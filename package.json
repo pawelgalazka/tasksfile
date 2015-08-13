@@ -1,0 +1,19 @@
+{
+  "name": "runjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pawelgalazka/runjs.git"
+  },
+  "author": "Pawel Galazka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pawelgalazka/runjs/issues"
+  },
+  "homepage": "https://github.com/pawelgalazka/runjs#readme"
+}
