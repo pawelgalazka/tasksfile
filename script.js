@@ -15,7 +15,7 @@ var runTask = function(tasks, args){
         tasks[taskName].apply(null, args.slice(2));
     }
     else {
-        throw "Task " + taskName + " not found";
+        console.error("Task " + taskName + " not found");
     }
 };
 
