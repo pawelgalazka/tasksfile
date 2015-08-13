@@ -2,6 +2,6 @@
 
 var path = require('path');
 var fs   = require('fs');
-var lib  = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
+var script = path.join(path.dirname(fs.realpathSync(__filename)), 'script.js');
 
-require(lib + '/script.js');
+require(script);
