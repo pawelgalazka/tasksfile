@@ -1,3 +1,4 @@
+var chalk = require('chalk');
 var runFile = require(process.cwd() + '/Runfile');
 
 var runTask = function(tasks, args){
@@ -15,7 +16,7 @@ var runTask = function(tasks, args){
         tasks[taskName].apply(null, args.slice(2));
     }
     else {
-        console.error("Task " + taskName + " not found");
+        console.error(chalk.red("Task " + taskName + " not found"));
     }
 };
 

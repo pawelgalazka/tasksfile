@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/pawelgalazka/runjs/issues"
   },
-  "homepage": "https://github.com/pawelgalazka/runjs#readme"
+  "homepage": "https://github.com/pawelgalazka/runjs#readme",
+  "dependencies": {
+    "chalk": "^1.1.0"
+  }
 }
