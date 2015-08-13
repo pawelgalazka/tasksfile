@@ -1,7 +1,7 @@
 var runFile = require(process.cwd() + '/Runfile');
 
 var runTask = function(tasks, args){
-    var taskName = args[2];
+    var taskName = args[1];
     if(!taskName){
         console.log('Available tasks:');
         Object.keys(tasks).forEach(function(t){
@@ -12,7 +12,7 @@ var runTask = function(tasks, args){
 
     var task = tasks[taskName];
     if(task){
-        tasks[taskName].apply(null, args.slice(3));
+        tasks[taskName].apply(null, args.slice(2));
     }
     else {
         throw "Task " + taskName + " not found";
