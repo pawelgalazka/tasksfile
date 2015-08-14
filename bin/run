@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-var path = require('path');
-var fs   = require('fs');
-var script = path.join(path.dirname(fs.realpathSync(__filename)), '../script.js');
+var call = require('runjs').call;
+var runfile = require(process.cwd() + '/runfile');
 
-require(script);
+call(runfile, process.argv.slice(1))
