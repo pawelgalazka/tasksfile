@@ -21,5 +21,8 @@
   "homepage": "https://github.com/pawelgalazka/runjs#readme",
   "dependencies": {
     "chalk": "^1.1.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.3.2"
   }
 }
