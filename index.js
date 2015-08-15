@@ -1,5 +1,5 @@
 var chalk = require('chalk');
-var execSync = require('child_process').execSync;
+var chProcess = require('child_process');
 
 exports.call = function(obj, args){
     var taskName = args[1];
@@ -20,8 +20,12 @@ exports.call = function(obj, args){
     }
 };
 
-exports.run = function(cmd){
+exports.run = function(cmd, options){
+    options = options || {};
     console.log(chalk.bold(cmd));
     cmd = 'PATH=$PATH:./node_modules/.bin/ ' + cmd;
-    execSync(cmd, {stdio: 'inherit'});
+    if(options.async){
+        return chProcess.exec(cmd, {stdio: 'inherit'});
+    }
+    return chProcess.execSync(cmd, {stdio: 'inherit'});
 };
