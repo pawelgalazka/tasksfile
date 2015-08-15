@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/pawelgalazka/runjs#readme",
   "dependencies": {
-    "chalk": "^1.1.0"
+    "chalk": "^1.1.0",
+    "coffee-script": "^1.9.3"
   },
   "devDependencies": {
     "jasmine": "^2.3.2"
