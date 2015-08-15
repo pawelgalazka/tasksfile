@@ -17,7 +17,7 @@ exports.call = function(obj, args){
             var time = Date.now();
             console.log(chalk.blue('Running "' + t + '"...'));
             task.apply(null, arguments);
-            time = ((Date.now() - time) / 100).toFixed(2);
+            time = ((Date.now() - time) / 1000).toFixed(2);
             console.log(chalk.blue('Finished "' + t +'" in', time, 'sec'));
         }
     });
