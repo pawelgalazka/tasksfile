@@ -16,7 +16,7 @@ exports.call = function(obj, args){
         obj[taskName].apply(null, args.slice(2));
     }
     else {
-        console.error(chalk.red("Task " + taskName + " not found"));
+        console.log(chalk.red("Task " + taskName + " not found"));
     }
 };
 
