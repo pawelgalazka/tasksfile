@@ -8,20 +8,22 @@ describe('index.js', function(){
 
     describe('.call()', function(){
         beforeEach(function(){
+            this.a = jasmine.createSpy('a');
+            this.b = jasmine.createSpy('b');
             this.obj = {
-                a: jasmine.createSpy('a'),
-                b: jasmine.createSpy('b')
+                a: this.a,
+                b: this.b
             }
         });
 
         it('should call method with given name on given object', function(){
             runjs.call(this.obj, ['scriptname', 'a']);
-            expect(this.obj.a).toHaveBeenCalled();
+            expect(this.a).toHaveBeenCalled();
         });
 
         it('should call method with given name on given object with given arguments', function(){
             runjs.call(this.obj, ['scriptname', 'b', '1', '2']);
-            expect(this.obj.b).toHaveBeenCalledWith('1', '2');
+            expect(this.b).toHaveBeenCalledWith('1', '2');
         });
 
         it('should print list of all methods available in object if method name not given', function(){

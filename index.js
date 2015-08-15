@@ -11,6 +11,17 @@ exports.call = function(obj, args){
         return;
     }
 
+    Object.keys(obj).forEach(function(t){
+        var task = obj[t];
+        obj[t] = function(){
+            var time = Date.now();
+            console.log(chalk.blue('Running "' + t + '"...'));
+            task.apply(null, arguments);
+            time = ((Date.now() - time) / 1000).toFixed(2);
+            console.log(chalk.blue('Finished "' + t +'" in', time, 'sec'));
+        }
+    });
+
     var task = obj[taskName];
     if(task){
         obj[taskName].apply(null, args.slice(2));
