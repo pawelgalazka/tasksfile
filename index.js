@@ -33,13 +33,14 @@ exports.call = function(obj, args){
 
 exports.run = function(cmd, options){
     options = options || {};
+    options.stdio = options.stdio || 'inherit';
     console.log(chalk.bold(cmd));
     cmd = 'PATH=$PATH:./node_modules/.bin/ ' + cmd;
     if(options.async){
-        var child = chProcess.exec(cmd);
+        var child = chProcess.exec(cmd, options);
         child.stdout.pipe(process.stdout);
         child.stderr.pipe(process.stderr);
         return child;
     }
-    return chProcess.execSync(cmd, {stdio: 'inherit'});
+    return chProcess.execSync(cmd, options);
 };
