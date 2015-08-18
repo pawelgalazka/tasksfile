@@ -35,7 +35,7 @@ exports.run = function(cmd, options){
     options = options || {};
     options.stdio = options.stdio || 'inherit';
     console.log(chalk.bold(cmd));
-    cmd = 'PATH=$PATH:./node_modules/.bin/ ' + cmd;
+    cmd = 'PATH=$PATH:' + process.cwd() + '/node_modules/.bin/ ' + cmd;
     if(options.async){
         var child = chProcess.exec(cmd, options);
         child.stdout.pipe(process.stdout);
