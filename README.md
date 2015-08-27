@@ -63,7 +63,7 @@ exports.install = ->
   run 'jspm install'
 
 exports.reinstall = ->
-  exports.uninstall()
+  exports['clean:all']()
   exports.install()
 
 exports.tests = ->
