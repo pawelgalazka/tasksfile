@@ -1,7 +1,13 @@
 {
   "name": "runjs",
   "version": "1.1.0",
-  "description": "",
+  "description": "Minimalistic building system",
+  "keywords": [
+    "build",
+    "system",
+    "make",
+    "tool"
+  ],
   "main": "index.js",
   "bin": {
     "run": "bin/run"
