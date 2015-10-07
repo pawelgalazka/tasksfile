@@ -10,7 +10,7 @@
   ],
   "main": "index.js",
   "bin": {
-    "run": "bin/run"
+    "run": "bin/run.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
