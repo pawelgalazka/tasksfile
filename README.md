@@ -41,3 +41,4 @@ Tips:
 2.0:
 * dropping es5 and coffeescript support in favor of es6
 * dropping support for node < v4.1
+* use of es6 modules thanks to systemjs
