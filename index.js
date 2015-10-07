@@ -2,7 +2,7 @@ var chalk = require('chalk');
 var chProcess = require('child_process');
 
 exports.call = function(obj, args){
-    var taskName = args[1];
+    var taskName = args[0];
     if(!taskName){
         console.log('Available tasks:');
         Object.keys(obj).forEach(function(t){
@@ -24,7 +24,7 @@ exports.call = function(obj, args){
 
     var task = obj[taskName];
     if(task){
-        obj[taskName].apply(null, args.slice(2));
+        obj[taskName].apply(null, args.slice(1));
     }
     else {
         console.log(chalk.red("Task " + taskName + " not found"));

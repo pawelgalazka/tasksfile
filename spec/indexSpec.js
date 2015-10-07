@@ -17,12 +17,12 @@ describe('index.js', function(){
         });
 
         it('should call method with given name on given object', function(){
-            runjs.call(this.obj, ['scriptname', 'a']);
+            runjs.call(this.obj, ['a']);
             expect(this.a).toHaveBeenCalled();
         });
 
         it('should call method with given name on given object with given arguments', function(){
-            runjs.call(this.obj, ['scriptname', 'b', '1', '2']);
+            runjs.call(this.obj, ['b', '1', '2']);
             expect(this.b).toHaveBeenCalledWith('1', '2');
         });
 
@@ -32,7 +32,7 @@ describe('index.js', function(){
         });
 
         it('should print error message if method not exist on given object', function(){
-            runjs.call(this.obj, ['scriptname', 'abc']);
+            runjs.call(this.obj, ['abc']);
             expect(process.stdout.write.calls.allArgs()).toEqual([[chalk.red('Task abc not found') + '\n']]);
         });
     });
