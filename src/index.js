@@ -1,7 +1,7 @@
-var chalk = require('chalk');
-var chProcess = require('child_process');
+import chalk from 'chalk';
+import chProcess from 'child_process';
 
-exports.call = function(obj, args){
+export function call(obj, args){
     var taskName = args[0];
     if(!taskName){
         console.log('Available tasks:');
@@ -29,9 +29,9 @@ exports.call = function(obj, args){
     else {
         console.log(chalk.red("Task " + taskName + " not found"));
     }
-};
+}
 
-exports.run = function(cmd, options){
+export function run(cmd, options){
     options = options || {};
     options.stdio = options.stdio || 'inherit';
     console.log(chalk.bold(cmd));
@@ -43,4 +43,4 @@ exports.run = function(cmd, options){
         return child;
     }
     return chProcess.execSync(cmd, options);
-};
+}

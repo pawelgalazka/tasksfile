@@ -1,5 +1,5 @@
 var chalk = require('chalk');
-var runjs = require('../index');
+var runjs = require('../lib/index');
 
 describe('index.js', function(){
     beforeEach(function(){

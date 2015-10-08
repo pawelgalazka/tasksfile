@@ -8,7 +8,7 @@
     "make",
     "tool"
   ],
-  "main": "index.js",
+  "main": "lib/index.js",
   "bin": {
     "run": "bin/run.js"
   },
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/pawelgalazka/runjs#readme",
   "dependencies": {
+    "babel": "^5.8.23",
     "chalk": "^1.1.0"
   },
   "devDependencies": {
