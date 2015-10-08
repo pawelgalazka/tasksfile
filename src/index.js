@@ -5,13 +5,13 @@ export function call(obj, args, cons = console){
     let taskName = args[0];
     if(!taskName){
         cons.log('Available tasks:');
-        Object.keys(obj).forEach(function(t){
+        Object.keys(obj).forEach((t) => {
             cons.log(t);
         });
         return;
     }
 
-    Object.keys(obj).forEach(function(t){
+    Object.keys(obj).forEach((t) => {
         let task = obj[t];
         obj[t] = function(){
             let time = Date.now();
