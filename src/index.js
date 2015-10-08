@@ -1,12 +1,12 @@
 import chalk from 'chalk';
 import chProcess from 'child_process';
 
-export function call(obj, args){
+export function call(obj, args, cons = console){
     let taskName = args[0];
     if(!taskName){
-        console.log('Available tasks:');
+        cons.log('Available tasks:');
         Object.keys(obj).forEach(function(t){
-            console.log(t);
+            cons.log(t);
         });
         return;
     }
@@ -15,10 +15,10 @@ export function call(obj, args){
         let task = obj[t];
         obj[t] = function(){
             let time = Date.now();
-            console.log(chalk.blue('Running "' + t + '"...'));
+            cons.log(chalk.blue('Running "' + t + '"...'));
             task.apply(null, arguments);
             time = ((Date.now() - time) / 1000).toFixed(2);
-            console.log(chalk.blue('Finished "' + t +'" in', time, 'sec'));
+            cons.log(chalk.blue('Finished "' + t +'" in', time, 'sec'));
         }
     });
 
@@ -27,7 +27,7 @@ export function call(obj, args){
         obj[taskName].apply(null, args.slice(1));
     }
     else {
-        console.log(chalk.red("Task " + taskName + " not found"));
+        cons.log(chalk.red("Task " + taskName + " not found"));
     }
 }
 

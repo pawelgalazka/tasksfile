@@ -2,7 +2,7 @@ import {run} from 'runjs';
 
 export function test(){
     exports.echo(1,2,3);
-    run('jasmine');
+    run('jest');
 }
 
 export function echo(){

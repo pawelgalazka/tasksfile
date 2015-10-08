@@ -30,6 +30,16 @@
     "chalk": "^1.1.0"
   },
   "devDependencies": {
-    "jasmine": "^2.3.2"
+    "babel-jest": "^5.3.0",
+    "jasmine": "^2.3.2",
+    "jest-cli": "^0.5.10"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "testFileExtensions": ["js"],
+    "moduleFileExtensions": ["js", "json"],
+    "testDirectoryName": "spec",
+    "unmockedModulePathPatterns": ["./node_modules/chalk/"],
+    "verbose": true
   }
 }
