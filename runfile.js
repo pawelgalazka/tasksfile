@@ -1,4 +1,4 @@
-var run = require('runjs').run;
+import {run} from 'runjs';
 
 export function test(){
     exports.echo(1,2,3);

@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import chProcess from 'child_process';
 
 export function call(obj, args){
-    var taskName = args[0];
+    let taskName = args[0];
     if(!taskName){
         console.log('Available tasks:');
         Object.keys(obj).forEach(function(t){
@@ -12,9 +12,9 @@ export function call(obj, args){
     }
 
     Object.keys(obj).forEach(function(t){
-        var task = obj[t];
+        let task = obj[t];
         obj[t] = function(){
-            var time = Date.now();
+            let time = Date.now();
             console.log(chalk.blue('Running "' + t + '"...'));
             task.apply(null, arguments);
             time = ((Date.now() - time) / 1000).toFixed(2);
@@ -22,7 +22,7 @@ export function call(obj, args){
         }
     });
 
-    var task = obj[taskName];
+    let task = obj[taskName];
     if(task){
         obj[taskName].apply(null, args.slice(1));
     }
@@ -37,7 +37,7 @@ export function run(cmd, options){
     console.log(chalk.bold(cmd));
     cmd = 'PATH=$PATH:' + process.cwd() + '/node_modules/.bin/ ' + cmd;
     if(options.async){
-        var child = chProcess.exec(cmd, options);
+        let child = chProcess.exec(cmd, options);
         child.stdout.pipe(process.stdout);
         child.stderr.pipe(process.stderr);
         return child;
