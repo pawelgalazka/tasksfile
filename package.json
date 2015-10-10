@@ -1,6 +1,6 @@
 {
   "name": "runjs",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0-beta",
   "description": "Minimalistic building system",
   "keywords": [
     "build",
@@ -11,6 +11,9 @@
   "main": "lib/index.js",
   "bin": {
     "run": "bin/run.js"
+  },
+  "engines": {
+    "node": ">=4.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
