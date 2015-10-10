@@ -1,4 +1,4 @@
-import {run} from 'runjs';
+import {run} from './lib/index';
 
 export function test(){
     exports.echo(1,2,3);
