@@ -1,0 +1,6 @@
+.idea
+.travis.yml
+runfile.js
+node_modules
+spec/
+src/
