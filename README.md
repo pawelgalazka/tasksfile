@@ -25,7 +25,7 @@ export function showFiles(){
 }
 
 export function mkdir(name){
-    run('mkdir ' + name);
+    run(`mkdir ${name}`);
 }
 ```
     
