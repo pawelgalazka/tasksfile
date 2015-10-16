@@ -1,4 +1,4 @@
-# runjs 2.0 (draft)
+# runjs 2.0
 
 Minimalistic building system
 
