@@ -1,4 +1,4 @@
-# runjs 2.0
+# runjs 2.1 (alpha)
 
 Minimalistic building system
 
