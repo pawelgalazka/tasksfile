@@ -1,4 +1,4 @@
-import runjs from '../lib/index';
+import * as runjs from '../lib/index';
 import chalk from 'chalk';
 import {expect, spy} from 'mochaccino';
 
@@ -29,12 +29,16 @@ describe('index.js', function(){
 
         it('should print list of all methods available in object if method name not given', function(){
             runjs.call(this.obj, [], this.console);
-            expect(this.console.log.mock.calls).toEqual([['Available tasks:'], ['a'], ['b']]);
+            expect(this.console.log).toHaveBeenCalledTimes(3);
+            expect(this.console.log).toHaveBeenCalledWith('Available tasks:');
+            expect(this.console.log).toHaveBeenCalledWith('a');
+            expect(this.console.log).toHaveBeenCalledWith('b');
         });
 
         it('should print error message if method not exist on given object', function(){
             runjs.call(this.obj, ['abc'], this.console);
-            expect(this.console.log.mock.calls).toEqual([[chalk.red('Task abc not found')]]);
+            expect(this.console.log).toHaveBeenCalledTimes(1);
+            expect(this.console.log).toHaveBeenCalledWith(chalk.red('Task abc not found'));
         });
     });
 });
