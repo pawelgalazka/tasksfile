@@ -1,4 +1,4 @@
-# runjs 2.1 (alpha)
+# runjs 2.1 (alpha) [![Build Status](https://travis-ci.org/pawelgalazka/runjs.svg?branch=master)](https://travis-ci.org/pawelgalazka/runjs) [![npm version](https://badge.fury.io/js/runjs.svg)](https://badge.fury.io/js/runjs)
 
 Minimalistic building system
 
