@@ -2,7 +2,8 @@ import {run} from './lib/index';
 
 export function test(){
     exports.echo(1,2,3);
-    run('jest');
+    build();
+    run('mocha');
 }
 
 export function echo(){

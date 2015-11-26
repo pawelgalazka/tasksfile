@@ -1,30 +1,30 @@
-jest.dontMock('../lib/index');
+import runjs from '../lib/index';
+import chalk from 'chalk';
+import {expect, spy} from 'mochaccino';
 
-var runjs = require('../lib/index');
-var chalk = require('chalk');
 
 describe('index.js', function(){
     describe('.call()', function(){
         beforeEach(function(){
-            this.a = jest.genMockFn();
-            this.b = jest.genMockFn();
+            this.a = spy();
+            this.b = spy();
             this.obj = {
                 a: this.a,
                 b: this.b
             };
             this.console = {
-                log: jest.genMockFn()
+                log: spy()
             };
         });
 
         it('should call method with given name on given object', function(){
             runjs.call(this.obj, ['a'], this.console);
-            expect(this.a).toBeCalled();
+            expect(this.a).toHaveBeenCalled();
         });
 
         it('should call method with given name on given object with given arguments', function(){
             runjs.call(this.obj, ['b', '1', '2'], this.console);
-            expect(this.b).toBeCalledWith('1', '2');
+            expect(this.b).toHaveBeenCalledWith('1', '2');
         });
 
         it('should print list of all methods available in object if method name not given', function(){
