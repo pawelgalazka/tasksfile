@@ -3,5 +3,4 @@ node_js:
   - "4.1"
 before_script:
   - npm install -g pawelgalazka/runjs
-  - run build
 script: run test
