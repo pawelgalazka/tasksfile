@@ -33,6 +33,6 @@
   },
   "devDependencies": {
     "mocha": "2.3.4",
-    "mochaccino": "1.0.0-beta.0"
+    "mochaccino": "1.1.0"
   }
 }
