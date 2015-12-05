@@ -30,9 +30,10 @@ export function mkdir(name){
 ```
     
 Run:
-
-    $ run showFiles
-    $ run mkdir test
+```
+run showFiles
+run mkdir test
+```
 
 Tips:
 
@@ -42,8 +43,37 @@ Tips:
 * each call of exported functions is logged to console as well as commands called by "run" method
 * handling es6 in the runfile out of the box
 
-## Changelog
+## API
 
-2.0:
-* dropping es5 and coffeescript support in favor of es6 (handled by babel)
-* dropping support for node < 4.0
+```javascript
+import {run, watch, generate, call} from 'runjs';
+```
+
+**run(cmd, options)**
+
+run given command as a child process and log run in the output
+
+Options:
+
+```json
+{
+    cwd: '', // current working directory
+    async: '' // run command asynchronously
+    
+}
+```
+
+**watch(pattern, callback)**
+
+watch files which match given pattern and call callback whenever file is modified or added
+
+```javascript
+watch('src/*.js', () => {
+    ...
+});
+```
+
+**generate(src, dst, context)**
+
+**call(object, args)**
+
