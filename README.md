@@ -37,9 +37,9 @@ run mkdir test
 
 Tips:
 
-* ./node_modules/.bin/ is included into PATH when running commands by "run" method
+* `./node_modules/.bin/` is included into PATH when running commands by `run` method
 * executing `run` command without arguments displays list of all available tasks
-* each call of exported functions is logged to console as well as commands called by "run" method
+* each call of exported functions is logged to console as well as commands called by `run` method
 * handling es6 in the runfile out of the box
 
 ## API
@@ -56,8 +56,8 @@ Options:
 
 ```javascript
 {
-    cwd: .., // current working directory
-    async: ... // run command asynchronously
+    cwd: .., // current working directory (String)
+    async: ... // run command asynchronously (true/false)
 }
 ```
 
@@ -75,7 +75,7 @@ watch('src/*.js', (path) => {
 
 generate file specified by `dst` path by given template `src` and `context`
 
-file1.tmp.js:
+`file1.tmp.js`:
 ```javascript
 {
     author: '<%= AUTHOR %>'
@@ -100,12 +100,20 @@ call method from given `object` by given `args` where first argument should
 be name of the method. Along the way it logs every method call and print
 to the output its time of execution.
 
+`script.js`:
+
 ```javascript
+#!/usr/bin/env node
 let o = {
     echo: (text, a1, a2) => {
         console.log(text, a1, a2);
     }
 }
 
-call(o, ['echo', 1, 2]);
+call(o, process.argv.slice(2));
+```
+
+```
+$ ./script.js echo 1 2
+echo 1 2
 ```
