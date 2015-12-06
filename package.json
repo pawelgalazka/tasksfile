@@ -1,6 +1,6 @@
 {
   "name": "runjs",
-  "version": "2.1.0-alpha",
+  "version": "2.1.0",
   "description": "Minimalistic building system",
   "keywords": [
     "build",
@@ -11,6 +11,10 @@
   "main": "lib/index.js",
   "bin": {
     "run": "bin/run.js"
+  },
+  "scripts": {
+    "test": "run test",
+    "prepublish": "run test"
   },
   "engines": {
     "node": ">=4.0.0"
