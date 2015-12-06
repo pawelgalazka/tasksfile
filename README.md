@@ -39,7 +39,6 @@ Tips:
 
 * ./node_modules/.bin/ is included into PATH when running commands by "run" method
 * executing `run` command without arguments displays list of all available tasks
-* by executing "run('some-command', {async: true})" you can execute command asynchronously
 * each call of exported functions is logged to console as well as commands called by "run" method
 * handling es6 in the runfile out of the box
 
@@ -51,15 +50,14 @@ import {run, watch, generate, call} from 'runjs';
 
 **run(cmd, options)**
 
-run given command as a child process and log run in the output
+run given command as a child process and log the call in the output
 
 Options:
 
-```json
+```javascript
 {
-    cwd: '', // current working directory
-    async: '' // run command asynchronously
-    
+    cwd: .., // current working directory
+    async: ... // run command asynchronously
 }
 ```
 
@@ -68,12 +66,46 @@ Options:
 watch files which match given pattern and call callback whenever file is modified or added
 
 ```javascript
-watch('src/*.js', () => {
+watch('src/*.js', (path) => {
     ...
 });
 ```
 
 **generate(src, dst, context)**
 
+generate file specified by `dst` path by given template `src` and `context`
+
+file1.tmp.js:
+```javascript
+{
+    author: '<%= AUTHOR %>'
+}
+```
+
+```javascript
+generate('file1.tmp.js', 'file1.js', {AUTHOR: 'Pawel'});
+```
+
+will generate `file1.js`:
+
+```
+{
+    author: 'Pawel'
+}
+```
+
 **call(object, args)**
 
+call method from given `object` by given `args` where first argument should
+be name of the method. Along the way it logs every method call and print
+to the output its time of execution.
+
+```javascript
+let o = {
+    echo: (text, a1, a2) => {
+        console.log(text, a1, a2);
+    }
+}
+
+call(o, ['echo', 1, 2]);
+```
