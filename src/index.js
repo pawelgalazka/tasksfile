@@ -3,6 +3,7 @@ import chProcess from 'child_process';
 import _ from 'lodash';
 import fs from 'fs';
 import chokidar from 'chokidar';
+import path from 'path';
 
 export function call(obj, args, cons = console){
     let taskName = args[0];
@@ -34,11 +35,16 @@ export function call(obj, args, cons = console){
     }
 }
 
-export function run(cmd, options){
-    options = options || {};
+export function run(cmd, options = {}){
+    options.env  = options.env || {};
+    let envPath = options.env.PATH ? options.env.PATH : process.env.PATH;
+
+    options.env.PATH = [
+      `${process.cwd()}/node_modules/.bin/`, envPath 
+    ].join(path.delimiter);
+
     options.stdio = options.stdio || 'inherit';
     console.log(chalk.bold(cmd));
-    cmd = 'PATH=$PATH:' + process.cwd() + '/node_modules/.bin/ ' + cmd;
     if(options.async){
         let child = chProcess.exec(cmd, options);
         child.stdout.pipe(process.stdout);

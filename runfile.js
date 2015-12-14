@@ -11,5 +11,5 @@ export function echo(){
 }
 
 export function build(){
-    run('babel src/index.js -o lib/index.js');
+    run('babel src/ --out-dir lib/');
 }
