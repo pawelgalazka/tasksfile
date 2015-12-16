@@ -1,19 +1,14 @@
 #!/usr/bin/env node
 
-var config = require('pkg-config')('runjs');
 var call   = require('../lib/index').call;
 
-if (config && config['require-hook']) {
-  require(config['require-hook']);
-}
-else {
-
+try {
+    require(process.cwd() + '/node_modules/babel-register');
+} catch(e) {
     try {
-        require('babel-register');
+        require(process.cwd() + '/node_modules/babel/register');
     } catch(e) {
-        try {
-            require('babel/register');
-        } catch(e) {}
+        require('babel/register');
     }
 }
 
