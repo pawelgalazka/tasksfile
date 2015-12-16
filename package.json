@@ -12,6 +12,11 @@
   "bin": {
     "run": "bin/run.js"
   },
+  "scripts": {
+    "build": "babel src/ --out-dir lib/",
+    "pretest": "npm run build",
+    "test": "mocha"
+  },
   "engines": {
     "node": ">=4.0.0"
   },
