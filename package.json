@@ -31,12 +31,13 @@
   },
   "homepage": "https://github.com/pawelgalazka/runjs#readme",
   "dependencies": {
-    "babel": "5.8.23",
     "chalk": "1.1.0",
     "chokidar": "1.2.0",
-    "lodash": "3.10.1"
+    "lodash": "3.10.1",
+    "pkg-config": "1.1.0"
   },
   "devDependencies": {
+    "babel": "5.8.23",
     "mocha": "2.3.4",
     "mochaccino": "1.1.0"
   }
