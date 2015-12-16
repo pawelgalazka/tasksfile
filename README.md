@@ -13,6 +13,10 @@ Install in your project (to use runjs api):
 
     npm install runjs
 
+Install babel if you want to use ES6 syntax
+(runjs will pick up your Babel 5 or 6 automatically):
+
+    npm install babel@5
 
 Create runfile.js:
 
@@ -116,6 +120,22 @@ call(o, process.argv.slice(2));
 ```
 $ ./script.js echo 1 2
 echo 1 2
+```
+
+## Custom transpiler
+
+If you want to use different require hook for transpilation
+than the one from babel 5 or 6 for runfile.js you can setup
+configuration in your `package.json`:
+
+```json
+{
+  "config": {
+    "runjs": {
+      "require-hook": "coffee-script/register"
+     }
+  }
+}
 ```
 
 ## Runfile example
