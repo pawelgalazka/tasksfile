@@ -36,7 +36,7 @@ export function call(obj, args, cons = console){
 }
 
 export function run(cmd, options = {}){
-    options.env  = options.env || {};
+    options.env  = options.env || process.env;
     let envPath = options.env.PATH ? options.env.PATH : process.env.PATH;
 
     options.env.PATH = [
