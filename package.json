@@ -34,7 +34,7 @@
     "chalk": "1.1.0",
     "chokidar": "1.2.0",
     "lodash": "3.10.1",
-    "pkg-config": "^1.1.0"
+    "pkg-config": "1.1.0"
   },
   "devDependencies": {
     "babel": "5.8.23",
