@@ -10,10 +10,10 @@ else {
 
     try {
         require('babel-register');
-    } catch() {
+    } catch(e) {
         try {
             require('babel/register');
-        } catch() {}
+        } catch(e) {}
     }
 }
 
