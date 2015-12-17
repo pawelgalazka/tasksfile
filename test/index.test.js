@@ -17,8 +17,9 @@ describe('run script', () => {
   describe('in a package without any babel transpiler', () => {
     const cwd = `${process.cwd()}/test/sandbox/no-babel`;
 
-    it('should call basic task from the runfile', () => {
+    it('should call basic task from the runfile', (done) => {
       exec(`${RUN} echo 1 2 3`, {cwd});
+      done();
     });
   });
 
@@ -30,8 +31,9 @@ describe('run script', () => {
       done();
     });
 
-    it('should call basic task from the runfile', () => {
+    it('should call basic task from the runfile', (done) => {
       exec(`${RUN} echo 1 2 3`, {cwd});
+      done();
     });
   });
 
