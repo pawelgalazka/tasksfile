@@ -25,8 +25,9 @@ describe('run script', () => {
   describe('in a package with pre installed babel5', () => {
     const cwd = `${process.cwd()}/test/sandbox/babel5`;
 
-    before(() => {
+    before((done) => {
       exec('npm install', {cwd});
+      done();
     });
 
     it('should call basic task from the runfile', () => {
