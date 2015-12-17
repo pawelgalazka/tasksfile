@@ -15,7 +15,7 @@
   "scripts": {
     "build": "babel src/ --out-dir lib/",
     "pretest": "npm run build",
-    "test": "mocha"
+    "test": "mocha test/*.test.js"
   },
   "engines": {
     "node": ">=4.0.0"
