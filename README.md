@@ -39,9 +39,8 @@ Tips:
 * `./node_modules/.bin/` is included into PATH when running commands by `run` method
 * executing `run` command without arguments displays list of all available tasks
 * each call of exported functions is logged to console as well as commands called by `run` method
-* handling es6 in the runfile out of the box
 * if you have `babel-register` or `babel/register` module available in you package
-runjs will use them for compilation
+runjs will use them for es6 compilation, if not it will use babel from runjs repository
 
 ## API
 
