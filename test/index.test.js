@@ -17,43 +17,44 @@ describe('run script', () => {
   describe('in a package without any babel transpiler', () => {
     const cwd = `${process.cwd()}/test/sandbox/no-babel`;
 
-    it('should call basic task from the runfile', (done) => {
+    it('should call basic task from the runfile', () => {
       exec(`${RUN} echo 1 2 3`, {cwd});
-      done();
     });
   });
 
   describe('in a package with pre installed babel5', () => {
     const cwd = `${process.cwd()}/test/sandbox/babel5`;
 
-    before((done) => {
+    before(() => {
       exec('npm install', {cwd});
-      done();
     });
 
-    it('should call basic task from the runfile', (done) => {
+    it('should call basic task from the runfile', () => {
       exec(`${RUN} echo 1 2 3`, {cwd});
-      done();
     });
   });
 
-  describe.skip('in a package with pre installed babel6', () => {
-    before(() => {
+  describe('in a package with pre installed babel6', () => {
+    const cwd = `${process.cwd()}/test/sandbox/babel6`;
 
+    before(() => {
+      exec('npm install', {cwd});
     });
 
     it('should call basic task from the runfile', () => {
-
+      exec(`${RUN} echo 1 2 3`, {cwd});
     });
   });
 
-  describe.skip('in a package with pre installed babel6 and .babelrc file', () => {
-    before(() => {
+  describe('in a package with pre installed babel6 and .babelrc file', () => {
+    const cwd = `${process.cwd()}/test/sandbox/babelrc`;
 
+    before(() => {
+      exec('npm install', {cwd});
     });
 
     it('should call basic task from the runfile', () => {
-
+      exec(`${RUN} echo 1 2 3`, {cwd});
     });
   });
 });
