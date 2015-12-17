@@ -13,6 +13,7 @@ export function exec(cmd, options = {}){
 
 describe('run script', () => {
   const RUN = `${process.cwd()}/bin/run.js`;
+
   describe('in a package without any babel transpiler', () => {
     const cwd = `${process.cwd()}/test/sandbox/no-babel`;
 
@@ -43,5 +44,18 @@ describe('run script', () => {
     it('should call basic task from the runfile', () => {
       exec(`${RUN} echo 1 2 3`, {cwd});
     });
+  });
+});
+
+describe('runjs installation', () => {
+  const cwd = `${process.cwd()}/test/sandbox/installation`;
+
+  before(() => {
+    exec('rm -rf node_modules', {cwd});
+    exec('npm install ../../../', {cwd});
+  });
+
+  it('should install runjs', () => {
+    exec('npm test', {cwd});
   });
 });
