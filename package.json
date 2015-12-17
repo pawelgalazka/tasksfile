@@ -1,6 +1,6 @@
 {
   "name": "runjs",
-  "version": "2.2.0-alpha",
+  "version": "2.2.0",
   "description": "Minimalistic building system",
   "keywords": [
     "build",
