@@ -11,10 +11,5 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.3.13"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
   }
 }

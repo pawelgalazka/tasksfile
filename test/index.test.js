@@ -34,20 +34,8 @@ describe('run script', () => {
     });
   });
 
-  describe('in a package with pre installed babel6', () => {
-    const cwd = `${process.cwd()}/test/sandbox/babel6`;
-
-    before(() => {
-      exec('npm install', {cwd});
-    });
-
-    it('should call basic task from the runfile', () => {
-      exec(`${RUN} echo 1 2 3`, {cwd});
-    });
-  });
-
   describe('in a package with pre installed babel6 and .babelrc file', () => {
-    const cwd = `${process.cwd()}/test/sandbox/babelrc`;
+    const cwd = `${process.cwd()}/test/sandbox/babel6`;
 
     before(() => {
       exec('npm install', {cwd});
