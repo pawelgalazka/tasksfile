@@ -15,7 +15,8 @@
   "scripts": {
     "build": "babel src/ --out-dir lib/",
     "pretest": "npm run build",
-    "test": "mocha test/*.test.js --compilers js:babel/register --timeout 100000"
+    "test": "mocha test/*.test.js --compilers js:babel/register --timeout 100000",
+    "test:fast": "npm run build && mocha test/index.test.js --compilers js:babel/register"
   },
   "engines": {
     "node": ">=4.0.0"
