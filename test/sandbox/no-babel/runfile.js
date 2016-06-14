@@ -1,7 +1,7 @@
 let task = {};
 
-task['echo'] = () => {
-  console.log('echo ' + Array.prototype.slice.call(arguments, 0).join(' '))
+task['echo'] = (...args) => {
+  console.log('echo ' + args.join(' '))
 };
 
 export default task;
