@@ -41,5 +41,17 @@ describe('api', () => {
       expect(consl.log).toHaveBeenCalledTimes(1);
       expect(consl.log).toHaveBeenCalledWith(chalk.red('Task abc not found'));
     });
+
+    it('should look for tasks in obj.default if available', () => {
+      obj = {
+        "default": {
+          a: a,
+          b: b
+        }
+      };
+
+      runjs.call(obj, ['a'], consl);
+      expect(a).toHaveBeenCalled();
+    });
   });
 });

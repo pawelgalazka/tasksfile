@@ -7,6 +7,11 @@ import path from 'path';
 
 export function call(obj, args, cons = console){
     let taskName = args[0];
+
+    if(obj.default){
+        obj = obj.default;
+    }
+
     if(!taskName){
         cons.log('Available tasks:');
         Object.keys(obj).forEach((t) => {
