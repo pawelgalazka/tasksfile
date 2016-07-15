@@ -50,6 +50,27 @@ Tips:
 * executing `run` command without arguments displays list of all available tasks
 * each call of exported functions is logged to console as well as commands called by `run` method
 
+## Why runjs ?
+
+We have Grunt, Gulp, npm scripts, Makefile. Why another building tool ?
+
+Gulp or Grunt files seem overly complex for what they do and the plugin
+ecosystem adds a layer of complexity towards the simple command
+line tools underneath. The documentation is not always up to date
+and the plugin does not always use the latest version of the tool.
+After a while customizing the process even with simple things,
+reconfiguring it becomes time consuming.
+
+Npm scripts are simple but they get out of hand pretty quickly if
+we need more complex process which make them quite hard to read.
+
+Makefiles are simple, better for more complex processes then npm scripts
+but they depend on bash scripting. Within `runfile` you can use
+command line calls as well as JavaScript code and npm
+libraries which makes that approach much more flexible. Having
+additionally simple reporting system which tells you which tasks
+or cli commands were called.
+
 ## API
 
 ```javascript
