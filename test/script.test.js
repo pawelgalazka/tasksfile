@@ -14,14 +14,6 @@ export function exec(cmd, options = {}){
 describe('run script', () => {
   const RUN = `${process.cwd()}/bin/run.js`;
 
-  describe('in a package without any babel transpiler', () => {
-    const cwd = `${process.cwd()}/test/sandbox/no-babel`;
-
-    it('should call basic task from the runfile', () => {
-      exec(`${RUN} echo 1 2 3`, {cwd});
-    });
-  });
-
   describe('in a package with pre installed babel6 and .babelrc file', () => {
     const cwd = `${process.cwd()}/test/sandbox/babel6`;
 
