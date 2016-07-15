@@ -11,28 +11,13 @@ export function exec(cmd, options = {}){
   console.log(chalk.yellow.bold('------'));
 }
 
-describe('run script', () => {
-  const RUN = `${process.cwd()}/bin/run.js`;
-
-  describe('in a package with pre installed babel6 and .babelrc file', () => {
-    const cwd = `${process.cwd()}/test/sandbox/babel6`;
-
-    before(() => {
-      exec('npm install', {cwd});
-    });
-
-    it('should call basic task from the runfile', () => {
-      exec(`${RUN} echo 1 2 3`, {cwd});
-    });
-  });
-});
-
 describe('runjs installation', () => {
-  const cwd = `${process.cwd()}/test/sandbox/installation`;
+  const cwd = `${process.cwd()}/test/sandbox`;
 
   before(() => {
     exec('rm -rf node_modules', {cwd});
-    exec('npm install ../../../', {cwd});
+    exec('npm install ../../', {cwd});
+    exec('npm install', {cwd});
   });
 
   it('should install runjs', () => {
