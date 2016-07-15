@@ -65,27 +65,3 @@ export function generate(src, dst, context){
     let content = _.template(template)(context);
     fs.writeFileSync(dst, content);
 }
-
-export function watch(pattern, callback){
-    console.log(`Watching files ${pattern}...`);
-    let watcher = chokidar.watch(pattern, {ignoreInitial: true});
-    watcher.on('change', (path) => {
-        console.log(`File ${path} changed`);
-        try {
-            callback(path);
-        } catch(e){
-
-        }
-    });
-
-    watcher.on('add', (path) => {
-        console.log(`File ${path} added`);
-        try {
-            callback(path);
-        } catch(e){
-
-        }
-    });
-
-    return watcher;
-}

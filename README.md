@@ -45,7 +45,7 @@ runjs will use them for es6 compilation, if not it will use babel from runjs rep
 ## API
 
 ```javascript
-import {run, watch, generate} from 'runjs';
+import {run, generate} from 'runjs';
 ```
 
 **run(cmd, options)**
@@ -59,16 +59,6 @@ Options:
     cwd: .., // current working directory (String)
     async: ... // run command asynchronously (true/false)
 }
-```
-
-**watch(pattern, callback)**
-
-watch files which match given pattern and call callback whenever file is modified or added
-
-```javascript
-watch('src/*.js', (path) => {
-    ...
-});
 ```
 
 **generate(src, dst, context)**
