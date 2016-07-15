@@ -2,7 +2,6 @@ import chalk from 'chalk';
 import chProcess from 'child_process';
 import _ from 'lodash';
 import fs from 'fs';
-import chokidar from 'chokidar';
 import path from 'path';
 
 export function call(obj, args, cons = console){
