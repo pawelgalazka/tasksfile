@@ -1,9 +1,12 @@
 import {run} from 'runjs';
 
-export function echo(...args) {
-  console.log('echo ' + args.join(' '))
-}
+const task = {
+  'echo': (...args) => {
+    console.log('echo ' + args.join(' '))
+  },
+  'testapi': () => {
+    run('ls')
+  }
+};
 
-export function testapi(){
-  run('ls');
-}
+export default task;

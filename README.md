@@ -29,19 +29,30 @@ Create runfile.js:
 
 import {run} from 'runjs';
 
-export function showFiles(){
-    run('ls');
-}
+const task = {
+    'create:component': (name) => {
 
-export function mkdir(name){
-    run(`mkdir ${name}`);
-}
+    },
+    'build:js': () => {
+
+    },
+    'build:css': () => {
+
+    },
+    'build': () => {
+      task['build:js']();
+      task['build:css']();
+    }
+};
+
+export default task
 ```
     
 Run:
 ```
-run showFiles
-run mkdir test
+run create:comonent AppContainer
+run build:js
+run build
 ```
 
 Tips:
