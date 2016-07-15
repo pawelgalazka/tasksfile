@@ -6,9 +6,8 @@ import {expect, spy} from 'mochaccino';
 export function exec(cmd, options = {}){
   options.stdio = 'inherit';
   let cwd = options.cwd || '';
-  console.log(chalk.yellow.bold(`RUNNING SCRIPT [${cmd}] IN [${cwd}]`));
+  console.log(chalk.yellow.bold(`${cmd} [${cwd}]`));
   chProcess.execSync(cmd, options);
-  console.log(chalk.yellow.bold('------'));
 }
 
 describe('runjs installation', () => {
