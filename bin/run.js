@@ -2,8 +2,12 @@
 
 var call = require('../lib/index').call;
 
-console.log('Requiring babel-register...')
-require(process.cwd() + '/node_modules/babel-register');
+try {
+  console.log('Requiring babel-register...')
+  require(process.cwd() + '/node_modules/babel-register');
+} catch (e) {
+  console.log('Requiring failed. Fallback to pure node.')
+}
 
 console.log('Processing runfile...')
 var runfile = require(process.cwd() + '/runfile');
