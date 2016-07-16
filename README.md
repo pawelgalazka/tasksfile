@@ -51,14 +51,14 @@ export default task
     
 Run:
 ```
-run create:comonent AppContainer
+run create:component AppContainer
 run build:js
 run build
 ```
 
 Tips:
 
-* `./node_modules/.bin/` is included into PATH when running commands by `run` method
+* `./node_modules/.bin/` is included into PATH when running commands by `run` api method
 * executing `run` command without arguments displays list of all available tasks
 * each call of exported functions is logged to console as well as commands called by `run` method
 * you don't have to use Babel. If runjs not finds `babel-register` it will
