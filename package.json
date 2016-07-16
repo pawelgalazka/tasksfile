@@ -20,7 +20,8 @@
     "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules && rm -rf test/sandbox/babel6/node_modules && rm -rf test/sandbox/installation/node_modules && rm -rf test/sandbox/no-babel/node_modules"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0",
+    "npm": ">=3.0.0"
   },
   "repository": {
     "type": "git",
