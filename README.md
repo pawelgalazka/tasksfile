@@ -9,11 +9,12 @@ Install globally (for a command line script):
 
     npm install runjs -g
 
-Install in your project (to use runjs api):
+Install in your project (to use runjs api inside your `runfile.js`):
 
     npm install runjs --save-dev
 
-If you don't have Babel (6.x) install it to use full ES6 syntax:
+If you want to use Babel (6.x) install it. Runjs will pickup
+babel-register automatically.
 
     npm install babel-core babel-preset-es2015 babel-register --save-dev
 
@@ -60,6 +61,8 @@ Tips:
 * `./node_modules/.bin/` is included into PATH when running commands by `run` method
 * executing `run` command without arguments displays list of all available tasks
 * each call of exported functions is logged to console as well as commands called by `run` method
+* you don't have to use Babel. If runjs not finds `babel-register` it will
+fallback to pure node for your `runfile.js`
 
 ## Why runjs ?
 
