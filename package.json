@@ -17,8 +17,7 @@
     "pretest": "npm run build",
     "test": "mocha test/*.test.js --compilers js:babel-register --timeout 150000",
     "test:fast": "npm run build && mocha test/index.test.js --compilers js:babel-register",
-    "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules && rm -rf test/sandbox/babel6/node_modules && rm -rf test/sandbox/installation/node_modules && rm -rf test/sandbox/no-babel/node_modules",
-    "prepublish": "npm test"
+    "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules && rm -rf test/sandbox/babel6/node_modules && rm -rf test/sandbox/installation/node_modules && rm -rf test/sandbox/no-babel/node_modules"
   },
   "engines": {
     "node": ">=6.0.0",
