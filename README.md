@@ -35,7 +35,7 @@ const task = {
 
     },
     'build:js': () => {
-
+      run('webpack -p --config config/webpack/prod.js --progress');
     },
     'build:css': () => {
 
