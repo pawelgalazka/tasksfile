@@ -63,6 +63,9 @@ Tips:
 * each call of exported functions is logged to console as well as commands called by `run` method
 * you don't have to use Babel. If runjs not finds `babel-register` it will
 fallback to pure node for your `runfile.js`
+* if you use babel and you would like to RunJS perform better it
+is advised to use npm version >3.0 (better performance with loading
+many modules which is a case for Babel plugins)
 
 ## Why runjs ?
 
