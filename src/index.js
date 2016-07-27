@@ -48,14 +48,12 @@ export function run(cmd, options = {}){
     ].join(path.delimiter);
 
     options.stdio = options.stdio || 'inherit';
+    options.shell = true;
     console.log(chalk.bold(cmd));
     if(options.async){
-        let child = chProcess.exec(cmd, options);
-        child.stdout.pipe(process.stdout);
-        child.stderr.pipe(process.stderr);
-        return child;
+        return chProcess.spawn(cmd, options);
     }
-    return chProcess.execSync(cmd, options);
+    return chProcess.spawnSync(cmd, options);
 }
 
 export function generate(src, dst, context){
