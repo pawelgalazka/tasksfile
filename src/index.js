@@ -53,7 +53,7 @@ export function run(cmd, options = {}){
     if(options.async){
         return chProcess.spawn(cmd, options);
     }
-    return chProcess.spawnSync(cmd, options);
+    return chProcess.execSync(cmd, options);
 }
 
 export function generate(src, dst, context){
