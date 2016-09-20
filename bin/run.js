@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
 var call = require('../lib/index').call;
+var pkg = require(process.cwd() + '/package.json');
 
 try {
   console.log('Requiring babel-register...')
-  require(process.cwd() + '/node_modules/babel-register');
+  if (pkg.runjs && pkg.runjs['babel-register']) {
+    require(process.cwd() + pkg.runjs['babel-register']);
+  } else {
+    require(process.cwd() + '/node_modules/babel-register');
+  }
 } catch (e) {
   console.log('Requiring failed. Fallback to pure node.')
 }
