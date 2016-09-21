@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
 var call = require('../lib/index').call;
-var pkg = require(process.cwd() + '/package.json');
+try {
+  var pkg = require(process.cwd() + '/package.json') || {};
+} catch (e) {
+
+}
+
 
 try {
   console.log('Requiring babel-register...')
