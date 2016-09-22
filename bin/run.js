@@ -6,7 +6,7 @@ var config;
 
 // try to read package.json config
 try {
-  config = require(path.resolve('./package.json')).runjs;
+  config = require(path.resolve('./package.json')).runjs || {};
 } catch (e) {
   config = {};
 }
@@ -20,7 +20,7 @@ try {
     require(path.resolve('./node_modules/babel-register'));
   }
 } catch (e) {
-  console.log('Requiring failed. Fallback to pure node.')
+  console.log('Requiring failed. Fallback to pure node.');
   if (config['babel-register']) {
     throw e.stack
   }
