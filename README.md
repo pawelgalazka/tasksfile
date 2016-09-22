@@ -66,6 +66,13 @@ fallback to pure node for your `runfile.js`
 * if you use babel and you would like to RunJS perform better it
 is advised to use npm version >3.0 (better performance with loading
 many modules which is a case for Babel plugins)
+    
+If you have a very specific location for your `babel-register`, you can define
+a path to it through config (default is `./node_modules/babel-register`):
+
+    "runjs": {
+        "babel-register": "./node_modules/some_package/node_modules/babel-register"
+    }
 
 ## Why runjs ?
 
