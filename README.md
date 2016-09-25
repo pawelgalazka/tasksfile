@@ -88,12 +88,11 @@ reconfiguring it becomes time consuming.
 Npm scripts are simple but they get out of hand pretty quickly if
 we need more complex process which make them quite hard to read.
 
-Makefiles are simple, better for more complex processes then npm scripts
+Makefiles are simple, better for more complex processes
 but they depend on bash scripting. Within `runfile` you can use
 command line calls as well as JavaScript code and npm
-libraries which makes that approach much more flexible. Having
-additionally simple reporting system which tells you which tasks
-or cli commands were called.
+libraries which makes that approach much more flexible. Additionally 
+each task and command call is reported in the console.
 
 ## API
 
