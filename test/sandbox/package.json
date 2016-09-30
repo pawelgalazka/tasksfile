@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "run echo 1 2 3 && run testapi"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {

@@ -26,4 +26,6 @@ echo 'Installing test package'
 npm install
 
 echo 'Testing test package'
-npm test
+./node_modules/.bin/run echo 1 2 3
+./node_modules/.bin/run testapi
+
