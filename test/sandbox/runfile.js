@@ -5,7 +5,7 @@ const task = {
     console.log('echo ' + args.join(' '))
   },
   'testapi': () => {
-    run('ls')
+    run('ls -al')
   }
 };
 
