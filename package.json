@@ -1,7 +1,7 @@
 {
   "name": "runjs",
   "version": "2.5.0",
-  "description": "Minimalistic building system",
+  "description": "Minimalistic building tool",
   "keywords": [
     "build",
     "system",
