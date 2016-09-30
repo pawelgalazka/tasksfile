@@ -1,7 +1,6 @@
 import * as runjs from '../lib/index';
 import chalk from 'chalk';
-import {expect, spy} from 'mochaccino';
-
+import { expect, spy } from 'mochaccino';
 
 describe('api', () => {
   describe('.call()', () => {
@@ -54,4 +53,19 @@ describe('api', () => {
       expect(a).toHaveBeenCalled();
     });
   });
+
+  describe('.run()', () => {
+    it('should execute basic shell commands when sync mode', () => {
+      const output = runjs.run('echo "echo test"', {stdio: 'pipe', cwd: './test/sandbox'}).toString()
+      expect(output).toEqual('echo test\n')
+    })
+
+    it('should execute basic shell commands when async mode', (done) => {
+      runjs.run('echo "echo test"', {async: true}).then((output) => {
+        output = output.toString()
+        expect(output).toEqual('echo test\n')
+        done()
+      })
+    })
+  })
 });
