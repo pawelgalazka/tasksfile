@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import chProcess from 'child_process';
-import _ from 'lodash';
+import template from 'lodash.template';
 import fs from 'fs';
 import path from 'path';
 
@@ -58,7 +58,7 @@ export function run(cmd, options = {}){
 
 export function generate(src, dst, context){
     console.log(`Generating ${dst} from template ${src}`);
-    let template = fs.readFileSync(src);
-    let content = _.template(template)(context);
+    let templateString = fs.readFileSync(src);
+    let content = template(templateString)(context);
     fs.writeFileSync(dst, content);
 }
