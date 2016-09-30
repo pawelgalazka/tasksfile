@@ -14,8 +14,9 @@
   },
   "scripts": {
     "build": "babel src/ --out-dir lib/",
-    "test": "npm run test:fast && mocha test/bin.test.js --compilers js:babel-register --timeout 150000",
+    "test": "npm run test:fast && npm run test:e2e",
     "test:fast": "npm run build && mocha test/api.test.js --compilers js:babel-register",
+    "test:e2e": "bash ./test/e2e.test.sh",
     "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules"
   },
   "engines": {
