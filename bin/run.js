@@ -2,12 +2,13 @@
 
 var call = require('../lib/index').call;
 var path = require('path');
+const fs = require('fs');
 var config;
 
 // try to read package.json config
 try {
   config = require(path.resolve('./package.json')).runjs || {};
-} catch (e) {
+} catch (error) {
   config = {};
 }
 
@@ -19,14 +20,22 @@ try {
   } else {
     require(path.resolve('./node_modules/babel-register'));
   }
-} catch (e) {
+} catch (error) {
   console.log('Requiring failed. Fallback to pure node.');
   if (config['babel-register']) {
-    throw e.stack
+    throw error.stack
   }
+}
+
+try {
+  fs.accessSync(path.resolve('./runfile.js'));
+} catch (error) {
+  console.log(`No runfile.js defined in ${process.cwd()}`);
+  process.exit(1);
 }
 
 // process runfile.js
 console.log('Processing runfile...')
 var runfile = require(path.resolve('./runfile'));
+
 call(runfile, process.argv.slice(2));
