@@ -27,6 +27,9 @@ try {
   }
 }
 
+// process runfile.js
+console.log('Processing runfile...')
+
 try {
   fs.accessSync(path.resolve('./runfile.js'));
 } catch (error) {
@@ -34,8 +37,5 @@ try {
   process.exit(1);
 }
 
-// process runfile.js
-console.log('Processing runfile...')
 const runfile = require(path.resolve('./runfile'));
-
 call(runfile, process.argv.slice(2));
