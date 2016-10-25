@@ -3,7 +3,7 @@
 const call = require('../lib/index').call;
 const path = require('path');
 const fs = require('fs');
-let config;
+var config;
 
 // try to read package.json config
 try {
