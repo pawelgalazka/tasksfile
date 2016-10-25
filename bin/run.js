@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-var call = require('../lib/index').call;
-var path = require('path');
+const call = require('../lib/index').call;
+const path = require('path');
 const fs = require('fs');
-var config;
+let config;
 
 // try to read package.json config
 try {
@@ -36,6 +36,6 @@ try {
 
 // process runfile.js
 console.log('Processing runfile...')
-var runfile = require(path.resolve('./runfile'));
+const runfile = require(path.resolve('./runfile'));
 
 call(runfile, process.argv.slice(2));
