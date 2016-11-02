@@ -52,8 +52,8 @@ export function run(cmd, options = {}) {
   if (options.async) {
 
     return new Promise((resolve, reject) => {
-      chProcess.exec(cmd, options, (error, stdout, stderr) => {
-        if (options.stdio === 'inherit') {
+      const cmdProcess = chProcess.exec(cmd, options, (error, stdout, stderr) => {
+        if (!options.stream && options.stdio === 'inherit') {
           process.stdout.write(stdout)
         }
 
@@ -63,6 +63,9 @@ export function run(cmd, options = {}) {
           resolve(stdout)
         }
       });
+      if (options.stream) {
+        cmdProcess.stdout.pipe(process.stdout);
+      }
     })
   }
 
