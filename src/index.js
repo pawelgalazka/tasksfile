@@ -52,17 +52,17 @@ export function run(cmd, options = {}) {
   if (options.async) {
 
     return new Promise((resolve, reject) => {
-      chProcess.exec(cmd, options, (error, stdout, stderr) => {
-        if (options.stdio === 'inherit') {
-          process.stdout.write(stdout)
-        }
-
+      const asyncProcess = chProcess.exec(cmd, options, (error, stdout, stderr) => {
         if (error) {
           reject(error)
         } else {
           resolve(stdout)
         }
       });
+
+      if (options.stdio === 'inherit') {
+        asyncProcess.stdout.pipe(process.stdout)
+      }
     })
   }
 
