@@ -1,19 +1,18 @@
 import * as runjs from '../lib/index';
 import chalk from 'chalk';
-import { expect, spy } from 'mochaccino';
 
 describe('api', () => {
   describe('.call()', () => {
     let a, b, obj, consl;
     beforeEach(() => {
-      a = spy();
-      b = spy();
+      a = jest.fn();
+      b = jest.fn();
       obj = {
         a: a,
         b: b
       };
       consl = {
-        log: spy()
+        log: jest.fn()
       };
     });
 

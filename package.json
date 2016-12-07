@@ -16,7 +16,7 @@
     "build": "babel src/ --out-dir lib/",
     "lint": "eslint src/ bin/",
     "test": "npm run lint && npm run test:fast && npm run test:e2e",
-    "test:fast": "npm run build && mocha test/api.test.js --compilers js:babel-register",
+    "test:fast": "npm run build && jest",
     "test:e2e": "bash ./test/e2e.test.sh",
     "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules"
   },
@@ -43,12 +43,12 @@
     "babel-preset-es2015": "6.16.0",
     "babel-register": "6.16.3",
     "babel-eslint": "7.0.0",
-    "mocha": "3.1.0",
-    "mochaccino": "1.2.0",
+    "babel-jest": "16.0.0",
     "eslint": "3.6.1",
     "eslint-config-standard": "6.2.0",
     "eslint-plugin-promise": "2.0.1",
-    "eslint-plugin-standard": "2.0.1"
+    "eslint-plugin-standard": "2.0.1",
+    "jest": "16.0.2"
   },
   "babel": {
     "presets": [
