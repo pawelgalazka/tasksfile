@@ -13,7 +13,7 @@ describe('api', () => {
   })
 
   describe('.call()', () => {
-    let a, b, obj, consl
+    let a, b, obj
     beforeEach(() => {
       a = jest.fn()
       b = jest.fn()
@@ -21,33 +21,30 @@ describe('api', () => {
         a: a,
         b: b
       }
-      consl = {
-        log: jest.fn()
-      }
     })
 
     it('should call method with given name on given object', () => {
-      runjs.call(obj, ['a'], consl)
+      runjs.call(obj, ['a'], logger)
       expect(a).toHaveBeenCalled()
     })
 
     it('should call method with given name on given object with given arguments', () => {
-      runjs.call(obj, ['b', '1', '2'], consl)
+      runjs.call(obj, ['b', '1', '2'], logger)
       expect(b).toHaveBeenCalledWith('1', '2')
     })
 
     it('should print list of all methods available in object if method name not given', () => {
-      runjs.call(obj, [], consl)
-      expect(consl.log).toHaveBeenCalledTimes(3)
-      expect(consl.log).toHaveBeenCalledWith('Available tasks:')
-      expect(consl.log).toHaveBeenCalledWith('a')
-      expect(consl.log).toHaveBeenCalledWith('b')
+      runjs.call(obj, [], logger)
+      expect(logger.log).toHaveBeenCalledTimes(3)
+      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
+      expect(logger.log).toHaveBeenCalledWith('a')
+      expect(logger.log).toHaveBeenCalledWith('b')
     })
 
     it('should print error message if method not exist on given object', () => {
-      runjs.call(obj, ['abc'], consl)
-      expect(consl.log).toHaveBeenCalledTimes(1)
-      expect(consl.log).toHaveBeenCalledWith(chalk.red('Task abc not found'))
+      runjs.call(obj, ['abc'], logger)
+      expect(logger.log).toHaveBeenCalledTimes(1)
+      expect(logger.log).toHaveBeenCalledWith(chalk.red('Task abc not found'))
     })
 
     it('should look for tasks in obj.default if available', () => {
@@ -58,7 +55,7 @@ describe('api', () => {
         }
       }
 
-      runjs.call(obj, ['a'], consl)
+      runjs.call(obj, ['a'], logger)
       expect(a).toHaveBeenCalled()
     })
   })
