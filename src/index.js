@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import chProcess from 'child_process'
+import { exec, execSync } from 'child_process'
 import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
@@ -93,7 +93,7 @@ export function run (cmd, options = {}) {
   console.log(chalk.bold(cmd))
   if (options.async) {
     return new Promise((resolve, reject) => {
-      const asyncProcess = chProcess.exec(cmd, options, (error, stdout, stderr) => {
+      const asyncProcess = exec(cmd, options, (error, stdout, stderr) => {
         if (error) {
           reject(error)
         } else {
@@ -107,7 +107,7 @@ export function run (cmd, options = {}) {
     })
   }
 
-  return chProcess.execSync(cmd, options)
+  return execSync(cmd, options)
 }
 
 export function generate (src, dst, context) {
