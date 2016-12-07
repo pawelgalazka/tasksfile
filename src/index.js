@@ -78,14 +78,18 @@ export function call (obj, args, cons = console) {
 }
 
 export function run (cmd, options = {}) {
-  options.env = options.env || process.env
-  let envPath = options.env.PATH ? options.env.PATH : process.env.PATH
+  const binPath = path.resolve('./node_modules/.bin')
 
-  options.env.PATH = [
-    `${process.cwd()}/node_modules/.bin/`, envPath
-  ].join(path.delimiter)
+  options = {
+    env: options.env || {},
+    cwd: options.cwd,
+    async: !!options.async,
+    stdio: options.stdio || 'inherit',
+    timeout: options.timeout
+  }
 
-  options.stdio = options.stdio || 'inherit'
+  options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
+
   console.log(chalk.bold(cmd))
   if (options.async) {
     return new Promise((resolve, reject) => {
