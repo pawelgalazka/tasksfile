@@ -80,6 +80,7 @@ export function call (obj, args, cons = console) {
 export function run (cmd, options = {}) {
   const binPath = path.resolve('./node_modules/.bin')
 
+  // Pick relevant option keys and set default values
   options = {
     env: options.env || {},
     cwd: options.cwd,
@@ -88,12 +89,20 @@ export function run (cmd, options = {}) {
     timeout: options.timeout
   }
 
+  // Include in PATH node_modules bin path
   options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
 
+  // Prepare options for exec commands (don't need async and stdio should have default value)
+  const execOptions = Object.assign({}, options)
+  delete execOptions.async
+  delete execOptions.stdio
+
   console.log(chalk.bold(cmd))
+
+  // Handle async call
   if (options.async) {
     return new Promise((resolve, reject) => {
-      const asyncProcess = exec(cmd, options, (error, stdout, stderr) => {
+      const asyncProcess = exec(cmd, execOptions, (error, stdout, stderr) => {
         if (error) {
           reject(error)
         } else {
@@ -107,7 +116,8 @@ export function run (cmd, options = {}) {
     })
   }
 
-  return execSync(cmd, options)
+  // Handle sync call by default
+  return execSync(cmd, execOptions)
 }
 
 export function generate (src, dst, context) {
