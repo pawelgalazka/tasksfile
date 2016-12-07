@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const api = require('../lib/index')
 
-const runfile = api.load('./runfile', console, function (filePath) {
+const runfile = api.load('./runfile', api.logger, function (filePath) {
   return require(path.resolve(filePath))
 }, function (filePath) {
   fs.accessSync(path.resolve(filePath))

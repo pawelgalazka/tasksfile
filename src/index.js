@@ -4,6 +4,24 @@ import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
 
+export const logger = {
+  debug: (...args) => {
+    console.log(chalk.blue(...args))
+  },
+  info: (...args) => {
+    console.log(chalk.bold(...args))
+  },
+  log: (...args) => {
+    console.log(...args)
+  },
+  warning: (...args) => {
+    console.warn(chalk.yellow(...args))
+  },
+  error: (...args) => {
+    console.error(chalk.red(...args))
+  }
+}
+
 export function load (runfilePath, logger, requirer, access, exit) {
   let config
 
@@ -35,7 +53,7 @@ export function load (runfilePath, logger, requirer, access, exit) {
   try {
     access('./runfile.js')
   } catch (error) {
-    logger.log(`No runfile.js defined in ${process.cwd()}`)
+    logger.error(`No runfile.js defined in ${process.cwd()}`)
     exit(1)
   }
 
