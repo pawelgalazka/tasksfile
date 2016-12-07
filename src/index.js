@@ -22,6 +22,8 @@ export const logger = {
   }
 }
 
+const loggerAlias = logger
+
 export function load (runfilePath, logger, requirer, access, exit) {
   let config
 
@@ -138,7 +140,7 @@ function execAsync (command, options) {
   })
 }
 
-export function run (command, options = {}) {
+export function run (command, options = {}, logger = loggerAlias) {
   const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
@@ -153,7 +155,7 @@ export function run (command, options = {}) {
   // Include in PATH node_modules bin path
   options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
 
-  console.log(chalk.bold(command))
+  logger.info(command)
 
   // Handle async call
   if (options.async) {

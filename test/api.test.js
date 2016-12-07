@@ -3,6 +3,15 @@ import * as runjs from '../lib/index'
 import chalk from 'chalk'
 
 describe('api', () => {
+  let logger
+
+  beforeEach(() => {
+    logger = {
+      log: jest.fn(),
+      info: jest.fn()
+    }
+  })
+
   describe('.call()', () => {
     let a, b, obj, consl
     beforeEach(() => {
@@ -56,12 +65,12 @@ describe('api', () => {
 
   describe('.run()', () => {
     it('should execute basic shell commands when sync mode', () => {
-      const output = runjs.run('echo "echo test"', {stdio: 'pipe', cwd: './test/sandbox'}).toString()
+      const output = runjs.run('echo "echo test"', {stdio: 'pipe', cwd: './test/sandbox'}, logger).toString()
       expect(output).toEqual('echo test\n')
     })
 
     it('should execute basic shell commands when async mode', (done) => {
-      runjs.run('echo "echo test"', {async: true}).then((output) => {
+      runjs.run('echo "echo test"', {async: true}, logger).then((output) => {
         output = output.toString()
         expect(output).toEqual('echo test\n')
         done()
