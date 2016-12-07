@@ -23,10 +23,10 @@ export function call(obj, args, cons = console) {
     let task = obj[t];
     obj[t] = function () {
       let time = Date.now();
-      cons.log(chalk.blue('Running "' + t + '"...'));
+      cons.log(chalk.blue(`Running "${t}"...`));
       task.apply(null, arguments);
       time = ((Date.now() - time) / 1000).toFixed(2);
-      cons.log(chalk.blue('Finished "' + t + '" in', time, 'sec'));
+      cons.log(chalk.blue(`Finished "${t}" in ${time} sec`));
     }
   });
 
@@ -35,7 +35,7 @@ export function call(obj, args, cons = console) {
     obj[taskName].apply(null, args.slice(1));
   }
   else {
-    cons.log(chalk.red("Task " + taskName + " not found"));
+    cons.log(chalk.red(`Task ${taskName} not found`));
   }
 }
 
