@@ -95,7 +95,9 @@ export function run (cmd, options = {}) {
   // Prepare options for exec commands (don't need async and stdio should have default value)
   const execOptions = Object.assign({}, options)
   delete execOptions.async
-  delete execOptions.stdio
+  if (execOptions.stdio === 'inherit') {
+    delete execOptions.stdio
+  }
 
   console.log(chalk.bold(cmd))
 
@@ -110,6 +112,7 @@ export function run (cmd, options = {}) {
         }
       })
 
+      // Simulate stdio=inherit behaviour for exec async (exec doesn't handle stdio option)
       if (options.stdio === 'inherit') {
         asyncProcess.stdout.pipe(process.stdout)
       }
@@ -117,7 +120,16 @@ export function run (cmd, options = {}) {
   }
 
   // Handle sync call by default
-  return execSync(cmd, execOptions)
+  const execSyncBuffer = execSync(cmd, execOptions)
+
+  if (options.stdio === 'inherit') {
+    // execSync do handle stdio option, but when stdio=inherit, execSync returns null. We can fix that
+    // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
+    // run function will still return child process outcome.
+    process.stdout.write(execSyncBuffer)
+  }
+
+  return execSyncBuffer.toString()
 }
 
 export function generate (src, dst, context) {
