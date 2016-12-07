@@ -1,14 +1,16 @@
 /* eslint-env jest */
 import * as runjs from '../lib/index'
-import chalk from 'chalk'
 
 describe('api', () => {
   let logger
 
   beforeEach(() => {
     logger = {
+      debug: jest.fn(),
+      info: jest.fn(),
       log: jest.fn(),
-      info: jest.fn()
+      warning: jest.fn(),
+      error: jest.fn()
     }
   })
 
@@ -43,8 +45,8 @@ describe('api', () => {
 
     it('should print error message if method not exist on given object', () => {
       runjs.call(obj, ['abc'], logger)
-      expect(logger.log).toHaveBeenCalledTimes(1)
-      expect(logger.log).toHaveBeenCalledWith(chalk.red('Task abc not found'))
+      expect(logger.error).toHaveBeenCalledTimes(1)
+      expect(logger.error).toHaveBeenCalledWith('Task abc not found')
     })
 
     it('should look for tasks in obj.default if available', () => {

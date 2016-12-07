@@ -12,4 +12,4 @@ const runfile = api.load('./runfile', api.logger, function (filePath) {
   process.exit(code)
 })
 
-api.call(runfile, process.argv.slice(2))
+api.call(runfile, process.argv.slice(2), api.logger)

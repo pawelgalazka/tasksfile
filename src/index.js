@@ -63,7 +63,7 @@ export function load (runfilePath, logger, requirer, access, exit) {
   return runfile
 }
 
-export function call (obj, args, cons = console) {
+export function call (obj, args, logger) {
   let taskName = args[0]
 
   if (obj.default) {
@@ -71,9 +71,9 @@ export function call (obj, args, cons = console) {
   }
 
   if (!taskName) {
-    cons.log('Available tasks:')
+    logger.log('Available tasks:')
     Object.keys(obj).forEach((t) => {
-      cons.log(t)
+      logger.log(t)
     })
     return
   }
@@ -82,10 +82,10 @@ export function call (obj, args, cons = console) {
     let task = obj[t]
     obj[t] = function () {
       let time = Date.now()
-      cons.log(chalk.blue(`Running "${t}"...`))
+      logger.debug(`Running "${t}"...`)
       task.apply(null, arguments)
       time = ((Date.now() - time) / 1000).toFixed(2)
-      cons.log(chalk.blue(`Finished "${t}" in ${time} sec`))
+      logger.debug(`Finished "${t}" in ${time} sec`)
     }
   })
 
@@ -93,7 +93,7 @@ export function call (obj, args, cons = console) {
   if (task) {
     obj[taskName].apply(null, args.slice(1))
   } else {
-    cons.log(chalk.red(`Task ${taskName} not found`))
+    logger.error(`Task ${taskName} not found`)
   }
 }
 
