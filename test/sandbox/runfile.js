@@ -6,6 +6,7 @@ const task = {
   },
   'testapi': () => {
     run('ls -al')
+    run('echo "\\033[33;44m Yellow text on blue background\\033[0m"')
   }
 };
 
