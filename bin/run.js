@@ -7,7 +7,8 @@ const runfile = api.load('./runfile', console, function (filePath) {
   return require(path.resolve(filePath))
 }, function (filePath) {
   fs.accessSync(path.resolve(filePath))
-}, function (code = 0) {
+}, function (code) {
+  code = code || 0
   process.exit(code)
 })
 
