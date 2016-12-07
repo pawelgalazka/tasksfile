@@ -110,6 +110,9 @@ Options:
 {
     cwd: .., // current working directory (String)
     async: ... // run command asynchronously (true/false)
+    stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
+    env: ...
+    timeout: ...
 }
 ```
 

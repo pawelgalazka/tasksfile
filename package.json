@@ -15,8 +15,8 @@
   "scripts": {
     "build": "babel src/ --out-dir lib/",
     "lint": "eslint src/ bin/ test/*.test.js",
-    "test": "npm run lint && npm run test:fast && npm run test:e2e",
-    "test:fast": "npm run build && jest",
+    "test": "npm run test:fast && npm run test:e2e",
+    "test:fast": "npm run lint && npm run build && jest",
     "test:e2e": "bash ./test/e2e.test.sh",
     "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules"
   },
