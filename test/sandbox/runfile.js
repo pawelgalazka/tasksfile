@@ -1,4 +1,4 @@
-import {run} from 'runjs';
+import {run} from 'runjs'
 
 const task = {
   'echo': (...args) => {
@@ -10,4 +10,4 @@ const task = {
   }
 };
 
-export default task;
+export default task
