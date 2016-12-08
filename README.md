@@ -6,7 +6,7 @@ Minimalistic building tool
 - [Why runjs ?](#why-runjs-)
 - [Running tasks](#running-tasks)
 - [API](#api)
-- [Babel](#babel)
+- [Using Babel](#using-babel)
 - [Scaling](#scaling)
 
 
@@ -155,12 +155,12 @@ will generate `file1.js`:
 }
 ```
 
-## Babel
+## Using Babel
 
 
-If you have Babel and `babel-register` already installed RunJs will pick up it
-automatically. If RunJS not finds `babel-register` it will fallback to pure node 
-for your `runfile.js`.
+If you have Babel and `babel-register` already installed, RunJS will pick up it
+automatically and use it for you `runfile.js`. If RunJS not finds `babel-register` 
+it will fallback to pure node.
 
 RunJS performs better with `npm>=3.0` when using with Babel. It is because new
 version of `npm` handles modules loading much more effective.
