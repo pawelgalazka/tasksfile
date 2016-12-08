@@ -13,12 +13,12 @@ Install in your project (to use runjs api inside your `runfile.js`):
 
     npm install runjs --save-dev
 
-If you want to use Babel (6.x) install it. Runjs will pickup
-babel-register automatically.
+If you want to use Babel, install it. RunJS will pickup your
+`babel-register` automatically.
 
     npm install babel-core babel-preset-es2015 babel-register --save-dev
 
-Configure Babel in your package.json:
+Configure Babel in your `package.json`:
 
     "babel": {
       "presets": ["es2015"]
@@ -56,23 +56,6 @@ run build:js
 run build
 ```
 
-Tips:
-
-* `./node_modules/.bin/` is included into PATH when running commands by `run` api method
-* executing `run` command without arguments displays list of all available tasks
-* each call of exported functions is logged to console as well as commands called by `run` method
-* you don't have to use Babel. If runjs not finds `babel-register` it will
-fallback to pure node for your `runfile.js`
-* if you use babel and you would like to RunJS perform better it
-is advised to use npm version >3.0 (better performance with loading
-many modules which is a case for Babel plugins)
-    
-If you have a very specific location for your `babel-register`, you can define
-a path to it through config (default is `./node_modules/babel-register`):
-
-    "runjs": {
-        "babel-register": "./node_modules/some_package/node_modules/babel-register"
-    }
 
 ## Why runjs ?
 
@@ -94,6 +77,38 @@ command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible. Additionally 
 each task and command call is reported in the console.
 
+## Babel
+
+
+If you have Babel and `babel-register` already installed RunJs will pick up it
+automatically. If RunJS not finds `babel-register` it will fallback to pure node 
+for your `runfile.js`.
+
+RunJS performs better with `npm>=3.0` when using with Babel. It is because new
+version of `npm` handles modules loading much more effective.
+    
+If you have very specific location for your `babel-register`, you can define
+a path to it through config in your `package.json` (default path is 
+`./node_modules/babel-register`):
+
+    "runjs": {
+        "babel-register": "./node_modules/some_package/node_modules/babel-register"
+    }
+
+## Running tasks
+
+To display all available tasks from your `runfile.js` type `run` in your command line
+without any arguments:
+
+    $ run
+    Requiring babel-register...
+    Processing runfile...
+    
+    Available tasks:
+    echo
+    testapi
+
+
 ## API
 
 ```javascript
@@ -102,7 +117,8 @@ import {run, generate} from 'runjs';
 
 **run(cmd, options)**
 
-run given command as a child process and log the call in the output
+run given command as a child process and log the call in the output. 
+`./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
 
 Options:
 
@@ -149,3 +165,7 @@ will generate `file1.js`:
     author: 'Pawel'
 }
 ```
+
+## Scaling
+
+...
