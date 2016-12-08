@@ -2,6 +2,13 @@
 
 Minimalistic building tool
 
+- [Get started](#get-started)
+- [Why runjs ?](#why-runjs-)
+- [Running tasks](#running-tasks)
+- [API](#api)
+- [Babel](#babel)
+- [Scaling](#scaling)
+
 
 ## Get started
 
@@ -77,24 +84,6 @@ command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible. Additionally 
 each task and command call is reported in the console.
 
-## Babel
-
-
-If you have Babel and `babel-register` already installed RunJs will pick up it
-automatically. If RunJS not finds `babel-register` it will fallback to pure node 
-for your `runfile.js`.
-
-RunJS performs better with `npm>=3.0` when using with Babel. It is because new
-version of `npm` handles modules loading much more effective.
-    
-If you have very specific location for your `babel-register`, you can define
-a path to it through config in your `package.json` (default path is 
-`./node_modules/babel-register`):
-
-    "runjs": {
-        "babel-register": "./node_modules/some_package/node_modules/babel-register"
-    }
-
 ## Running tasks
 
 To display all available tasks from your `runfile.js` type `run` in your command line
@@ -165,6 +154,24 @@ will generate `file1.js`:
     author: 'Pawel'
 }
 ```
+
+## Babel
+
+
+If you have Babel and `babel-register` already installed RunJs will pick up it
+automatically. If RunJS not finds `babel-register` it will fallback to pure node 
+for your `runfile.js`.
+
+RunJS performs better with `npm>=3.0` when using with Babel. It is because new
+version of `npm` handles modules loading much more effective.
+    
+If you have very specific location for your `babel-register`, you can define
+a path to it through config in your `package.json` (default path is 
+`./node_modules/babel-register`):
+
+    "runjs": {
+        "babel-register": "./node_modules/some_package/node_modules/babel-register"
+    }
 
 ## Scaling
 
