@@ -50,6 +50,9 @@ const task = {
     'build': () => {
       task['build:js']();
       task['build:css']();
+    },
+    'lint': (path = '.', options = {}) => {
+      options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
     }
 };
 
@@ -61,6 +64,7 @@ Run:
 run create:component AppContainer
 run build:js
 run build
+run lint --fix compontets/Button.js
 ```
 
 
