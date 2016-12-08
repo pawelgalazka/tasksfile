@@ -24,7 +24,7 @@ Configure Babel in your `package.json`:
       "presets": ["es2015"]
     }
 
-Create runfile.js:
+Create `runfile.js`:
 
 ```javascript
 
@@ -168,4 +168,41 @@ will generate `file1.js`:
 
 ## Scaling
 
-...
+When `runfile.js` gets large it is a good idea to extract some logic to external modules 
+and import them back to `runfile.js`:
+
+```javascript
+import { run } from 'runjs'
+import lint from './tasks/lint'
+import css from './tasks/css'
+import common from './tasks/common'
+
+export default {
+  css, // equals to css: css
+  lint, // equals to lint: lint
+  clean: () => {
+    run('rm -rf node_modules') 
+  },
+  ...common,
+  deploy: {
+    'production': () => {
+      
+    },
+    'staging': () => {
+      
+    }
+  }
+}
+```
+
+```
+run css:compile
+run lint:fix
+run clean
+run deploy:production
+run staging:staging
+```
+
+You can notice a couple of approaches here but in general RunJS will treat object key as
+a namespace. It is also possible to bump tasks directly without the namespace by using ES7 
+object spread operator as with `common` tasks in the example above.
