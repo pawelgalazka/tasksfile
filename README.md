@@ -88,7 +88,7 @@ command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible. Additionally 
 each task and command call is reported in the console.
 
-## Running tasks
+## Documenting tasks
 
 To display all available tasks from your `runfile.js` type `run` in your command line
 without any arguments:
@@ -100,7 +100,30 @@ without any arguments:
     Available tasks:
     echo
     testapi
+    
+Add `doc` property to your task to get additional description:
 
+```javascript
+import { run } from 'runjs'
+
+const task = {
+  'build:js': () => {
+    
+  }
+}
+
+task['build:js'].doc = 'Compile JavaScript files'
+
+export default task
+```
+
+    $ run
+    Requiring babel-register...
+    Processing runfile...
+    
+    Available tasks:
+    build:js - Compile JavaScript files
+    
 
 ## API
 
