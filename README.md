@@ -4,7 +4,7 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
-- [Running tasks](#running-tasks)
+- [Documenting tasks](#documenting-tasks)
 - [API](#api)
 - [Using Babel](#using-babel)
 - [Scaling](#scaling)
