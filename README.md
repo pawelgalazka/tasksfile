@@ -124,8 +124,61 @@ export default task
     Available tasks:
     build:js - Compile JavaScript files
     
+## Task arguments
+
+Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
+normal node.js module. Then based on command line arguments a proper exported function
+from `runfile.js` is run. All exported functions are provided in a single object as a part
+of a module so that means that both of cases below will work:
+
+```javascript
+export function sayHello () {
+  console.log('Hello!')
+}
+```
+
+```javascript
+export default {
+  sayHello: () => {
+    
+  } 
+}
+```
+
+    $ run sayHello
+    Hello!
+    
+Provided arguments are passed to the function as well:
+
+
+```javascript
+export function sayHello (who) {
+  console.log(`Hello ${who}!`)
+}
+```
+
+    $ run sayHello world
+    Hello world!
+    
+You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
+after task name argument in the command line but they will be always passed as a last
+argument in a form of JSON object.
+
+```javascript
+export function sayHello (who, options) {
+  console.log(`Hello ${who}!`)
+  console.log('Given options:', options)
+}
+```
+
+    $ run sayHello -a --test=something world
+    Hello world!
+    Given options: { a: true, test: 'something' }
+    
 
 ## API
+
+For inside `runfile.js` usage
 
 ```javascript
 import {run, generate} from 'runjs';
@@ -161,7 +214,7 @@ run('http-server .', {async: true}).then((output) => {
 
 **generate(src, dst, context)**
 
-generate file specified by `dst` path by given template `src` and `context`
+generate a file specified by `dst` path by given template file `src` and `context` object
 
 `file1.tmp.js`:
 ```javascript
