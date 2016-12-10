@@ -140,7 +140,7 @@ export function sayHello () {
 ```javascript
 export default {
   sayHello: () => {
-    
+    console.log('Hello!')
   } 
 }
 ```
@@ -148,7 +148,7 @@ export default {
     $ run sayHello
     Hello!
     
-Provided arguments are passed to the function as well:
+Provided arguments in the command line are passed to the function:
 
 
 ```javascript
@@ -161,8 +161,7 @@ export function sayHello (who) {
     Hello world!
     
 You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
-after task name argument in the command line but they will be always passed as a last
-argument in a form of JSON object.
+after task name but they will be always passed as a last argument in a form of JSON object.
 
 ```javascript
 export function sayHello (who, options) {
@@ -189,19 +188,19 @@ import {run, generate} from 'runjs';
 run given command as a child process and log the call in the output. 
 `./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
 
-Options:
+*Options:*
 
 ```javascript
 {
-    cwd: .., // current working directory (String)
-    async: ... // run command asynchronously (true/false)
-    stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
-    env: ...
+    cwd: ..., // current working directory (String)
+    async: ... // run command asynchronously (true/false), false by default
+    stdio: ... // 'inherit' (default), 'pipe' or 'ignore' (String)
+    env: ... // environment key-value pairs (Object)
     timeout: ...
 }
 ```
 
-Examples:
+*Examples:*
 
 ```javascript
 run('rm -rf ./build')
