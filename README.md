@@ -6,6 +6,9 @@ Minimalistic building tool
 - [Why runjs ?](#why-runjs-)
 - [Documenting tasks](#documenting-tasks)
 - [API](#api)
+    - [run](#runcmd-options)
+    - [generate](#generatesrc-dst-context)
+    - [ask](#askquestion)
 - [Using Babel](#using-babel)
 - [Scaling](#scaling)
 
@@ -253,13 +256,13 @@ export function prompt () {
     Hello Pawel!
     
 You can also provide an object of questions to `ask` function and it will gather
-answers sequentially and returning them within the object.
+answers sequentially and return them within the object.
 
 ```javascript
 ask({
   name: 'Component name',
   description: 'Component descrition'
-}).then((anserws) => {
+}).then((answers) => {
   // answers.name
   // answers.description
 })
