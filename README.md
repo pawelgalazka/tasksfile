@@ -183,7 +183,7 @@ For inside `runfile.js` usage
 import {run, generate} from 'runjs';
 ```
 
-**run(cmd, options)**
+#### run(cmd, options)
 
 run given command as a child process and log the call in the output. 
 `./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
@@ -211,7 +211,7 @@ run('http-server .', {async: true}).then((output) => {
 })
 ```
 
-**generate(src, dst, context)**
+#### generate(src, dst, context)
 
 generate a file specified by `dst` path by given template file `src` and `context` object
 
@@ -231,6 +231,49 @@ will generate `file1.js`:
 ```
 {
     author: 'Pawel'
+}
+```
+
+#### ask(question)
+
+Gather information from the user.
+
+```javascript
+import { ask } from 'runjs'
+
+export function prompt () {
+  ask('Who are you?').then((name) => {
+    console.log(`Hello ${name}!`) 
+  })
+}
+```
+
+    $ run prompt
+    Who are you? Pawel
+    Hello Pawel!
+    
+You can also provide an object of questions to `ask` function and it will gather
+answers sequentially and returning them within the object.
+
+```javascript
+ask({
+  name: 'Component name',
+  description: 'Component descrition'
+}).then((anserws) => {
+  // answers.name
+  // answers.description
+})
+```
+
+`async/await` with `ask` function. In this case you don't need to use callbacks: 
+
+
+```javascript
+import { ask } from 'runjs'
+
+export async function prompt () {
+  const name = await ask('Component name')
+  const description = await ask('Component description')
 }
 ```
 
