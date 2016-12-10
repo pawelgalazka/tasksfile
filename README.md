@@ -303,6 +303,33 @@ a path to it through config in your `package.json` (default path is
 When `runfile.js` gets large it is a good idea to extract some logic to external modules 
 and import them back to `runfile.js`:
 
+
+`./tasks/css`:
+
+```javascript
+export function compile () {
+  ...
+}
+```
+
+`./tasks/lint`:
+
+```javascript
+export function fix () {
+  ...
+}
+```
+
+`./tasks/common`:
+
+```javascript
+export function serve () {
+  ...
+}
+```
+
+`runfile.js`:
+
 ```javascript
 import { run } from 'runjs'
 import lint from './tasks/lint'
@@ -312,10 +339,10 @@ import common from './tasks/common'
 export default {
   css, // equals to css: css
   lint, // equals to lint: lint
+  ...common,
   clean: () => {
     run('rm -rf node_modules') 
   },
-  ...common,
   deploy: {
     'production': () => {
       
@@ -330,6 +357,7 @@ export default {
 ```
 run css:compile
 run lint:fix
+run serve
 run clean
 run deploy:production
 run staging:staging
