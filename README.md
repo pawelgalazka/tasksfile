@@ -5,6 +5,7 @@ Minimalistic building tool
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
 - [Documenting tasks](#documenting-tasks)
+- [Task arguments](#task-arguments)
 - [API](#api)
     - [run](#runcmd-options)
     - [generate](#generatesrc-dst-context)
