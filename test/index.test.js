@@ -14,7 +14,35 @@ describe('api', () => {
     }
   })
 
-  describe('.call()', () => {
+  describe('load()', () => {
+    describe('when custom path to babel-register defined in config', () => {
+      it('should raise an error if specified babel-register cannot be found', () => {
+
+      })
+
+      it('should load specified babel-register', () => {
+
+      })
+    })
+
+    it('should load babel-register if found', () => {
+
+    })
+
+    it('should ignore babel-register load error if module not found', () => {
+
+    })
+
+    it('should raise an error if runfile.js cannot be found', () => {
+
+    })
+
+    it('should return runfile.js as a module if found', () => {
+
+    })
+  })
+
+  describe('call()', () => {
     let a, b, obj
     beforeEach(() => {
       a = jest.fn()
@@ -62,7 +90,7 @@ describe('api', () => {
     })
   })
 
-  describe('.run()', () => {
+  describe('run()', () => {
     it('should execute basic shell commands when sync mode', () => {
       const output = runjs.run('echo "echo test"', {stdio: 'pipe', cwd: './test/sandbox'}, logger).toString()
       expect(output).toEqual('echo test\n')
@@ -75,5 +103,9 @@ describe('api', () => {
         done()
       })
     })
+  })
+
+  describe('ask()', () => {
+
   })
 })
