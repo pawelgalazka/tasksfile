@@ -4,6 +4,7 @@ import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
 
+// Needed to use ES5 inheritance, because of issues with Error subclassing for Babel
 export function RunJSError (message) {
   this.name = 'RunJSError'
   this.message = message
@@ -31,7 +32,7 @@ export const logger = {
 
 const loggerAlias = logger
 
-export function load (runfilePath, logger, requirer, access, exit) {
+export function load (runfilePath, logger, requirer, access) {
   let config
 
   // try to read package.json config
