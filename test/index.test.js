@@ -57,28 +57,44 @@ describe('api', () => {
       }
     })
 
-    it('should call method with given name on given object', () => {
+    it('calls the method from a given object by given method name and its arguments', () => {
       runjs.call(obj, ['a'], logger)
-      expect(a).toHaveBeenCalled()
-    })
-
-    it('should call method with given name on given object with given arguments', () => {
       runjs.call(obj, ['b', '1', '2'], logger)
+      expect(a).toHaveBeenCalled()
       expect(b).toHaveBeenCalledWith('1', '2')
     })
 
-    it('should print list of all methods available in object if method name not given', () => {
-      runjs.call(obj, [], logger)
-      expect(logger.log).toHaveBeenCalledTimes(3)
-      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
-      expect(logger.log).toHaveBeenCalledWith('a')
-      expect(logger.log).toHaveBeenCalledWith('b')
+    it('should handle dash arguments', () => {
+
     })
 
-    it('should print error message if method not exist on given object', () => {
+    it('should call methods from nested objects by method name name-spacing', () => {
+
+    })
+
+    it('should raise an error if called method cannot be found', () => {
+      // not correct test enough
       runjs.call(obj, ['abc'], logger)
       expect(logger.error).toHaveBeenCalledTimes(1)
       expect(logger.error).toHaveBeenCalledWith('Task abc not found')
+    })
+
+    it('should log execution time for called method with its arguments', () => {
+
+    })
+
+    describe('when method name not provided', () => {
+      it('should log list of methods available in the object', () => {
+        runjs.call(obj, [], logger)
+        expect(logger.log).toHaveBeenCalledTimes(3)
+        expect(logger.log).toHaveBeenCalledWith('Available tasks:')
+        expect(logger.log).toHaveBeenCalledWith('a')
+        expect(logger.log).toHaveBeenCalledWith('b')
+      })
+
+      it('should log list of methods from the object with description for each one if provided', () => {
+
+      })
     })
   })
 
