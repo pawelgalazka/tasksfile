@@ -40,6 +40,10 @@ describe('api', () => {
     it('should return runfile.js as a module if found', () => {
 
     })
+
+    it('should return runfile module default context if found', () => {
+
+    })
   })
 
   describe('call()', () => {
@@ -75,18 +79,6 @@ describe('api', () => {
       runjs.call(obj, ['abc'], logger)
       expect(logger.error).toHaveBeenCalledTimes(1)
       expect(logger.error).toHaveBeenCalledWith('Task abc not found')
-    })
-
-    it('should look for tasks in obj.default if available', () => {
-      obj = {
-        'default': {
-          a: a,
-          b: b
-        }
-      }
-
-      runjs.call(obj, ['a'], logger)
-      expect(a).toHaveBeenCalled()
     })
   })
 

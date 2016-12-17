@@ -60,15 +60,14 @@ export function load (runfilePath, logger, requirer, access, exit) {
   }
 
   const runfile = requirer('./runfile')
+  if (runfile.default) {
+    return runfile.default
+  }
   return runfile
 }
 
 export function call (obj, args, logger) {
   let taskName = args[0]
-
-  if (obj.default) {
-    obj = obj.default
-  }
 
   if (!taskName) {
     logger.log('Available tasks:')
