@@ -4,6 +4,13 @@ import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
 
+export function RunJSError (message) {
+  this.name = 'RunJSError'
+  this.message = message
+}
+RunJSError.prototype = Object.create(Error.prototype)
+RunJSError.prototype.constructor = RunJSError
+
 export const logger = {
   debug: (...args) => {
     console.log(chalk.blue(...args))
@@ -45,7 +52,7 @@ export function load (runfilePath, logger, requirer, access, exit) {
   } catch (error) {
     logger.log('Requiring failed. Fallback to pure node.')
     if (config['babel-register']) {
-      throw error.stack
+      throw error
     }
   }
 
@@ -55,8 +62,7 @@ export function load (runfilePath, logger, requirer, access, exit) {
   try {
     access('./runfile.js')
   } catch (error) {
-    logger.error(`No runfile.js defined in ${process.cwd()}`)
-    exit(1)
+    throw new RunJSError(`No runfile.js defined in ${process.cwd()}`)
   }
 
   const runfile = requirer('./runfile')
@@ -92,7 +98,7 @@ export function call (obj, args, logger) {
   if (task) {
     obj[taskName].apply(null, args.slice(1))
   } else {
-    logger.error(`Task ${taskName} not found`)
+    throw new RunJSError(`Task ${taskName} not found`)
   }
 }
 

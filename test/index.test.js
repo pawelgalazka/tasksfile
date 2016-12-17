@@ -73,10 +73,13 @@ describe('api', () => {
     })
 
     it('should raise an error if called method cannot be found', () => {
-      // not correct test enough
-      runjs.call(obj, ['abc'], logger)
-      expect(logger.error).toHaveBeenCalledTimes(1)
-      expect(logger.error).toHaveBeenCalledWith('Task abc not found')
+      expect(() => {
+        runjs.call(obj, ['abc'], logger)
+      }).toThrowError(('Task abc not found'))
+
+      expect(() => {
+        runjs.call(obj, ['abc'], logger)
+      }).toThrowError(runjs.RunJSError)
     })
 
     it('should log execution time for called method with its arguments', () => {
