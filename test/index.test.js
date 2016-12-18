@@ -179,8 +179,18 @@ describe('api', () => {
       }).toThrowError(runjs.RunJSError)
     })
 
-    it('should log execution time for called method with its arguments', () => {
+    it('should log method execution with given method arguments', () => {
+      runjs.call(obj, ['a'], logger)
+      expect(logger.debug).toHaveBeenCalledWith('Running "a"...')
+      runjs.call(obj, ['a', '1', '2'], logger)
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with (1, 2)...')
+      runjs.call(obj, ['a', 'b', 'c'], logger)
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with (b, c)...')
+    })
 
+    it('should log execution time for called method', () => {
+      runjs.call(obj, ['a', '1', '2'], logger)
+      expect(logger.debug.mock.calls[1][0]).toMatch(/Finished "a" in \d{1,2}\.\d{2} sec/)
     })
 
     describe('when method name not provided', () => {

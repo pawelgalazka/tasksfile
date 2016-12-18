@@ -91,10 +91,14 @@ export function call (obj, args, logger) {
 
   Object.keys(obj).forEach((t) => {
     let task = obj[t]
-    obj[t] = function () {
+    obj[t] = function (...args) {
       let time = Date.now()
-      logger.debug(`Running "${t}"...`)
-      task.apply(null, arguments)
+      if (args.length) {
+        logger.debug(`Running "${t}" with (${args.join(', ')})...`)
+      } else {
+        logger.debug(`Running "${t}"...`)
+      }
+      task.apply(null, args)
       time = ((Date.now() - time) / 1000).toFixed(2)
       logger.debug(`Finished "${t}" in ${time} sec`)
     }
