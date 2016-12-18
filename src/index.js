@@ -3,6 +3,7 @@ import childProcess from 'child_process'
 import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
+import minimist from 'minimist'
 
 // Needed to use ES5 inheritance, because of issues with Error subclassing for Babel
 export function RunJSError (message) {
@@ -106,7 +107,15 @@ export function call (obj, args, logger) {
 
   let task = obj[taskName]
   if (task) {
-    obj[taskName].apply(null, args.slice(1))
+    let parsedArgs = minimist(args.slice(1))
+    let options = Object.assign({}, parsedArgs)
+    delete options['_']
+    parsedArgs = parsedArgs['_']
+    if (Object.keys(options).length) {
+      obj[taskName].apply(null, parsedArgs.concat([options]))
+    } else {
+      obj[taskName].apply(null, args.slice(1))
+    }
   } else {
     throw new RunJSError(`Task ${taskName} not found`)
   }

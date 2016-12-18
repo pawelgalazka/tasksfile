@@ -162,7 +162,10 @@ describe('api', () => {
     })
 
     it('should handle dash arguments', () => {
-
+      runjs.call(obj, ['a', '-a', '--test=something', 'hello'], logger)
+      expect(a).toHaveBeenCalledWith('hello', {a: true, test: 'something'})
+      runjs.call(obj, ['b', 'hello', '-a', '--test=something'], logger)
+      expect(b).toHaveBeenCalledWith('hello', {a: true, test: 'something'})
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
