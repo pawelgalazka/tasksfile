@@ -78,8 +78,13 @@ export function call (obj, args, logger) {
 
   if (!taskName) {
     logger.log('Available tasks:')
-    Object.keys(obj).forEach((t) => {
-      logger.log(t)
+    Object.keys(obj).forEach((key) => {
+      let doc = obj[key].doc
+      if (doc) {
+        logger.log(key, `- ${doc}`)
+      } else {
+        logger.log(key)
+      }
     })
     return
   }

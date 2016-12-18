@@ -10,4 +10,6 @@ const task = {
   }
 };
 
+task['echo'].doc = 'Simple echo task'
+
 export default task

@@ -193,7 +193,13 @@ describe('api', () => {
       })
 
       it('should log list of methods from the object with description for each one if provided', () => {
-
+        obj.a.doc = 'Description for method a'
+        obj.b.doc = 'Description for method b'
+        runjs.call(obj, [], logger)
+        expect(logger.log).toHaveBeenCalledTimes(3)
+        expect(logger.log).toHaveBeenCalledWith('Available tasks:')
+        expect(logger.log).toHaveBeenCalledWith('a', '- Description for method a')
+        expect(logger.log).toHaveBeenCalledWith('b', '- Description for method b')
       })
     })
   })
