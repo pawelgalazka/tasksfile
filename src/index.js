@@ -95,7 +95,7 @@ export function call (obj, args, logger) {
     obj[t] = function (...args) {
       let time = Date.now()
       if (args.length) {
-        logger.debug(`Running "${t}" with (${args.join(', ')})...`)
+        logger.debug(`Running "${t}" with ${JSON.stringify(args)}...`)
       } else {
         logger.debug(`Running "${t}"...`)
       }

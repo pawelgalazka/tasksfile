@@ -186,9 +186,11 @@ describe('api', () => {
       runjs.call(obj, ['a'], logger)
       expect(logger.debug).toHaveBeenCalledWith('Running "a"...')
       runjs.call(obj, ['a', '1', '2'], logger)
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with (1, 2)...')
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["1","2"]...')
       runjs.call(obj, ['a', 'b', 'c'], logger)
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with (b, c)...')
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b","c"]...')
+      runjs.call(obj, ['a', 'b', '-a'], logger)
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b",{"a":true}]...')
     })
 
     it('should log execution time for called method', () => {
