@@ -15,13 +15,44 @@ describe('api', () => {
   })
 
   describe('load()', () => {
+    let requirer, access
+
+    beforeEach(() => {
+      requirer = jest.fn()
+      access = jest.fn().mockReturnValue(true)
+    })
+
     describe('when custom path to babel-register defined in config', () => {
       it('should raise an error if specified babel-register cannot be found', () => {
-
+        requirer = jest.fn((mod) => {
+          switch (mod) {
+            case './package.json':
+              return {runjs: {'babel-register': './custom/babel-register'}}
+            case './custom/babel-register':
+              throw new Error('Cannot find babel-register')
+            default:
+              throw new Error('Unexpected import')
+          }
+        })
+        expect(() => {
+          runjs.load('./runfile', logger, requirer, access)
+        }).toThrowError('Cannot find babel-register')
       })
 
       it('should load specified babel-register', () => {
-
+        requirer = jest.fn((mod) => {
+          switch (mod) {
+            case './package.json':
+              return {runjs: {'babel-register': './custom/babel-register'}}
+            case './custom/babel-register':
+              return {}
+            case './runfile':
+              return {test: 1}
+            default:
+              throw new Error('Unexpected import')
+          }
+        })
+        expect(runjs.load('./runfile', logger, requirer, access)).toEqual({test: 1})
       })
     })
 

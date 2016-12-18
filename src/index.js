@@ -61,12 +61,12 @@ export function load (runfilePath, logger, requirer, access) {
   logger.log('Processing runfile...')
 
   try {
-    access('./runfile.js')
+    access(`${runfilePath}.js`)
   } catch (error) {
     throw new RunJSError(`No runfile.js defined in ${process.cwd()}`)
   }
 
-  const runfile = requirer('./runfile')
+  const runfile = requirer(runfilePath)
   if (runfile.default) {
     return runfile.default
   }
