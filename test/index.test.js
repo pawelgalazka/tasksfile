@@ -47,33 +47,99 @@ describe('api', () => {
             case './custom/babel-register':
               return {}
             case './runfile':
-              return {test: 1}
+              return {}
             default:
               throw new Error('Unexpected import')
           }
         })
-        expect(runjs.load('./runfile', logger, requirer, access)).toEqual({test: 1})
+        runjs.load('./runfile', logger, requirer, access)
+        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
       })
     })
 
     it('should load babel-register if found', () => {
-
+      requirer = jest.fn((mod) => {
+        switch (mod) {
+          case './package.json':
+            return {}
+          case './node_modules/babel-register':
+            return {}
+          case './runfile':
+            return {}
+          default:
+            throw new Error('Unexpected import')
+        }
+      })
+      runjs.load('./runfile', logger, requirer, access)
+      expect(requirer).toHaveBeenCalledWith('./node_modules/babel-register')
     })
 
     it('should ignore babel-register load error if module not found', () => {
-
+      requirer = jest.fn((mod) => {
+        switch (mod) {
+          case './package.json':
+            return {}
+          case './node_modules/babel-register':
+            throw new Error('babel-register not found')
+          case './runfile':
+            return {test: 1}
+          default:
+            throw new Error('Unexpected import')
+        }
+      })
+      expect(runjs.load('./runfile', logger, requirer, access)).toEqual({test: 1})
     })
 
     it('should raise an error if runfile.js cannot be found', () => {
-
+      requirer = jest.fn((mod) => {
+        switch (mod) {
+          case './package.json':
+            return {}
+          case './node_modules/babel-register':
+            return {}
+          default:
+            throw new Error('Unexpected import')
+        }
+      })
+      access = jest.fn(() => { throw new Error('No access') })
+      expect(() => {
+        runjs.load('./runfile', logger, requirer, access)
+      }).toThrowError(runjs.RunJSError)
+      expect(() => {
+        runjs.load('./runfile', logger, requirer, access)
+      }).toThrowError(/^No \.\/runfile\.js defined in/)
     })
 
     it('should return runfile.js as a module if found', () => {
-
+      requirer = jest.fn((mod) => {
+        switch (mod) {
+          case './package.json':
+            return {}
+          case './node_modules/babel-register':
+            return {}
+          case './runfile':
+            return {test: 1}
+          default:
+            throw new Error('Unexpected import')
+        }
+      })
+      expect(runjs.load('./runfile', logger, requirer, access)).toEqual({test: 1})
     })
 
     it('should return runfile module default context if found', () => {
-
+      requirer = jest.fn((mod) => {
+        switch (mod) {
+          case './package.json':
+            return {}
+          case './node_modules/babel-register':
+            return {}
+          case './runfile':
+            return {default: {test: 1}}
+          default:
+            throw new Error('Unexpected import')
+        }
+      })
+      expect(runjs.load('./runfile', logger, requirer, access)).toEqual({test: 1})
     })
   })
 
