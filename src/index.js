@@ -60,6 +60,7 @@ export function run (cmd, options = {}) {
 
       if (options.stdio === 'inherit') {
         asyncProcess.stdout.pipe(process.stdout)
+        asyncProcess.stderr.pipe(process.stderr)
       }
     })
   }
