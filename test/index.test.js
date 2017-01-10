@@ -232,7 +232,7 @@ describe('api', () => {
 
   describe('run()', () => {
     it('should execute basic shell commands when sync mode', () => {
-      const output = runjs.run('echo "echo test"', {stdio: 'pipe', cwd: './test/sandbox'}, logger).toString()
+      const output = runjs.run('echo "echo test"', {cwd: './test/sandbox'}, logger)
       expect(output).toEqual('echo test\n')
     })
 
