@@ -162,10 +162,23 @@ describe('api', () => {
     })
 
     it('should handle dash arguments', () => {
-      runjs.call(obj, ['a', '-a', '--test=something', 'hello'], logger)
-      expect(a).toHaveBeenCalledWith('hello', {a: true, test: 'something'})
-      runjs.call(obj, ['b', 'hello', '-a', '--test=something'], logger)
-      expect(b).toHaveBeenCalledWith('hello', {a: true, test: 'something'})
+      runjs.call(obj, ['a', '-a', 'hello'], logger)
+      expect(a).toHaveBeenCalledWith('hello', {a: true})
+      a.mockReset()
+      runjs.call(obj, ['a', 'hello', '-a'], logger)
+      expect(a).toHaveBeenCalledWith('hello', {a: true})
+      a.mockReset()
+      runjs.call(obj, ['a', '--abc', 'hello'], logger)
+      expect(a).toHaveBeenCalledWith('hello', {abc: true})
+      a.mockReset()
+      runjs.call(obj, ['a', '-a=123', 'hello'], logger)
+      expect(a).toHaveBeenCalledWith('hello', {a: 123})
+      a.mockReset()
+      runjs.call(obj, ['a', '--abc=test', 'hello'], logger)
+      expect(a).toHaveBeenCalledWith('hello', {abc: 'test'})
+      a.mockReset()
+      runjs.call(obj, ['a', '-a', '--abc=test', 'hello'], logger)
+      expect(a).toHaveBeenCalledWith('hello', {a: true, abc: 'test'})
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
