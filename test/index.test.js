@@ -180,7 +180,32 @@ describe('api', () => {
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
+      const c = jest.fn()
+      const f = jest.fn()
+      obj = {
+        a,
+        e: {
+          b,
+          d: {
+            sub: c,
+            f: () => {}
+          }
+        },
+        'e:d:f': f
+      }
 
+      runjs.call(obj, ['a', '1', '2'], logger)
+      expect(a).toHaveBeenLastCalledWith('1', '2')
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["1","2"]...')
+      runjs.call(obj, ['e:b', '1', '2'], logger)
+      expect(b).toHaveBeenLastCalledWith('1', '2')
+      expect(logger.debug).toHaveBeenCalledWith('Running "e:b" with ["1","2"]...')
+      runjs.call(obj, ['e:d:sub', '1', '2'], logger)
+      expect(c).toHaveBeenLastCalledWith('1', '2')
+      expect(logger.debug).toHaveBeenCalledWith('Running "e:d:sub" with ["1","2"]...')
+      runjs.call(obj, ['e:d:f', '1', '2'], logger)
+      expect(f).toHaveBeenLastCalledWith('1', '2')
+      expect(logger.debug).toHaveBeenCalledWith('Running "e:d:f" with ["1","2"]...')
     })
 
     it('should raise an error if called method cannot be found', () => {
