@@ -238,7 +238,6 @@ describe('api', () => {
 
     it('should execute basic shell commands when async mode', (done) => {
       runjs.run('echo "echo test"', {async: true}, logger).then((output) => {
-        output = output.toString()
         expect(output).toEqual('echo test\n')
         done()
       })

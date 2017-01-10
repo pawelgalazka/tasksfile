@@ -168,7 +168,7 @@ function execAsync (command, options) {
       if (error) {
         reject(error)
       } else {
-        resolve(stdout)
+        resolve(stdout.toString())
       }
     })
 
