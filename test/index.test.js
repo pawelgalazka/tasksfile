@@ -175,6 +175,8 @@ describe('api', () => {
       expect(a).toHaveBeenLastCalledWith('hello', {abc: 'test'})
       runjs.call(obj, ['a', '-a', '--abc=test', 'hello'], logger)
       expect(a).toHaveBeenLastCalledWith('hello', {a: true, abc: 'test'})
+      runjs.call(obj, ['a', '-a', '--abc=test', '-b=4', 'hello', '-abc', '--def'], logger)
+      expect(a).toHaveBeenLastCalledWith('hello', '-abc', {a: true, b: 4, abc: 'test', def: true})
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {

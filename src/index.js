@@ -76,8 +76,8 @@ export function load (runfilePath, logger, requirer, access) {
 function parseArgs (args) {
   let options = {}
   let nextArgs = args.filter(arg => {
-    const doubleDashMatch = arg.match(/^--(\w+)=?(\w+)?$/)
-    const singleDashMatch = arg.match(/^-(\w)=?(\w+)?$/)
+    const doubleDashMatch = arg.match(/^--(\w+)=(\w*)$/) || arg.match(/^--(\w+)$/)
+    const singleDashMatch = arg.match(/^-(\w)=(\w*)$/) || arg.match(/^-(\w)$/)
 
     if (singleDashMatch) {
       options[singleDashMatch[1]] = Number(singleDashMatch[2]) || singleDashMatch[2] || true
