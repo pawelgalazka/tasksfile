@@ -4,7 +4,6 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
-- [Documenting tasks](#documenting-tasks)
 - [Task arguments](#task-arguments)
 - [API](#api)
     - [run](#runcmd-options)
@@ -12,6 +11,7 @@ Minimalistic building tool
     - [ask](#askquestion)
 - [Using Babel](#using-babel)
 - [Scaling](#scaling)
+- [Documenting tasks](#documenting-tasks)
 
 
 ## Get started
@@ -92,42 +92,7 @@ command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible. Additionally 
 each task and command call is reported in the console.
 
-## Documenting tasks
 
-To display all available tasks from your `runfile.js` type `run` in your command line
-without any arguments:
-
-    $ run
-    Requiring babel-register...
-    Processing runfile...
-    
-    Available tasks:
-    echo
-    testapi
-    
-Add `doc` property to your task to get additional description:
-
-```javascript
-import { run } from 'runjs'
-
-const task = {
-  'build:js': () => {
-    
-  }
-}
-
-task['build:js'].doc = 'Compile JavaScript files'
-
-export default task
-```
-
-    $ run
-    Requiring babel-register...
-    Processing runfile...
-    
-    Available tasks:
-    build:js - Compile JavaScript files
-    
 ## Task arguments
 
 Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
@@ -367,3 +332,40 @@ run staging:staging
 You can notice a couple of approaches here but in general RunJS will treat object key as
 a namespace. It is also possible to bump tasks directly without the namespace by using ES7 
 object spread operator as with `common` tasks in the example above.
+
+## Documenting tasks
+
+To display all available tasks from your `runfile.js` type `run` in your command line
+without any arguments:
+
+    $ run
+    Requiring babel-register...
+    Processing runfile...
+    
+    Available tasks:
+    echo
+    testapi
+    
+Add `doc` property to your task to get additional description:
+
+```javascript
+import { run } from 'runjs'
+
+const task = {
+  'build:js': () => {
+    
+  }
+}
+
+task['build:js'].doc = 'Compile JavaScript files'
+
+export default task
+```
+
+    $ run
+    Requiring babel-register...
+    Processing runfile...
+    
+    Available tasks:
+    build:js - Compile JavaScript files
+    
