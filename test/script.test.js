@@ -211,13 +211,22 @@ describe('script', () => {
       }, logger)
     })
 
-    it('should log method execution with given method arguments', () => {
+    it('should log flat methods execution with given method arguments', () => {
       obj.a()
       expect(logger.debug).toHaveBeenCalledWith('Running "a"...')
       obj.a('b', 'c')
       expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b","c"]...')
       obj.a('b', {a: true})
       expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b",{"a":true}]...')
+    })
+
+    it('should log nested methods execution with given method arguments', () => {
+      obj.b.c()
+      expect(logger.debug).toHaveBeenCalledWith('Running "b:c"...')
+      obj.b.c('b', 'c')
+      expect(logger.debug).toHaveBeenCalledWith('Running "b:c" with ["b","c"]...')
+      obj.b.d.e('b', {a: true})
+      expect(logger.debug).toHaveBeenCalledWith('Running "b:d:e" with ["b",{"a":true}]...')
     })
 
     it('should log execution time for called method', () => {
