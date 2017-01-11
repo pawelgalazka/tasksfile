@@ -28,4 +28,6 @@ npm install
 echo 'Testing test package'
 ./node_modules/.bin/run echo 1 2 3
 ./node_modules/.bin/run testapi
+./node_modules/.bin/run n1:nested1
+./node_modules/.bin/run n1:nested2
 
