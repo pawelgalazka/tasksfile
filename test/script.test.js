@@ -236,21 +236,29 @@ describe('script', () => {
   })
 
   describe('call()', () => {
-    let a, b, obj
+    let obj, a, c, e, h
     beforeEach(() => {
       a = jest.fn()
-      b = jest.fn()
+      c = jest.fn()
+      e = jest.fn()
+      h = jest.fn()
       obj = {
-        a: a,
-        b: b
+        a,
+        b: {
+          c,
+          d: {
+            e
+          }
+        },
+        'f:g:h': h
       }
     })
 
     it('calls the method from a given object by given method name and its arguments', () => {
       script.call(obj, ['a'])
-      script.call(obj, ['b', '1', '2'])
-      expect(a).toHaveBeenCalled()
-      expect(b).toHaveBeenCalledWith('1', '2')
+      expect(a).toHaveBeenLastCalledWith()
+      script.call(obj, ['a', '1', '2'])
+      expect(a).toHaveBeenLastCalledWith('1', '2')
     })
 
     it('should handle dash arguments', () => {
@@ -272,29 +280,14 @@ describe('script', () => {
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
-      const c = jest.fn()
-      const f = jest.fn()
-      obj = {
-        a,
-        e: {
-          b,
-          d: {
-            sub: c,
-            f: () => {}
-          }
-        },
-        'e:d:f': f
-      }
-
       script.call(obj, ['a', '1', '2'])
       expect(a).toHaveBeenLastCalledWith('1', '2')
-      script.call(obj, ['e:b', '1', '2'])
-      expect(b).toHaveBeenLastCalledWith('1', '2')
-      script.call(obj, ['e:d:sub', '1', '2'])
+      script.call(obj, ['b:c', '1', '2'])
       expect(c).toHaveBeenLastCalledWith('1', '2')
-      script.call(obj, ['e:d:f', '1', '2'])
-      expect(f).toHaveBeenLastCalledWith('1', '2')
-      // script.call(obj, ['e', '1', '2'])
+      script.call(obj, ['b:d:e', '1', '2'])
+      expect(e).toHaveBeenLastCalledWith('1', '2')
+      script.call(obj, ['f:g:h', '1', '2'])
+      expect(h).toHaveBeenLastCalledWith('1', '2')
     })
 
     it('should raise an error if called method cannot be found', () => {
@@ -305,6 +298,10 @@ describe('script', () => {
       expect(() => {
         script.call(obj, ['abc'])
       }).toThrowError(script.RunJSError)
+
+      expect(() => {
+        script.call(obj, ['b:d'])
+      }).toThrowError(('Task b:d not found'))
     })
   })
 })
