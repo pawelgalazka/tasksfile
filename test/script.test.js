@@ -144,13 +144,11 @@ describe('script', () => {
   })
 
   describe('describe()', () => {
-    let a, b, obj
+    let obj
     beforeEach(() => {
-      a = jest.fn()
-      b = jest.fn()
       obj = {
-        a: a,
-        b: b
+        a: () => {},
+        b: () => {}
       }
     })
 
@@ -166,14 +164,32 @@ describe('script', () => {
       obj.a.doc = 'Description for method a'
       obj.b.doc = 'Description for method b'
       script.describe(obj, logger)
-      expect(logger.log).toHaveBeenCalledTimes(3)
       expect(logger.log).toHaveBeenCalledWith('Available tasks:')
       expect(logger.log).toHaveBeenCalledWith('a', '- Description for method a')
       expect(logger.log).toHaveBeenCalledWith('b', '- Description for method b')
+      expect(logger.log).toHaveBeenCalledTimes(3)
     })
 
     it('should log list of name spaced / nested methods', () => {
+      obj.c = {
+        d: () => {},
+        e: {
+          f: () => {},
+          g: () => {}
+        }
+      }
 
+      obj.c.doc = 'Description for namespace c'
+      obj.c.e.f.doc = 'Description for method f'
+
+      script.describe(obj, logger)
+      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
+      expect(logger.log).toHaveBeenCalledWith('a')
+      expect(logger.log).toHaveBeenCalledWith('b')
+      expect(logger.log).toHaveBeenCalledWith('c:d')
+      expect(logger.log).toHaveBeenCalledWith('c:e:f', '- Description for method f')
+      expect(logger.log).toHaveBeenCalledWith('c:e:g')
+      expect(logger.log).toHaveBeenCalledTimes(6)
     })
   })
 
