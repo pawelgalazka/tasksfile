@@ -24,7 +24,7 @@ export const logger = {
 
 const loggerAlias = logger
 
-function execSync (command, options) {
+function runSync (command, options) {
   // Prepare options for execSync command (don't need async and stdio should have default value)
   const execOptions = Object.assign({}, options)
   delete execOptions.async
@@ -44,7 +44,7 @@ function execSync (command, options) {
   return execSyncBuffer.toString()
 }
 
-function execAsync (command, options) {
+function runAsync (command, options) {
   // Prepare options for exec command (don't need async and stdio as it doesn't handle them)
   const execOptions = Object.assign({}, options)
   delete execOptions.async
@@ -86,11 +86,11 @@ export function run (command, options = {}, logger = loggerAlias) {
 
   // Handle async call
   if (options.async) {
-    return execAsync(command, options)
+    return runAsync(command, options)
   }
 
   // Handle sync call by default
-  return execSync(command, options)
+  return runSync(command, options)
 }
 
 export function generate (src, dst, context) {
