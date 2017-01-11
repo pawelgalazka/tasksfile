@@ -10,7 +10,13 @@ try {
   }, function (filePath) {
     return fs.accessSync(path.resolve(filePath))
   })
-  script.call(runfile, process.argv.slice(2), api.logger)
+  const ARGV = process.argv.slice(2)
+
+  if (ARGV.length) {
+    script.call(runfile, ARGV, api.logger)
+  } else {
+    script.describe(runfile, api.logger)
+  }
 } catch (error) {
   if (error instanceof script.RunJSError) {
     api.logger.error(error.message)

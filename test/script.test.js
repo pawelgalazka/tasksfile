@@ -143,6 +143,40 @@ describe('script', () => {
     })
   })
 
+  describe('describe()', () => {
+    let a, b, obj
+    beforeEach(() => {
+      a = jest.fn()
+      b = jest.fn()
+      obj = {
+        a: a,
+        b: b
+      }
+    })
+
+    it('should log list of methods available in the object', () => {
+      script.describe(obj, logger)
+      expect(logger.log).toHaveBeenCalledTimes(3)
+      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
+      expect(logger.log).toHaveBeenCalledWith('a')
+      expect(logger.log).toHaveBeenCalledWith('b')
+    })
+
+    it('should log list of methods from the object with description for each one if provided', () => {
+      obj.a.doc = 'Description for method a'
+      obj.b.doc = 'Description for method b'
+      script.describe(obj, logger)
+      expect(logger.log).toHaveBeenCalledTimes(3)
+      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
+      expect(logger.log).toHaveBeenCalledWith('a', '- Description for method a')
+      expect(logger.log).toHaveBeenCalledWith('b', '- Description for method b')
+    })
+
+    it('should log list of name spaced / nested methods', () => {
+
+    })
+  })
+
   describe('call()', () => {
     let a, b, obj
     beforeEach(() => {
@@ -233,30 +267,6 @@ describe('script', () => {
     it('should log execution time for called method', () => {
       script.call(obj, ['a', '1', '2'], logger)
       expect(logger.debug.mock.calls[1][0]).toMatch(/Finished "a" in \d{1,2}\.\d{2} sec/)
-    })
-
-    describe('when method name not provided', () => {
-      it('should log list of methods available in the object', () => {
-        script.call(obj, [], logger)
-        expect(logger.log).toHaveBeenCalledTimes(3)
-        expect(logger.log).toHaveBeenCalledWith('Available tasks:')
-        expect(logger.log).toHaveBeenCalledWith('a')
-        expect(logger.log).toHaveBeenCalledWith('b')
-      })
-
-      it('should log list of methods from the object with description for each one if provided', () => {
-        obj.a.doc = 'Description for method a'
-        obj.b.doc = 'Description for method b'
-        script.call(obj, [], logger)
-        expect(logger.log).toHaveBeenCalledTimes(3)
-        expect(logger.log).toHaveBeenCalledWith('Available tasks:')
-        expect(logger.log).toHaveBeenCalledWith('a', '- Description for method a')
-        expect(logger.log).toHaveBeenCalledWith('b', '- Description for method b')
-      })
-
-      it('should log list of name spaced / nested methods', () => {
-
-      })
     })
   })
 })

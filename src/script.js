@@ -72,21 +72,20 @@ function parseArgs (args) {
   return nextArgs
 }
 
-export function call (obj, args, logger) {
-  let taskName = args[0]
+export function describe (obj, logger) {
+  logger.log('Available tasks:')
+  Object.keys(obj).forEach((key) => {
+    let doc = obj[key].doc
+    if (doc) {
+      logger.log(key, `- ${doc}`)
+    } else {
+      logger.log(key)
+    }
+  })
+}
 
-  if (!taskName) {
-    logger.log('Available tasks:')
-    Object.keys(obj).forEach((key) => {
-      let doc = obj[key].doc
-      if (doc) {
-        logger.log(key, `- ${doc}`)
-      } else {
-        logger.log(key)
-      }
-    })
-    return
-  }
+export function call (obj, args, logger) {
+  const taskName = args[0]
 
   if (!obj[taskName]) {
     throw new RunJSError(`Task ${taskName} not found`)
