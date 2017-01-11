@@ -193,6 +193,39 @@ describe('script', () => {
     })
   })
 
+  describe('decorate()', () => {
+    let obj, a, c, e
+
+    beforeEach(() => {
+      a = jest.fn()
+      c = jest.fn()
+      e = jest.fn()
+      obj = script.decorate({
+        a,
+        b: {
+          c,
+          d: {
+            e
+          }
+        }
+      }, logger)
+    })
+
+    it('should log method execution with given method arguments', () => {
+      obj.a()
+      expect(logger.debug).toHaveBeenCalledWith('Running "a"...')
+      obj.a('b', 'c')
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b","c"]...')
+      obj.a('b', {a: true})
+      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b",{"a":true}]...')
+    })
+
+    it('should log execution time for called method', () => {
+      obj.a('b', 'c')
+      expect(logger.debug.mock.calls[1][0]).toMatch(/Finished "a" in \d{1,2}\.\d{2} sec/)
+    })
+  })
+
   describe('call()', () => {
     let a, b, obj
     beforeEach(() => {
@@ -267,22 +300,6 @@ describe('script', () => {
       expect(() => {
         script.call(obj, ['abc'], logger)
       }).toThrowError(script.RunJSError)
-    })
-
-    it('should log method execution with given method arguments', () => {
-      script.call(obj, ['a'], logger)
-      expect(logger.debug).toHaveBeenCalledWith('Running "a"...')
-      script.call(obj, ['a', '1', '2'], logger)
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["1","2"]...')
-      script.call(obj, ['a', 'b', 'c'], logger)
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b","c"]...')
-      script.call(obj, ['a', 'b', '-a'], logger)
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b",{"a":true}]...')
-    })
-
-    it('should log execution time for called method', () => {
-      script.call(obj, ['a', '1', '2'], logger)
-      expect(logger.debug.mock.calls[1][0]).toMatch(/Finished "a" in \d{1,2}\.\d{2} sec/)
     })
   })
 })

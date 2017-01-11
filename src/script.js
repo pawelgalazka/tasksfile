@@ -94,27 +94,39 @@ export function describe (obj, logger, namespace) {
   })
 }
 
+export function decorate (obj, logger, namespace) {
+  let nextObj = {}
+  Object.keys(obj).forEach((key) => {
+    const value = obj[key]
+    const nextNamespace = namespace ? `${namespace}:${key}` : key
+
+    if (typeof value === 'function') {
+      nextObj[key] = function (...args) {
+        let time = Date.now()
+        if (args.length) {
+          logger.debug(`Running "${nextNamespace}" with ${JSON.stringify(args)}...`)
+        } else {
+          logger.debug(`Running "${nextNamespace}"...`)
+        }
+        value.apply(null, args)
+        time = ((Date.now() - time) / 1000).toFixed(2)
+        logger.debug(`Finished "${nextNamespace}" in ${time} sec`)
+      }
+    }
+
+    if (typeof value === 'object') {
+      nextObj[key] = decorate(value, logger, nextNamespace)
+    }
+  })
+  return nextObj
+}
+
 export function call (obj, args, logger) {
   const taskName = args[0]
 
   if (!obj[taskName]) {
     throw new RunJSError(`Task ${taskName} not found`)
   }
-
-  Object.keys(obj).forEach((key) => {
-    const task = obj[key]
-    obj[key] = function (...args) {
-      let time = Date.now()
-      if (args.length) {
-        logger.debug(`Running "${key}" with ${JSON.stringify(args)}...`)
-      } else {
-        logger.debug(`Running "${key}"...`)
-      }
-      task.apply(null, args)
-      time = ((Date.now() - time) / 1000).toFixed(2)
-      logger.debug(`Finished "${key}" in ${time} sec`)
-    }
-  })
 
   obj[taskName].apply(null, parseArgs(args.slice(1)))
 }
