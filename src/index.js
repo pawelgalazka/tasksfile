@@ -114,6 +114,10 @@ export function call (obj, args, logger) {
     return
   }
 
+  if (!obj[taskName]) {
+    throw new RunJSError(`Task ${taskName} not found`)
+  }
+
   Object.keys(obj).forEach((t) => {
     let task = obj[t]
     obj[t] = function (...args) {
@@ -129,12 +133,7 @@ export function call (obj, args, logger) {
     }
   })
 
-  let task = obj[taskName]
-  if (task) {
-    obj[taskName].apply(null, parseArgs(args.slice(1)))
-  } else {
-    throw new RunJSError(`Task ${taskName} not found`)
-  }
+  obj[taskName].apply(null, parseArgs(args.slice(1)))
 }
 
 function execSync (command, options) {
