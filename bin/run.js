@@ -14,7 +14,7 @@ try {
 
   if (ARGV.length) {
     let decoratedRunfile = script.decorate(runfile, api.logger)
-    script.call(decoratedRunfile, ARGV, api.logger)
+    script.call(decoratedRunfile, ARGV)
   } else {
     script.describe(runfile, api.logger)
   }

@@ -238,27 +238,27 @@ describe('script', () => {
     })
 
     it('calls the method from a given object by given method name and its arguments', () => {
-      script.call(obj, ['a'], logger)
-      script.call(obj, ['b', '1', '2'], logger)
+      script.call(obj, ['a'])
+      script.call(obj, ['b', '1', '2'])
       expect(a).toHaveBeenCalled()
       expect(b).toHaveBeenCalledWith('1', '2')
     })
 
     it('should handle dash arguments', () => {
-      script.call(obj, ['a', '-a', 'hello'], logger)
+      script.call(obj, ['a', '-a', 'hello'])
       expect(a).toHaveBeenLastCalledWith('hello', {a: true})
       a.mockClear()
-      script.call(obj, ['a', 'hello', '-a'], logger)
+      script.call(obj, ['a', 'hello', '-a'])
       expect(a).toHaveBeenLastCalledWith('hello', {a: true})
-      script.call(obj, ['a', '--abc', 'hello'], logger)
+      script.call(obj, ['a', '--abc', 'hello'])
       expect(a).toHaveBeenLastCalledWith('hello', {abc: true})
-      script.call(obj, ['a', '-a=123', 'hello'], logger)
+      script.call(obj, ['a', '-a=123', 'hello'])
       expect(a).toHaveBeenLastCalledWith('hello', {a: 123})
-      script.call(obj, ['a', '--abc=test', 'hello'], logger)
+      script.call(obj, ['a', '--abc=test', 'hello'])
       expect(a).toHaveBeenLastCalledWith('hello', {abc: 'test'})
-      script.call(obj, ['a', '-a', '--abc=test', 'hello'], logger)
+      script.call(obj, ['a', '-a', '--abc=test', 'hello'])
       expect(a).toHaveBeenLastCalledWith('hello', {a: true, abc: 'test'})
-      script.call(obj, ['a', '-a', '--abc=test', '-b=4', 'hello', '-abc', '--def'], logger)
+      script.call(obj, ['a', '-a', '--abc=test', '-b=4', 'hello', '-abc', '--def'])
       expect(a).toHaveBeenLastCalledWith('hello', '-abc', {a: true, b: 4, abc: 'test', def: true})
     })
 
@@ -277,28 +277,28 @@ describe('script', () => {
         'e:d:f': f
       }
 
-      script.call(obj, ['a', '1', '2'], logger)
+      script.call(obj, ['a', '1', '2'])
       expect(a).toHaveBeenLastCalledWith('1', '2')
       expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["1","2"]...')
-      script.call(obj, ['e:b', '1', '2'], logger)
+      script.call(obj, ['e:b', '1', '2'])
       expect(b).toHaveBeenLastCalledWith('1', '2')
       expect(logger.debug).toHaveBeenCalledWith('Running "e:b" with ["1","2"]...')
-      script.call(obj, ['e:d:sub', '1', '2'], logger)
+      script.call(obj, ['e:d:sub', '1', '2'])
       expect(c).toHaveBeenLastCalledWith('1', '2')
       expect(logger.debug).toHaveBeenCalledWith('Running "e:d:sub" with ["1","2"]...')
-      script.call(obj, ['e:d:f', '1', '2'], logger)
+      script.call(obj, ['e:d:f', '1', '2'])
       expect(f).toHaveBeenLastCalledWith('1', '2')
       expect(logger.debug).toHaveBeenCalledWith('Running "e:d:f" with ["1","2"]...')
-      // script.call(obj, ['e', '1', '2'], logger)
+      // script.call(obj, ['e', '1', '2'])
     })
 
     it('should raise an error if called method cannot be found', () => {
       expect(() => {
-        script.call(obj, ['abc'], logger)
+        script.call(obj, ['abc'])
       }).toThrowError(('Task abc not found'))
 
       expect(() => {
-        script.call(obj, ['abc'], logger)
+        script.call(obj, ['abc'])
       }).toThrowError(script.RunJSError)
     })
   })

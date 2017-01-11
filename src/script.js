@@ -121,7 +121,7 @@ export function decorate (obj, logger, namespace) {
   return nextObj
 }
 
-export function call (obj, args, logger) {
+export function call (obj, args) {
   const taskName = args[0]
 
   if (!obj[taskName]) {
