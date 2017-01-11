@@ -101,18 +101,18 @@ export function call (obj, args, logger) {
     throw new RunJSError(`Task ${taskName} not found`)
   }
 
-  Object.keys(obj).forEach((t) => {
-    let task = obj[t]
-    obj[t] = function (...args) {
+  Object.keys(obj).forEach((key) => {
+    const task = obj[key]
+    obj[key] = function (...args) {
       let time = Date.now()
       if (args.length) {
-        logger.debug(`Running "${t}" with ${JSON.stringify(args)}...`)
+        logger.debug(`Running "${key}" with ${JSON.stringify(args)}...`)
       } else {
-        logger.debug(`Running "${t}"...`)
+        logger.debug(`Running "${key}"...`)
       }
       task.apply(null, args)
       time = ((Date.now() - time) / 1000).toFixed(2)
-      logger.debug(`Finished "${t}" in ${time} sec`)
+      logger.debug(`Finished "${key}" in ${time} sec`)
     }
   })
 

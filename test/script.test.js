@@ -256,7 +256,7 @@ describe('script', () => {
       script.call(obj, ['e:d:f', '1', '2'], logger)
       expect(f).toHaveBeenLastCalledWith('1', '2')
       expect(logger.debug).toHaveBeenCalledWith('Running "e:d:f" with ["1","2"]...')
-      script.call(obj, ['e', '1', '2'], logger)
+      // script.call(obj, ['e', '1', '2'], logger)
     })
 
     it('should raise an error if called method cannot be found', () => {
