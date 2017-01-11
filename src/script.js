@@ -121,12 +121,28 @@ export function decorate (obj, logger, namespace) {
   return nextObj
 }
 
-export function call (obj, args) {
+export function call (obj, args, depth = 0) {
   const taskName = args[0]
 
-  if (!obj[taskName]) {
-    throw new RunJSError(`Task ${taskName} not found`)
+  if (typeof obj[taskName] === 'function') {
+    obj[taskName].apply(null, parseArgs(args.slice(1)))
+    return obj[taskName]
   }
 
-  obj[taskName].apply(null, parseArgs(args.slice(1)))
+  let namespaces = taskName.split(':')
+  const rootNamespace = namespaces.shift()
+  const nextTaskName = namespaces.join(':')
+  let nextArgs = args.slice()
+  nextArgs[0] = nextTaskName
+
+  if (obj[rootNamespace]) {
+    const calledTask = call(obj[rootNamespace], nextArgs, depth + 1)
+    if (calledTask) {
+      return calledTask
+    }
+  }
+
+  if (!depth) {
+    throw new RunJSError(`Task ${taskName} not found`)
+  }
 }

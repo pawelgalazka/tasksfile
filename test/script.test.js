@@ -288,16 +288,12 @@ describe('script', () => {
 
       script.call(obj, ['a', '1', '2'])
       expect(a).toHaveBeenLastCalledWith('1', '2')
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["1","2"]...')
       script.call(obj, ['e:b', '1', '2'])
       expect(b).toHaveBeenLastCalledWith('1', '2')
-      expect(logger.debug).toHaveBeenCalledWith('Running "e:b" with ["1","2"]...')
       script.call(obj, ['e:d:sub', '1', '2'])
       expect(c).toHaveBeenLastCalledWith('1', '2')
-      expect(logger.debug).toHaveBeenCalledWith('Running "e:d:sub" with ["1","2"]...')
       script.call(obj, ['e:d:f', '1', '2'])
       expect(f).toHaveBeenLastCalledWith('1', '2')
-      expect(logger.debug).toHaveBeenCalledWith('Running "e:d:f" with ["1","2"]...')
       // script.call(obj, ['e', '1', '2'])
     })
 
