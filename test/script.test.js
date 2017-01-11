@@ -194,12 +194,13 @@ describe('script', () => {
   })
 
   describe('decorate()', () => {
-    let obj, a, c, e
+    let obj, a, c, e, h
 
     beforeEach(() => {
       a = jest.fn()
       c = jest.fn()
       e = jest.fn()
+      h = jest.fn()
       obj = script.decorate({
         a,
         b: {
@@ -207,7 +208,8 @@ describe('script', () => {
           d: {
             e
           }
-        }
+        },
+        'f:g:h': h
       }, logger)
     })
 
@@ -227,6 +229,8 @@ describe('script', () => {
       expect(logger.debug).toHaveBeenCalledWith('Running "b:c" with ["b","c"]...')
       obj.b.d.e('b', {a: true})
       expect(logger.debug).toHaveBeenCalledWith('Running "b:d:e" with ["b",{"a":true}]...')
+      obj['f:g:h']('1', '2')
+      expect(logger.debug).toHaveBeenCalledWith('Running "f:g:h" with ["1","2"]...')
     })
 
     it('should log execution time for called method', () => {
