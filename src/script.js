@@ -72,14 +72,24 @@ function parseArgs (args) {
   return nextArgs
 }
 
-export function describe (obj, logger) {
-  logger.log('Available tasks:')
+export function describe (obj, logger, namespace) {
+  if (!namespace) {
+    logger.log('Available tasks:')
+  }
+
   Object.keys(obj).forEach((key) => {
-    let doc = obj[key].doc
-    if (doc) {
-      logger.log(key, `- ${doc}`)
-    } else {
-      logger.log(key)
+    const value = obj[key]
+    const doc = value.doc
+    const nextNamespace = namespace ? `${namespace}:${key}` : key
+
+    if (typeof value === 'function') {
+      if (doc) {
+        logger.log(nextNamespace, `- ${doc}`)
+      } else {
+        logger.log(nextNamespace)
+      }
+    } else if (typeof value === 'object') {
+      describe(value, logger, nextNamespace)
     }
   })
 }
