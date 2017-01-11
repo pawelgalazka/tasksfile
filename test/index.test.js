@@ -206,6 +206,7 @@ describe('api', () => {
       runjs.call(obj, ['e:d:f', '1', '2'], logger)
       expect(f).toHaveBeenLastCalledWith('1', '2')
       expect(logger.debug).toHaveBeenCalledWith('Running "e:d:f" with ["1","2"]...')
+      runjs.call(obj, ['e', '1', '2'], logger)
     })
 
     it('should raise an error if called method cannot be found', () => {
@@ -251,6 +252,10 @@ describe('api', () => {
         expect(logger.log).toHaveBeenCalledWith('Available tasks:')
         expect(logger.log).toHaveBeenCalledWith('a', '- Description for method a')
         expect(logger.log).toHaveBeenCalledWith('b', '- Description for method b')
+      })
+
+      it('should log list of name spaced / nested methods', () => {
+
       })
     })
   })
