@@ -1,4 +1,4 @@
-import {run} from 'runjs'
+import { run, ask } from 'runjs'
 
 const task = {
   'echo': (...args) => {
@@ -15,6 +15,11 @@ const task = {
   },
   'n1:nested2': () => {
     console.log('Nested task nr 2 executed!')
+  },
+  'testask': () => {
+    ask('Who are you?').then((answer) => {
+      console.log(`Hello ${answer}!`)
+    })
   }
 };
 

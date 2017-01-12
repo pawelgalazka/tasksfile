@@ -3,6 +3,7 @@ import childProcess from 'child_process'
 import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
+import readline from 'readline'
 
 export const logger = {
   debug: (...args) => {
@@ -98,4 +99,24 @@ export function generate (src, dst, context) {
   let templateString = fs.readFileSync(src)
   let content = template(templateString)(context)
   fs.writeFileSync(dst, content)
+}
+
+export function ask (question) {
+  const readlineInterface = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        readlineInterface.question(question + ' ', (answer) => {
+          resolve(answer)
+          readlineInterface.close()
+        })
+      } catch (error) {
+        reject(error)
+        readlineInterface.close()
+      }
+    }, 0)
+  })
 }
