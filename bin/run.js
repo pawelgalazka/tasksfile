@@ -1,16 +1,10 @@
 #!/usr/bin/env node
 'use strict'
-const path = require('path')
-const fs = require('fs')
 const script = require('../lib/script')
 const api = require('../lib/index')
 
 try {
-  const runfile = script.load('./runfile', api.logger, function (filePath) {
-    return require(path.resolve(filePath))
-  }, function (filePath) {
-    return fs.accessSync(path.resolve(filePath))
-  })
+  const runfile = script.load('./runfile', api.logger, script.requirer, script.hasAccess)
   const ARGV = process.argv.slice(2)
 
   if (ARGV.length) {
