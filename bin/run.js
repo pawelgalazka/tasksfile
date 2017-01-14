@@ -4,7 +4,8 @@ const script = require('../lib/script')
 const api = require('../lib/index')
 
 try {
-  const runfile = script.load('./runfile', api.logger, script.requirer, script.hasAccess)
+  const config = script.config('./package.json')
+  const runfile = script.load('./runfile', config, api.logger, script.requirer, script.hasAccess)
   const ARGV = process.argv.slice(2)
 
   if (ARGV.length) {

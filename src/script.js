@@ -17,16 +17,17 @@ export function hasAccess (filePath) {
   return fs.accessSync(path.resolve(filePath))
 }
 
-export function load (runfilePath, logger, requirer, access) {
+export function config (filePath) {
   let config
-
-  // try to read package.json config
   try {
-    config = requirer('./package.json').runjs || {}
+    config = require(filePath).runjs || {}
   } catch (error) {
     config = {}
   }
+  return config
+}
 
+export function load (runfilePath, config, logger, requirer, access) {
   // try to load babel-register
   try {
     logger.log('Requiring babel-register...')
