@@ -71,6 +71,10 @@ run build
 run lint --fix compontets/Button.js
 ```
 
+Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
+normal node.js module. Then based on command line arguments a proper exported function
+from `runfile.js` is run.
+
 
 ## Why runjs ?
 
@@ -95,28 +99,6 @@ each task and command call is reported in the console.
 
 ## Task arguments
 
-Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
-normal node.js module. Then based on command line arguments a proper exported function
-from `runfile.js` is run. All exported functions are provided in a single object as a part
-of a module so that means that both of cases below will work:
-
-```javascript
-export function sayHello () {
-  console.log('Hello!')
-}
-```
-
-```javascript
-export default {
-  sayHello: () => {
-    console.log('Hello!')
-  } 
-}
-```
-
-    $ run sayHello
-    Hello!
-    
 Provided arguments in the command line are passed to the function:
 
 
@@ -221,31 +203,6 @@ export function prompt () {
     Who are you? Pawel
     Hello Pawel!
     
-You can also provide an object of questions to `ask` function and it will gather
-answers sequentially and return them within the object.
-
-```javascript
-ask({
-  name: 'Component name',
-  description: 'Component descrition'
-}).then((answers) => {
-  // answers.name
-  // answers.description
-})
-```
-
-`async/await` with `ask` function. In this case you don't need to use callbacks: 
-
-
-```javascript
-import { ask } from 'runjs'
-
-export async function prompt () {
-  const name = await ask('Component name')
-  const description = await ask('Component description')
-}
-```
-
 ## Using Babel
 
 
