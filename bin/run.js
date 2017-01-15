@@ -1,41 +1,24 @@
 #!/usr/bin/env node
+'use strict'
+const script = require('../lib/script')
+const api = require('../lib/index')
 
-const call = require('../lib/index').call
-const path = require('path')
-const fs = require('fs')
-var config
-
-// try to read package.json config
 try {
-  config = require(path.resolve('./package.json')).runjs || {}
-} catch (error) {
-  config = {}
-}
+  const config = script.config('./package.json')
+  const runfile = script.load('./runfile', config, api.logger, script.requirer, script.hasAccess)
+  const ARGV = process.argv.slice(2)
 
-// try to load babel-register
-try {
-  console.log('Requiring babel-register...')
-  if (config['babel-register']) {
-    require(path.resolve(config['babel-register']))
+  if (ARGV.length) {
+    let decoratedRunfile = script.decorate(runfile, api.logger)
+    script.call(decoratedRunfile, ARGV)
   } else {
-    require(path.resolve('./node_modules/babel-register'))
+    script.describe(runfile, api.logger)
   }
 } catch (error) {
-  console.log('Requiring failed. Fallback to pure node.')
-  if (config['babel-register']) {
-    throw error.stack
+  if (error instanceof script.RunJSError) {
+    api.logger.error(error.message)
+    process.exit(1)
+  } else {
+    throw error
   }
 }
-
-// process runfile.js
-console.log('Processing runfile...')
-
-try {
-  fs.accessSync(path.resolve('./runfile.js'))
-} catch (error) {
-  console.log(`No runfile.js defined in ${process.cwd()}`)
-  process.exit(1)
-}
-
-const runfile = require(path.resolve('./runfile'))
-call(runfile, process.argv.slice(2))
