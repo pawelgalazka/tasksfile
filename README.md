@@ -14,6 +14,11 @@ Minimalistic building tool
 - [Documenting tasks](#documenting-tasks)
 
 
+> This is runjs 3.0.0-beta version which contains significant 
+[changes](https://github.com/pawelgalazka/runjs/releases) compared to older versions.
+For runjs 2.6.X docs check [this page](https://github.com/pawelgalazka/runjs/tree/v2.6.X).
+
+
 ## Get started
 
 Install globally (for a command line script):
