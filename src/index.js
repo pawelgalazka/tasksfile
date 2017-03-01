@@ -68,6 +68,23 @@ function runAsync (command, options) {
   })
 }
 
+function runAsyncSpawn (command, args, options) {
+  return new Promise((resolve, reject) => {
+    const spawnOptions = Object.assign({shell: true}, options)
+    const asyncProcess = childProcess.spawn(command, args, spawnOptions)
+    asyncProcess.on('close', code => {
+      if (code !== 0) {
+        reject('failed')
+      } else {
+        resolve('success')
+      }
+    })
+    asyncProcess.on('error', (error) => {
+      reject(error)
+    })
+  })
+}
+
 export function run (command, options = {}, logger = loggerAlias) {
   const binPath = path.resolve('./node_modules/.bin')
 
@@ -77,20 +94,25 @@ export function run (command, options = {}, logger = loggerAlias) {
     cwd: options.cwd,
     async: !!options.async,
     stdio: options.stdio || 'inherit',
-    timeout: options.timeout
+    timeout: options.timeout,
+    asyncSpawn: !!options.asyncSpawn,
+    args: options.args || []
   }
 
   // Include in PATH node_modules bin path
   options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
 
-  logger.info(command)
-
   // Handle async call
   if (options.async) {
+    logger.info(command)
     return runAsync(command, options)
+  } else if (options.asyncSpawn) {
+    logger.info(`${command} ${options.args.join(' ')}`)
+    return runAsyncSpawn(command, options.args, options)
   }
 
   // Handle sync call by default
+  logger.info(command)
   return runSync(command, options)
 }
 
