@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import * as api from '../lib/index'
+import { RunJSError } from '../lib/common'
 
 describe('api', () => {
   let logger
@@ -27,6 +28,12 @@ describe('api', () => {
         expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
         done()
       })
+    })
+
+    it('should throw an error if command fails', () => {
+      expect(() => {
+        api.run('node ./ghost.js', {stdio: 'pipe'}, logger)
+      }).toThrow(RunJSError)
     })
   })
 

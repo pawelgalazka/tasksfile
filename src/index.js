@@ -4,6 +4,7 @@ import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
+import { RunJSError } from './common'
 
 export const logger = {
   debug: (...args) => {
@@ -33,17 +34,19 @@ function runSync (command, options) {
     delete execOptions.stdio
   }
 
-  const execSyncBuffer = childProcess.execSync(command, execOptions)
-
-  if (options.stdio === 'inherit') {
-    // execSync do handle stdio option, but when stdio=inherit, execSync returns null. We can fix that
-    // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
-    // run function will still return child process outcome.
-    process.stdout.write(execSyncBuffer)
-    // stderr is inherited by default
+  try {
+    const execSyncBuffer = childProcess.execSync(command, execOptions)
+    if (options.stdio === 'inherit') {
+      // execSync do handle stdio option, but when stdio=inherit, execSync returns null. We can fix that
+      // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
+      // run function will still return child process outcome.
+      process.stdout.write(execSyncBuffer)
+      // stderr is inherited by default
+    }
+    return execSyncBuffer.toString()
+  } catch (error) {
+    throw new RunJSError(error.message)
   }
-
-  return execSyncBuffer.toString()
 }
 
 function runAsync (command, options) {
