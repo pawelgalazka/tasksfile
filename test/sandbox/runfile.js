@@ -8,8 +8,22 @@ const task = {
     run('ls -al')
     run('echo "\\033[33;44m Yellow text on blue background\\033[0m"')
   },
-  'testerror': () => {
-    run('node ./error_script.js')
+  'testerror': (async) => {
+    if (async) {
+      run('node ./error_script.js', {async: true}).catch((error) => {
+        console.log('ERROR', error)
+      })
+    } else {
+      run('node ./error_script.js')
+    }
+  },
+  'testserver': () => {
+    run('http-server', {async: true})
+  },
+  'testasync': () => {
+    run('ls -al', {async: true}).then((data) => {
+      console.log('DATA', data)
+    })
   },
   'n1': {
     'nested1': () => {
