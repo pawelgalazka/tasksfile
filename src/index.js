@@ -40,6 +40,7 @@ function runSync (command, options) {
     // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
     // run function will still return child process outcome.
     process.stdout.write(execSyncBuffer)
+    // stderr is inherited by default
   }
 
   return execSyncBuffer.toString()
