@@ -8,6 +8,9 @@ const task = {
     run('ls -al')
     run('echo "\\033[33;44m Yellow text on blue background\\033[0m"')
   },
+  'testerror': () => {
+    run('node ./error_script.js')
+  },
   'n1': {
     'nested1': () => {
       console.log('Nested task nr 1 executed!')
