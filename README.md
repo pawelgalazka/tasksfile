@@ -165,11 +165,6 @@ run('http-server .', {async: true}).then((output) => {
 }).catch((error) => {
   throw error
 })
-run('webpack', {asyncSpawn: true, args: ['--progress', '-p']}).then((output) => {
-  log(output)
-}).catch((error) => {
-  throw error
-})
 ```
 
 #### generate(src, dst, context)
