@@ -90,14 +90,14 @@ export function run (command, options = {}, logger = loggerAlias) {
   // Include in PATH node_modules bin path
   options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
 
+  logger.info(command)
+
   // Handle async call
   if (options.async) {
-    logger.info(command)
     return runAsync(command, options)
   }
 
   // Handle sync call by default
-  logger.info(command)
   return runSync(command, options)
 }
 
