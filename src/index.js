@@ -50,25 +50,32 @@ function runSync (command, options) {
 }
 
 function runAsync (command, options) {
-  // Prepare options for exec command (don't need async and stdio as it doesn't handle them)
-  const execOptions = Object.assign({}, options)
-  delete execOptions.async
-  delete execOptions.stdio
-
   return new Promise((resolve, reject) => {
-    const asyncProcess = childProcess.exec(command, execOptions, (error, stdout) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(stdout.toString())
+    const spawnOptions = Object.assign({shell: true}, options)
+    const timeout = spawnOptions.timeout
+    delete spawnOptions.async
+
+    return new Promise((resolve, reject) => {
+      const asyncProcess = childProcess.spawn(command, spawnOptions)
+      asyncProcess.on('error', (error) => {
+        reject(new Error(`Failed to start command: ${command}; ${error}`))
+      })
+
+      asyncProcess.on('close', (exitCode) => {
+        if (exitCode === 0) {
+          resolve(exitCode)
+        } else {
+          reject(new Error(`Command failed: ${command} with exit code ${exitCode}`))
+        }
+      })
+
+      if (timeout) {
+        setTimeout(() => {
+          asyncProcess.kill()
+          reject(new Error(`Command timeout: ${command}`))
+        }, timeout)
       }
     })
-
-    // Simulate stdio=inherit behaviour for exec async (exec doesn't handle stdio option)
-    if (options.stdio === 'inherit') {
-      asyncProcess.stdout.pipe(process.stdout)
-      asyncProcess.stderr.pipe(process.stderr)
-    }
   })
 }
 
