@@ -4,7 +4,7 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
-- [Task arguments](#task-arguments)
+- [Handling arguments](#handling-arguments)
 - [API](#api)
     - [run](#runcmd-options)
     - [generate](#generatesrc-dst-context)
@@ -98,7 +98,7 @@ libraries which makes that approach much more flexible. Additionally
 each task and command call is reported in the console.
 
 
-## Task arguments
+## Handling arguments
 
 Provided arguments in the command line are passed to the function:
 
