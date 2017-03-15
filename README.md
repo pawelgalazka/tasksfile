@@ -41,33 +41,34 @@ Create `runfile.js`:
 
 import {run} from 'runjs';
 
-const task = {
-    'create:component': (name) => {
+export const build = {
+  js () {
+    run('webpack -p --config config/webpack/prod.js --progress');
+  },
+  
+  css () {
+    
+  },
+  
+  all () {
+    
+  }
+}
 
-    },
-    'build:js': () => {
-      run('webpack -p --config config/webpack/prod.js --progress');
-    },
-    'build:css': () => {
+export function createcomponent (name) {
+  
+}
 
-    },
-    'build': () => {
-      task['build:js']();
-      task['build:css']();
-    },
-    'lint': (path = '.', options = {}) => {
-      options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
-    }
-};
-
-export default task
+export function lint (path = '.', options = {}) {
+  options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
 ```
     
 Run:
 ```
-run create:component AppContainer
+run createcomponent AppContainer
 run build:js
-run build
+run build:all
 run lint --fix compontets/Button.js
 ```
 
@@ -308,15 +309,11 @@ Add `doc` property to your task to get additional description:
 ```javascript
 import { run } from 'runjs'
 
-const task = {
-  'build:js': () => {
-    
-  }
+export function buildjs () {
+  
 }
 
-task['build:js'].doc = 'Compile JavaScript files'
-
-export default task
+buildjs.doc = 'Compile JavaScript files'
 ```
 
     $ run
@@ -324,5 +321,5 @@ export default task
     Processing runfile...
     
     Available tasks:
-    build:js - Compile JavaScript files
+    buildjs - Compile JavaScript files
     
