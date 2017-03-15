@@ -42,6 +42,11 @@ export const n1 = {
 
   'nested2:echo': () => {
     console.log('Nested task nr 2 executed!')
+  },
+
+  all () {
+    n1.nested1()
+    n1['nested2:echo']()
   }
 }
 

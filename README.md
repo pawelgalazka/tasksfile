@@ -51,7 +51,8 @@ export const build = {
   },
   
   all () {
-    
+    build.js()
+    build.css()
   }
 }
 
