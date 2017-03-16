@@ -50,19 +50,37 @@ function runSync (command, options) {
 }
 
 function runAsync (command, options) {
-  const spawnOptions = Object.assign({shell: true}, options)
+  const spawnOptions = Object.assign({}, options, {
+    shell: true,
+    stdio: 'pipe'
+  })
   const timeout = spawnOptions.timeout
   delete spawnOptions.async
 
   return new Promise((resolve, reject) => {
     const asyncProcess = childProcess.spawn(command, spawnOptions)
+    let output = ''
+
+    asyncProcess.stdout.on('data', (buffer) => {
+      output = buffer.toString()
+      if (options.stdio === 'inherit') {
+        process.stdout.write(buffer)
+      }
+    })
+
+    asyncProcess.stderr.on('data', (buffer) => {
+      if (options.stdio === 'inherit') {
+        process.stderr.write(buffer)
+      }
+    })
+
     asyncProcess.on('error', (error) => {
       reject(new Error(`Failed to start command: ${command}; ${error}`))
     })
 
     asyncProcess.on('close', (exitCode) => {
       if (exitCode === 0) {
-        resolve(exitCode)
+        resolve(output)
       } else {
         reject(new Error(`Command failed: ${command} with exit code ${exitCode}`))
       }
