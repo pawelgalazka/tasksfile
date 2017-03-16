@@ -26,6 +26,8 @@ export function testserver () {
 export function testasync () {
   run('ls -al', {async: true}).then((data) => {
     console.log('DATA', data)
+  }).catch((error) => {
+    console.log('ERROR', error)
   })
 }
 
