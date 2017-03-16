@@ -147,7 +147,7 @@ run given command as a child process and log the call in the output.
 {
     cwd: ..., // current working directory (String)
     async: ... // run command asynchronously (true/false), false by default
-    stdio: ... // 'inherit' (default), 'pipe' or 'ignore' (String)
+    stdio: ... // 'inherit' (default) or 'pipe' (String)
     env: ... // environment key-value pairs (Object)
     timeout: ...
 }
