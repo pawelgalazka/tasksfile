@@ -50,32 +50,30 @@ function runSync (command, options) {
 }
 
 function runAsync (command, options) {
+  const spawnOptions = Object.assign({shell: true}, options)
+  const timeout = spawnOptions.timeout
+  delete spawnOptions.async
+
   return new Promise((resolve, reject) => {
-    const spawnOptions = Object.assign({shell: true}, options)
-    const timeout = spawnOptions.timeout
-    delete spawnOptions.async
+    const asyncProcess = childProcess.spawn(command, spawnOptions)
+    asyncProcess.on('error', (error) => {
+      reject(new Error(`Failed to start command: ${command}; ${error}`))
+    })
 
-    return new Promise((resolve, reject) => {
-      const asyncProcess = childProcess.spawn(command, spawnOptions)
-      asyncProcess.on('error', (error) => {
-        reject(new Error(`Failed to start command: ${command}; ${error}`))
-      })
-
-      asyncProcess.on('close', (exitCode) => {
-        if (exitCode === 0) {
-          resolve(exitCode)
-        } else {
-          reject(new Error(`Command failed: ${command} with exit code ${exitCode}`))
-        }
-      })
-
-      if (timeout) {
-        setTimeout(() => {
-          asyncProcess.kill()
-          reject(new Error(`Command timeout: ${command}`))
-        }, timeout)
+    asyncProcess.on('close', (exitCode) => {
+      if (exitCode === 0) {
+        resolve(exitCode)
+      } else {
+        reject(new Error(`Command failed: ${command} with exit code ${exitCode}`))
       }
     })
+
+    if (timeout) {
+      setTimeout(() => {
+        asyncProcess.kill()
+        reject(new Error(`Command timeout: ${command}`))
+      }, timeout)
+    }
   })
 }
 
