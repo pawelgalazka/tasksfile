@@ -5,7 +5,7 @@ export function echo (...args) {
 }
 
 export function testapi () {
-  run('ls -al')
+  run('ls -al | cat')
   run('echo "\\033[33;44m Yellow text on blue background\\033[0m"')
 }
 
@@ -24,7 +24,7 @@ export function testserver () {
 }
 
 export function testasync () {
-  run('ls -al', {async: true}).then((data) => {
+  run('ls -al | cat', {async: true}).then((data) => {
     console.log('DATA', data)
   }).catch((error) => {
     console.log('ERROR', error)
