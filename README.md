@@ -4,7 +4,7 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
-- [Task arguments](#task-arguments)
+- [Handling arguments](#handling-arguments)
 - [API](#api)
     - [run](#runcmd-options)
     - [generate](#generatesrc-dst-context)
@@ -12,11 +12,6 @@ Minimalistic building tool
 - [Using Babel](#using-babel)
 - [Scaling](#scaling)
 - [Documenting tasks](#documenting-tasks)
-
-
-> This is runjs 3.0.0-beta version which contains significant 
-[changes](https://github.com/pawelgalazka/runjs/releases) compared to older versions.
-For runjs 2.6.X docs check [this page](https://github.com/pawelgalazka/runjs/tree/v2.6.X).
 
 
 ## Get started
@@ -46,33 +41,35 @@ Create `runfile.js`:
 
 import {run} from 'runjs';
 
-const task = {
-    'create:component': (name) => {
+export const build = {
+  js () {
+    run('webpack -p --config config/webpack/prod.js --progress');
+  },
+  
+  css () {
+    
+  },
+  
+  all () {
+    build.js()
+    build.css()
+  }
+}
 
-    },
-    'build:js': () => {
-      run('webpack -p --config config/webpack/prod.js --progress');
-    },
-    'build:css': () => {
+export function createcomponent (name) {
+  
+}
 
-    },
-    'build': () => {
-      task['build:js']();
-      task['build:css']();
-    },
-    'lint': (path = '.', options = {}) => {
-      options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
-    }
-};
-
-export default task
+export function lint (path = '.', options = {}) {
+  options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
 ```
     
 Run:
 ```
-run create:component AppContainer
+run createcomponent AppContainer
 run build:js
-run build
+run build:all
 run lint --fix compontets/Button.js
 ```
 
@@ -102,7 +99,7 @@ libraries which makes that approach much more flexible. Additionally
 each task and command call is reported in the console.
 
 
-## Task arguments
+## Handling arguments
 
 Provided arguments in the command line are passed to the function:
 
@@ -150,7 +147,7 @@ run given command as a child process and log the call in the output.
 {
     cwd: ..., // current working directory (String)
     async: ... // run command asynchronously (true/false), false by default
-    stdio: ... // 'inherit' (default), 'pipe' or 'ignore' (String)
+    stdio: ... // 'inherit' (default) or 'pipe' (String)
     env: ... // environment key-value pairs (Object)
     timeout: ...
 }
@@ -313,15 +310,11 @@ Add `doc` property to your task to get additional description:
 ```javascript
 import { run } from 'runjs'
 
-const task = {
-  'build:js': () => {
-    
-  }
+export function buildjs () {
+  
 }
 
-task['build:js'].doc = 'Compile JavaScript files'
-
-export default task
+buildjs.doc = 'Compile JavaScript files'
 ```
 
     $ run
@@ -329,5 +322,5 @@ export default task
     Processing runfile...
     
     Available tasks:
-    build:js - Compile JavaScript files
+    buildjs - Compile JavaScript files
     

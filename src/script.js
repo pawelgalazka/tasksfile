@@ -1,13 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-
-// Needed to use ES5 inheritance, because of issues with Error subclassing for Babel
-export function RunJSError (message) {
-  this.name = 'RunJSError'
-  this.message = message
-}
-RunJSError.prototype = Object.create(Error.prototype)
-RunJSError.prototype.constructor = RunJSError
+import { RunJSError } from './common'
 
 export function requirer (filePath) {
   return require(path.resolve(filePath))

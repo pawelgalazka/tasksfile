@@ -4,6 +4,7 @@ import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
+import { RunJSError } from './common'
 
 export const logger = {
   debug: (...args) => {
@@ -33,37 +34,63 @@ function runSync (command, options) {
     delete execOptions.stdio
   }
 
-  const execSyncBuffer = childProcess.execSync(command, execOptions)
-
-  if (options.stdio === 'inherit') {
-    // execSync do handle stdio option, but when stdio=inherit, execSync returns null. We can fix that
-    // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
-    // run function will still return child process outcome.
-    process.stdout.write(execSyncBuffer)
+  try {
+    const execSyncBuffer = childProcess.execSync(command, execOptions)
+    if (options.stdio === 'inherit') {
+      // execSync do handle stdio option, but when stdio=inherit, execSync returns null. We can fix that
+      // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
+      // run function will still return child process outcome.
+      process.stdout.write(execSyncBuffer)
+      // stderr is inherited by default
+    }
+    return execSyncBuffer.toString()
+  } catch (error) {
+    throw new RunJSError(error.message)
   }
-
-  return execSyncBuffer.toString()
 }
 
 function runAsync (command, options) {
-  // Prepare options for exec command (don't need async and stdio as it doesn't handle them)
-  const execOptions = Object.assign({}, options)
-  delete execOptions.async
-  delete execOptions.stdio
+  const spawnOptions = Object.assign({}, options, {
+    shell: true,
+    stdio: 'pipe'
+  })
+  const timeout = spawnOptions.timeout
+  delete spawnOptions.async
 
   return new Promise((resolve, reject) => {
-    const asyncProcess = childProcess.exec(command, execOptions, (error, stdout) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(stdout.toString())
+    const asyncProcess = childProcess.spawn(command, spawnOptions)
+    let output = ''
+
+    asyncProcess.stdout.on('data', (buffer) => {
+      output = buffer.toString()
+      if (options.stdio === 'inherit') {
+        process.stdout.write(buffer)
       }
     })
 
-    // Simulate stdio=inherit behaviour for exec async (exec doesn't handle stdio option)
-    if (options.stdio === 'inherit') {
-      asyncProcess.stdout.pipe(process.stdout)
-      asyncProcess.stderr.pipe(process.stderr)
+    asyncProcess.stderr.on('data', (buffer) => {
+      if (options.stdio === 'inherit') {
+        process.stderr.write(buffer)
+      }
+    })
+
+    asyncProcess.on('error', (error) => {
+      reject(new Error(`Failed to start command: ${command}; ${error}`))
+    })
+
+    asyncProcess.on('close', (exitCode) => {
+      if (exitCode === 0) {
+        resolve(output)
+      } else {
+        reject(new Error(`Command failed: ${command} with exit code ${exitCode}`))
+      }
+    })
+
+    if (timeout) {
+      setTimeout(() => {
+        asyncProcess.kill()
+        reject(new Error(`Command timeout: ${command}`))
+      }, timeout)
     }
   })
 }
