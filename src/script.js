@@ -80,14 +80,13 @@ function parseArgs (args) {
 
 export function describe (obj, logger, namespace) {
   if (!namespace) {
-    logger.log('Available tasks:')
+    logger.debug('Available tasks:')
   }
 
   Object.keys(obj).forEach((key) => {
     const value = obj[key]
     const nextNamespace = namespace ? `${namespace}:${key}` : key
     const doc = value.doc
-    const loggerParams = [nextNamespace]
 
     if (typeof value === 'function') {
       let funcParams
@@ -96,13 +95,11 @@ export function describe (obj, logger, namespace) {
       } catch (error) {
         funcParams = []
       }
-      if (funcParams.length) {
-        loggerParams.push(`[${funcParams.join(' ')}]`)
-      }
+      const paramsDoc = funcParams.length ? `[${funcParams.join(' ')}]` : ''
+      logger.info('\n', nextNamespace, paramsDoc)
       if (doc) {
-        loggerParams.push(`- ${doc}`)
+        logger.log(`   ${doc}`)
       }
-      logger.log(...loggerParams)
     } else if (typeof value === 'object') {
       describe(value, logger, nextNamespace)
     }
