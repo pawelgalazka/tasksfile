@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { RunJSError } from './common'
+import getParamNames from 'get-parameter-names'
 
 export function requirer (filePath) {
   return require(path.resolve(filePath))
@@ -84,15 +85,24 @@ export function describe (obj, logger, namespace) {
 
   Object.keys(obj).forEach((key) => {
     const value = obj[key]
-    const doc = value.doc
     const nextNamespace = namespace ? `${namespace}:${key}` : key
+    const doc = value.doc
+    const loggerParams = [nextNamespace]
 
     if (typeof value === 'function') {
-      if (doc) {
-        logger.log(nextNamespace, `- ${doc}`)
-      } else {
-        logger.log(nextNamespace)
+      let funcParams
+      try {
+        funcParams = getParamNames(value)
+      } catch (error) {
+        funcParams = []
       }
+      if (funcParams.length) {
+        loggerParams.push(`[${funcParams.join(' ')}]`)
+      }
+      if (doc) {
+        loggerParams.push(`- ${doc}`)
+      }
+      logger.log(...loggerParams)
     } else if (typeof value === 'object') {
       describe(value, logger, nextNamespace)
     }
