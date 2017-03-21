@@ -100,7 +100,7 @@ export function run (command, options = {}, logger = loggerAlias) {
 
   // Pick relevant option keys and set default values
   options = {
-    env: options.env || {},
+    env: options.env || process.env,
     cwd: options.cwd,
     async: !!options.async,
     stdio: options.stdio || 'inherit',

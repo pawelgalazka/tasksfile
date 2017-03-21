@@ -2,6 +2,8 @@
 import * as api from '../lib/index'
 import { RunJSError } from '../lib/common'
 
+process.env.RUNJS_TEST = 'runjs test'
+
 describe('api', () => {
   let logger
 
@@ -16,24 +18,40 @@ describe('api', () => {
   })
 
   describe('run()', () => {
-    it('should execute basic shell commands when sync mode', () => {
-      const output = api.run('echo "echo test"', {cwd: './test/sandbox'}, logger)
-      expect(output).toEqual('echo test\n')
-      expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
-    })
-
-    it('should execute basic shell commands when async mode', (done) => {
-      api.run('echo "echo test"', {async: true}, logger).then((output) => {
+    describe('sync version', () => {
+      it('should execute basic shell commands', () => {
+        const output = api.run('echo "echo test"', {cwd: './test/sandbox'}, logger)
         expect(output).toEqual('echo test\n')
         expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
-        done()
+      })
+
+      it('should throw an error if command fails', () => {
+        expect(() => {
+          api.run('node ./ghost.js', {stdio: 'pipe'}, logger)
+        }).toThrow(RunJSError)
+      })
+
+      it('should have access to environment variables by default', () => {
+        const output = api.run('echo $RUNJS_TEST', {}, logger)
+        expect(output).toEqual('runjs test\n')
       })
     })
 
-    it('should throw an error if command fails', () => {
-      expect(() => {
-        api.run('node ./ghost.js', {stdio: 'pipe'}, logger)
-      }).toThrow(RunJSError)
+    describe('async version', () => {
+      it('should execute basic shell commands', (done) => {
+        api.run('echo "echo test"', {async: true}, logger).then((output) => {
+          expect(output).toEqual('echo test\n')
+          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+          done()
+        })
+      })
+
+      it('should have access to environment variables by default', (done) => {
+        api.run('echo $RUNJS_TEST', {async: true}, logger).then((output) => {
+          expect(output).toEqual('runjs test\n')
+          done()
+        })
+      })
     })
   })
 
