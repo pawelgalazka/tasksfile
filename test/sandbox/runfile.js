@@ -6,7 +6,6 @@ export function echo (...args) {
 
 export function testapi () {
   run('ls -al | cat')
-  run('echo "\\033[33;44m Yellow text on blue background\\033[0m"')
 }
 
 export function testerror (async) {
@@ -17,6 +16,11 @@ export function testerror (async) {
   } else {
     run('node ./error_script.js')
   }
+}
+
+export function testcolor () {
+  run('node ./color_script.js')
+  run('node ./color_script.js', {async: true})
 }
 
 export function testserver () {
