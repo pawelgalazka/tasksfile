@@ -2,6 +2,8 @@
 import * as api from '../lib/index'
 import { RunJSError } from '../lib/common'
 
+process.env.RUNJS_TEST = 'runjs test'
+
 describe('api', () => {
   let logger
 
@@ -28,6 +30,11 @@ describe('api', () => {
           api.run('node ./ghost.js', {stdio: 'pipe'}, logger)
         }).toThrow(RunJSError)
       })
+
+      it('should have access to environment variables by default', () => {
+        const output = api.run('echo $RUNJS_TEST', {}, logger)
+        expect(output).toEqual('runjs test\n')
+      })
     })
 
     describe('async version', () => {
@@ -35,6 +42,13 @@ describe('api', () => {
         api.run('echo "echo test"', {async: true}, logger).then((output) => {
           expect(output).toEqual('echo test\n')
           expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+          done()
+        })
+      })
+
+      it('should have access to environment variables by default', (done) => {
+        api.run('echo $RUNJS_TEST', {async: true}, logger).then((output) => {
+          expect(output).toEqual('runjs test\n')
           done()
         })
       })
