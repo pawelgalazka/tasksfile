@@ -19,37 +19,77 @@ describe('api', () => {
 
   describe('run()', () => {
     describe('sync version', () => {
-      it('should execute basic shell commands', () => {
-        const output = api.run('echo "echo test"', {cwd: './test/sandbox'}, logger)
-        expect(output).toEqual('echo test\n')
-        expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+      describe('with stdio=pipe', () => {
+        it('should execute basic shell commands', () => {
+          const output = api.run('echo "echo test"', {stdio: 'pipe'}, logger)
+          expect(output).toEqual('echo test\n')
+          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+        })
+
+        it('should throw an error if command fails', () => {
+          expect(() => {
+            api.run('node ./ghost.js', {stdio: 'pipe'}, logger)
+          }).toThrow(RunJSError)
+        })
+
+        it('should have access to environment variables by default', () => {
+          const output = api.run('echo $RUNJS_TEST', {stdio: 'pipe'}, logger)
+          expect(output).toEqual('runjs test\n')
+        })
       })
 
-      it('should throw an error if command fails', () => {
-        expect(() => {
-          api.run('node ./ghost.js', {stdio: 'pipe'}, logger)
-        }).toThrow(RunJSError)
-      })
+      describe('with stdio=inherit', () => {
+        it('should execute basic shell commands', () => {
+          const output = api.run('echo "echo test"', {}, logger)
+          expect(output).toEqual(null)
+          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+        })
 
-      it('should have access to environment variables by default', () => {
-        const output = api.run('echo $RUNJS_TEST', {}, logger)
-        expect(output).toEqual('runjs test\n')
+        it('should throw an error if command fails', () => {
+          expect(() => {
+            api.run('node ./ghost.js', {}, logger)
+          }).toThrow(RunJSError)
+        })
+
+        it('should have access to environment variables by default', () => {
+          const output = api.run('echo $RUNJS_TEST', {}, logger)
+          expect(output).toEqual(null)
+        })
       })
     })
 
     describe('async version', () => {
-      it('should execute basic shell commands', (done) => {
-        api.run('echo "echo test"', {async: true}, logger).then((output) => {
-          expect(output).toEqual('echo test\n')
-          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
-          done()
+      describe('with stdio=pipe', () => {
+        it('should execute basic shell commands', (done) => {
+          api.run('echo "echo test"', {async: true, stdio: 'pipe'}, logger).then((output) => {
+            expect(output).toEqual('echo test\n')
+            expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+            done()
+          })
+        })
+
+        it('should have access to environment variables by default', (done) => {
+          api.run('echo $RUNJS_TEST', {async: true, stdio: 'pipe'}, logger).then((output) => {
+            expect(output).toEqual('runjs test\n')
+            done()
+          })
         })
       })
 
-      it('should have access to environment variables by default', (done) => {
-        api.run('echo $RUNJS_TEST', {async: true}, logger).then((output) => {
-          expect(output).toEqual('runjs test\n')
-          done()
+      describe('with stdio=inherit', () => {
+        it('should execute basic shell commands', (done) => {
+          api.run('echo "echo test"', {async: true}, logger).then((output) => {
+            expect(output).toEqual(null)
+            expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+            done()
+          })
+        })
+
+        it('should have access to environment variables by default', (done) => {
+          api.run('echo $RUNJS_TEST', {async: true}, logger).then((output) => {
+            expect(output).toEqual(null)
+            done()
+          })
         })
       })
     })
