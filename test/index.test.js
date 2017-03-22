@@ -74,6 +74,13 @@ describe('api', () => {
             done()
           })
         })
+
+        it('should reject with an error if command fails', (done) => {
+          api.run('node ./ghost.js', {async: true, stdio: 'pipe'}, logger).catch((error) => {
+            expect(error.message).toEqual('Command failed: node ./ghost.js with exit code 1')
+            done()
+          })
+        })
       })
 
       describe('with stdio=inherit', () => {
@@ -88,6 +95,13 @@ describe('api', () => {
         it('should have access to environment variables by default', (done) => {
           api.run('echo $RUNJS_TEST', {async: true}, logger).then((output) => {
             expect(output).toEqual(null)
+            done()
+          })
+        })
+
+        it('should reject with an error if command fails', (done) => {
+          api.run('node ./ghost.js', {async: true}, logger).catch((error) => {
+            expect(error.message).toEqual('Command failed: node ./ghost.js with exit code 1')
             done()
           })
         })
