@@ -27,52 +27,21 @@ export const logger = {
 const loggerAlias = logger
 
 function runSync (command, options) {
-  // Prepare options for execSync command (don't need async and stdio should have default value)
-  const execOptions = Object.assign({}, options)
-  delete execOptions.async
-  if (execOptions.stdio === 'inherit') {
-    delete execOptions.stdio
-  }
-
   try {
-    const execSyncBuffer = childProcess.execSync(command, execOptions)
-    if (options.stdio === 'inherit') {
-      // execSync do handle stdio option, but when stdio=inherit, execSync returns null. We can fix that
-      // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
-      // run function will still return child process outcome.
-      process.stdout.write(execSyncBuffer)
-      // stderr is inherited by default
+    const buffer = childProcess.execSync(command, options)
+    if (buffer) {
+      return buffer.toString()
     }
-    return execSyncBuffer.toString()
+    return buffer
   } catch (error) {
     throw new RunJSError(error.message)
   }
 }
 
 function runAsync (command, options) {
-  const spawnOptions = Object.assign({}, options, {
-    shell: true,
-    stdio: 'pipe'
-  })
-  const timeout = spawnOptions.timeout
-  delete spawnOptions.async
-
   return new Promise((resolve, reject) => {
-    const asyncProcess = childProcess.spawn(command, spawnOptions)
-    let output = ''
-
-    asyncProcess.stdout.on('data', (buffer) => {
-      output = buffer.toString()
-      if (options.stdio === 'inherit') {
-        process.stdout.write(buffer)
-      }
-    })
-
-    asyncProcess.stderr.on('data', (buffer) => {
-      if (options.stdio === 'inherit') {
-        process.stderr.write(buffer)
-      }
-    })
+    const asyncProcess = childProcess.spawn(command, options)
+    let output = null
 
     asyncProcess.on('error', (error) => {
       reject(new Error(`Failed to start command: ${command}; ${error}`))
@@ -86,11 +55,17 @@ function runAsync (command, options) {
       }
     })
 
-    if (timeout) {
+    if (options.stdio === 'pipe') {
+      asyncProcess.stdout.on('data', (buffer) => {
+        output = buffer.toString()
+      })
+    }
+
+    if (options.timeout) {
       setTimeout(() => {
         asyncProcess.kill()
         reject(new Error(`Command timeout: ${command}`))
-      }, timeout)
+      }, options.timeout)
     }
   })
 }
@@ -104,7 +79,8 @@ export function run (command, options = {}, logger = loggerAlias) {
     cwd: options.cwd,
     async: !!options.async,
     stdio: options.stdio || 'inherit',
-    timeout: options.timeout
+    timeout: options.timeout,
+    shell: true
   }
 
   // Include in PATH node_modules bin path

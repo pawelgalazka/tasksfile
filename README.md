@@ -147,7 +147,7 @@ run given command as a child process and log the call in the output.
 {
     cwd: ..., // current working directory (String)
     async: ... // run command asynchronously (true/false), false by default
-    stdio: ... // 'inherit' (default) or 'pipe' (String)
+    stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
     env: ... // environment key-value pairs (Object)
     timeout: ...
 }
@@ -155,14 +155,22 @@ run given command as a child process and log the call in the output.
 
 *Examples:*
 
+To get an output from `run` function we need to set `stdio` option to `pipe` otherwise
+`output` will be `null`:
+
 ```javascript
-run('rm -rf ./build')
-run('http-server .', {async: true}).then((output) => {
+const output = run('ls -la', {stdio: 'pipe'})
+run('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
   log(output) 
 }).catch((error) => {
   throw error
 })
 ```
+
+For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 
+not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are passed 
+to the terminal, but `run` function will resolve (async) / return (sync)
+`null`.
 
 #### generate(src, dst, context)
 

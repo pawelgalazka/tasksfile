@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { RunJSError } from './common'
+import getParamNames from 'get-parameter-names'
 
 export function requirer (filePath) {
   return require(path.resolve(filePath))
@@ -79,19 +80,25 @@ function parseArgs (args) {
 
 export function describe (obj, logger, namespace) {
   if (!namespace) {
-    logger.log('Available tasks:')
+    logger.debug('Available tasks:')
   }
 
   Object.keys(obj).forEach((key) => {
     const value = obj[key]
-    const doc = value.doc
     const nextNamespace = namespace ? `${namespace}:${key}` : key
+    const doc = value.doc
 
     if (typeof value === 'function') {
+      let funcParams
+      try {
+        funcParams = getParamNames(value)
+      } catch (error) {
+        funcParams = []
+      }
+      const paramsDoc = funcParams.length ? `[${funcParams.join(' ')}]` : ''
+      logger.info('\n', nextNamespace, paramsDoc)
       if (doc) {
-        logger.log(nextNamespace, `- ${doc}`)
-      } else {
-        logger.log(nextNamespace)
+        logger.log(`   ${doc}`)
       }
     } else if (typeof value === 'object') {
       describe(value, logger, nextNamespace)

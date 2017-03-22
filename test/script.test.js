@@ -145,20 +145,23 @@ describe('script', () => {
 
     it('should log list of methods available in the object', () => {
       script.describe(obj, logger)
-      expect(logger.log).toHaveBeenCalledTimes(3)
-      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
-      expect(logger.log).toHaveBeenCalledWith('a')
-      expect(logger.log).toHaveBeenCalledWith('b')
+      expect(logger.debug).toHaveBeenCalledTimes(1)
+      expect(logger.info).toHaveBeenCalledTimes(2)
+      expect(logger.debug).toHaveBeenCalledWith('Available tasks:')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'a', '')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'b', '')
     })
 
     it('should log list of methods from the object with description for each one if provided', () => {
       obj.a.doc = 'Description for method a'
       obj.b.doc = 'Description for method b'
       script.describe(obj, logger)
-      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
-      expect(logger.log).toHaveBeenCalledWith('a', '- Description for method a')
-      expect(logger.log).toHaveBeenCalledWith('b', '- Description for method b')
-      expect(logger.log).toHaveBeenCalledTimes(3)
+      expect(logger.debug).toHaveBeenCalledWith('Available tasks:')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'a', '')
+      expect(logger.log).toHaveBeenCalledWith('   Description for method a')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'b', '')
+      expect(logger.log).toHaveBeenCalledWith('   Description for method b')
+      expect(logger.info).toHaveBeenCalledTimes(2)
     })
 
     it('should log list of name spaced / nested methods', () => {
@@ -174,13 +177,14 @@ describe('script', () => {
       obj.c.e.f.doc = 'Description for method f'
 
       script.describe(obj, logger)
-      expect(logger.log).toHaveBeenCalledWith('Available tasks:')
-      expect(logger.log).toHaveBeenCalledWith('a')
-      expect(logger.log).toHaveBeenCalledWith('b')
-      expect(logger.log).toHaveBeenCalledWith('c:d')
-      expect(logger.log).toHaveBeenCalledWith('c:e:f', '- Description for method f')
-      expect(logger.log).toHaveBeenCalledWith('c:e:g')
-      expect(logger.log).toHaveBeenCalledTimes(6)
+      expect(logger.debug).toHaveBeenCalledWith('Available tasks:')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'a', '')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'b', '')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'c:d', '')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'c:e:f', '')
+      expect(logger.log).toHaveBeenCalledWith('   Description for method f')
+      expect(logger.info).toHaveBeenCalledWith('\n', 'c:e:g', '')
+      expect(logger.info).toHaveBeenCalledTimes(5)
     })
   })
 
