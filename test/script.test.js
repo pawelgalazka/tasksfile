@@ -276,6 +276,8 @@ describe('script', () => {
       expect(a).toHaveBeenLastCalledWith('hello', {a: true, abc: 'test'})
       script.call(obj, ['a', '-a', '--abc=test', '-b=4', 'hello', '-abc', '--def'])
       expect(a).toHaveBeenLastCalledWith('hello', '-abc', {a: true, b: 4, abc: 'test', def: true})
+      script.call(obj, ['a', '--ab-cd', '--ef-gh=test', '--ab.cd', '--ef.gh=123', 'hello', '-abc'])
+      expect(a).toHaveBeenLastCalledWith('hello', '-abc', {'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123})
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
