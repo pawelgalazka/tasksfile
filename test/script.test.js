@@ -256,18 +256,18 @@ describe('script', () => {
     it('calls the method from a given object by given method name and its arguments', () => {
       script.call(obj, ['a'])
       expect(a).toHaveBeenLastCalledWith()
-      script.call(obj, ['a', '1', '2'])
-      expect(a).toHaveBeenLastCalledWith('1', '2')
+      script.call(obj, ['a', 1, 2])
+      expect(a).toHaveBeenLastCalledWith(1, 2)
     })
 
     it('should handle dash arguments', () => {
       script.call(obj, ['a', '-a', 'hello'])
-      expect(a).toHaveBeenLastCalledWith('hello', {a: true})
+      expect(a).toHaveBeenLastCalledWith({a: 'hello'})
       a.mockClear()
       script.call(obj, ['a', 'hello', '-a'])
       expect(a).toHaveBeenLastCalledWith('hello', {a: true})
       script.call(obj, ['a', '--abc', 'hello'])
-      expect(a).toHaveBeenLastCalledWith('hello', {abc: true})
+      expect(a).toHaveBeenLastCalledWith({abc: 'hello'})
       script.call(obj, ['a', '-a=123', 'hello'])
       expect(a).toHaveBeenLastCalledWith('hello', {a: 123})
       script.call(obj, ['a', '--abc=test', 'hello'])
@@ -282,13 +282,13 @@ describe('script', () => {
 
     it('should call methods from nested objects by method name name-spacing', () => {
       script.call(obj, ['a', '1', '2'])
-      expect(a).toHaveBeenLastCalledWith('1', '2')
+      expect(a).toHaveBeenLastCalledWith(1, 2)
       script.call(obj, ['b:c', '1', '2'])
-      expect(c).toHaveBeenLastCalledWith('1', '2')
+      expect(c).toHaveBeenLastCalledWith(1, 2)
       script.call(obj, ['b:d:e', '1', '2'])
-      expect(e).toHaveBeenLastCalledWith('1', '2')
+      expect(e).toHaveBeenLastCalledWith(1, 2)
       script.call(obj, ['f:g:h', '1', '2'])
-      expect(h).toHaveBeenLastCalledWith('1', '2')
+      expect(h).toHaveBeenLastCalledWith(1, 2)
     })
 
     it('should raise an error if called method cannot be found', () => {
@@ -303,6 +303,13 @@ describe('script', () => {
       expect(() => {
         script.call(obj, ['b:d'])
       }).toThrowError(('Task b:d not found'))
+    })
+
+    it('should handle nested options arguments', () => {
+      script.call(obj, ['a', 'hello', '-a', '--abc', '--nested="-a --abc --foo=bar"'])
+      expect(a).toHaveBeenLastCalledWith('hello', {a: true, abc: true, nested: '"-a --abc --foo=bar"'})
+      script.call(obj, ['a', 'hello', '-a', '--abc', '--nested', '"-a --abc --foo=bar"'])
+      expect(a).toHaveBeenLastCalledWith('hello', {a: true, abc: true, nested: '"-a --abc --foo=bar"'})
     })
   })
 })
