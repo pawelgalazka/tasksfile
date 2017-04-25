@@ -2,6 +2,7 @@
 'use strict'
 const script = require('../lib/script')
 const api = require('../lib/index')
+const common = require('../lib/common')
 
 try {
   const config = script.config('./package.json')
@@ -15,7 +16,7 @@ try {
     script.describe(runfile, api.logger)
   }
 } catch (error) {
-  if (error instanceof script.RunJSError) {
+  if (error instanceof common.RunJSError) {
     api.logger.error(error.message)
     process.exit(1)
   } else {

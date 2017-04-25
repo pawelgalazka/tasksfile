@@ -4,6 +4,7 @@ import template from 'lodash.template'
 import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
+import { RunJSError } from './common'
 
 export const logger = {
   debug: (...args) => {
@@ -26,44 +27,45 @@ export const logger = {
 const loggerAlias = logger
 
 function runSync (command, options) {
-  // Prepare options for execSync command (don't need async and stdio should have default value)
-  const execOptions = Object.assign({}, options)
-  delete execOptions.async
-  if (execOptions.stdio === 'inherit') {
-    delete execOptions.stdio
+  try {
+    const buffer = childProcess.execSync(command, options)
+    if (buffer) {
+      return buffer.toString()
+    }
+    return buffer
+  } catch (error) {
+    throw new RunJSError(error.message)
   }
-
-  const execSyncBuffer = childProcess.execSync(command, execOptions)
-
-  if (options.stdio === 'inherit') {
-    // execSync do handle stdio option, but when stdio=inherit, execSync returns null. We can fix that
-    // by not passing stdio=inherit and writing outcome separately. Thanks to this stdout will be streamed and sync
-    // run function will still return child process outcome.
-    process.stdout.write(execSyncBuffer)
-  }
-
-  return execSyncBuffer.toString()
 }
 
 function runAsync (command, options) {
-  // Prepare options for exec command (don't need async and stdio as it doesn't handle them)
-  const execOptions = Object.assign({}, options)
-  delete execOptions.async
-  delete execOptions.stdio
-
   return new Promise((resolve, reject) => {
-    const asyncProcess = childProcess.exec(command, execOptions, (error, stdout) => {
-      if (error) {
-        reject(error)
+    const asyncProcess = childProcess.spawn(command, options)
+    let output = null
+
+    asyncProcess.on('error', (error) => {
+      reject(new Error(`Failed to start command: ${command}; ${error}`))
+    })
+
+    asyncProcess.on('close', (exitCode) => {
+      if (exitCode === 0) {
+        resolve(output)
       } else {
-        resolve(stdout.toString())
+        reject(new Error(`Command failed: ${command} with exit code ${exitCode}`))
       }
     })
 
-    // Simulate stdio=inherit behaviour for exec async (exec doesn't handle stdio option)
-    if (options.stdio === 'inherit') {
-      asyncProcess.stdout.pipe(process.stdout)
-      asyncProcess.stderr.pipe(process.stderr)
+    if (options.stdio === 'pipe') {
+      asyncProcess.stdout.on('data', (buffer) => {
+        output = buffer.toString()
+      })
+    }
+
+    if (options.timeout) {
+      setTimeout(() => {
+        asyncProcess.kill()
+        reject(new Error(`Command timeout: ${command}`))
+      }, options.timeout)
     }
   })
 }
@@ -73,11 +75,12 @@ export function run (command, options = {}, logger = loggerAlias) {
 
   // Pick relevant option keys and set default values
   options = {
-    env: options.env || {},
+    env: options.env || process.env,
     cwd: options.cwd,
     async: !!options.async,
     stdio: options.stdio || 'inherit',
-    timeout: options.timeout
+    timeout: options.timeout,
+    shell: true
   }
 
   // Include in PATH node_modules bin path
