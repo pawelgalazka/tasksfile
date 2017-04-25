@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import minimist from 'minimist'
 
 // Needed to use ES5 inheritance, because of issues with Error subclassing for Babel
 export function RunJSError (message) {
@@ -60,28 +61,10 @@ export function load (runfilePath, config, logger, requirer, access) {
 }
 
 function parseArgs (args) {
-  let options = {}
-  let nextArgs = args.filter(arg => {
-    const doubleDashMatch = arg.match(/^--(\w+)=(\w*)$/) || arg.match(/^--(\w+)$/)
-    const singleDashMatch = arg.match(/^-(\w)=(\w*)$/) || arg.match(/^-(\w)$/)
-
-    if (singleDashMatch) {
-      options[singleDashMatch[1]] = Number(singleDashMatch[2]) || singleDashMatch[2] || true
-      return false
-    }
-
-    if (doubleDashMatch) {
-      options[doubleDashMatch[1]] = Number(doubleDashMatch[2]) || doubleDashMatch[2] || true
-      return false
-    }
-
-    return true
-  })
-
-  if (Object.keys(options).length) {
-    nextArgs.push(options)
-  }
-  return nextArgs
+  const options = minimist(args)
+  const unassigned = options._
+  delete options._
+  return Object.keys(options).length ? unassigned.concat(options) : unassigned
 }
 
 export function describe (obj, logger, namespace) {
