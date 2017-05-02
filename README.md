@@ -70,7 +70,7 @@ Run:
 run createcomponent AppContainer
 run build:js
 run build:all
-run lint --fix compontets/Button.js
+run lint --fix components/Button.js
 ```
 
 Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
