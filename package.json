@@ -1,6 +1,6 @@
 {
   "name": "runjs",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "description": "Minimalistic building tool",
   "keywords": [
     "build",
@@ -41,10 +41,10 @@
   "devDependencies": {
     "babel-cli": "6.16.0",
     "babel-core": "6.16.0",
-    "babel-preset-es2015": "6.16.0",
-    "babel-register": "6.16.3",
     "babel-eslint": "7.0.0",
     "babel-jest": "16.0.0",
+    "babel-preset-es2015": "6.16.0",
+    "babel-register": "6.16.3",
     "eslint": "3.6.1",
     "eslint-config-standard": "6.2.0",
     "eslint-plugin-promise": "2.0.1",
