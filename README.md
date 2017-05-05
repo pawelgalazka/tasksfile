@@ -114,12 +114,13 @@ export function sayHello (who) {
     Hello world!
     
 You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
-after task name but they will be always passed as a last argument in a form of JSON object.
+after task name. They will be always passed through `this.options` inside a function 
+in a form of JSON object.
 
 ```javascript
-export function sayHello (who, options) {
+export function sayHello (who) {
   console.log(`Hello ${who}!`)
-  console.log('Given options:', options)
+  console.log('Given options:', this.options)
 }
 ```
 

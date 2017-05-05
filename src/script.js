@@ -54,8 +54,8 @@ export function load (runfilePath, config, logger, requirer, access) {
 }
 
 function parseArgs (args) {
-  let options = {}
-  let nextArgs = args.filter(arg => {
+  const options = {}
+  const nextArgs = args.filter(arg => {
     const doubleDashMatch = arg.match(/^--([\w-.]+)=([\w-.]*)$/) || arg.match(/^--([\w-.]+)$/)
     const singleDashMatch = arg.match(/^-(?!-)([\w-.])=([\w-.]*)$/) || arg.match(/^-(?!-)([\w-.])$/)
 
@@ -72,10 +72,10 @@ function parseArgs (args) {
     return true
   })
 
-  if (Object.keys(options).length) {
-    nextArgs.push(options)
+  return {
+    nextArgs,
+    options
   }
-  return nextArgs
 }
 
 export function describe (obj, logger, namespace) {
@@ -110,7 +110,8 @@ export function call (obj, args, depth = 0) {
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {
-    obj[taskName].apply(null, parseArgs(args.slice(1)))
+    const { nextArgs, options } = parseArgs(args.slice(1))
+    obj[taskName].apply({ options }, nextArgs)
     return obj[taskName]
   }
 
