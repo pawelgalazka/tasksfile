@@ -1,5 +1,5 @@
 .idea
 .travis.yml
 node_modules
-test/
-src/
+/test
+/src
