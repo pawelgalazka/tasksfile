@@ -60,8 +60,8 @@ export function createcomponent (name) {
   
 }
 
-export function lint (path = '.', options = {}) {
-  options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+export function lint (path = '.') {
+  this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
 ```
     
