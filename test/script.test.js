@@ -188,52 +188,6 @@ describe('script', () => {
     })
   })
 
-  describe('decorate()', () => {
-    let obj, a, c, e, h
-
-    beforeEach(() => {
-      a = jest.fn()
-      c = jest.fn()
-      e = jest.fn()
-      h = jest.fn()
-      obj = script.decorate({
-        a,
-        b: {
-          c,
-          d: {
-            e
-          }
-        },
-        'f:g:h': h
-      }, logger)
-    })
-
-    it('should log flat methods execution with given method arguments', () => {
-      obj.a()
-      expect(logger.debug).toHaveBeenCalledWith('Running "a"...')
-      obj.a('b', 'c')
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b","c"]...')
-      obj.a('b', {a: true})
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b",{"a":true}]...')
-    })
-
-    it('should log nested methods execution with given method arguments', () => {
-      obj.b.c()
-      expect(logger.debug).toHaveBeenCalledWith('Running "b:c"...')
-      obj.b.c('b', 'c')
-      expect(logger.debug).toHaveBeenCalledWith('Running "b:c" with ["b","c"]...')
-      obj.b.d.e('b', {a: true})
-      expect(logger.debug).toHaveBeenCalledWith('Running "b:d:e" with ["b",{"a":true}]...')
-      obj['f:g:h']('1', '2')
-      expect(logger.debug).toHaveBeenCalledWith('Running "f:g:h" with ["1","2"]...')
-    })
-
-    it('should log execution time for called method', () => {
-      obj.a('b', 'c')
-      expect(logger.debug.mock.calls[1][0]).toMatch(/Finished "a" in \d{1,2}\.\d{2} sec/)
-    })
-  })
-
   describe('call()', () => {
     let obj, a, c, e, h
     beforeEach(() => {
@@ -261,23 +215,32 @@ describe('script', () => {
     })
 
     it('should handle dash arguments', () => {
+      let data = {}
+
+      function fn (...args) {
+        data.args = args
+        data.options = this.options
+      }
+
+      obj.a = fn
+
       script.call(obj, ['a', '-a', 'hello'])
-      expect(a).toHaveBeenLastCalledWith('hello', {a: true})
-      a.mockClear()
+      expect(data).toEqual({args: ['hello'], options: {a: true}})
+      data = {}
       script.call(obj, ['a', 'hello', '-a'])
-      expect(a).toHaveBeenLastCalledWith('hello', {a: true})
+      expect(data).toEqual({args: ['hello'], options: {a: true}})
       script.call(obj, ['a', '--abc', 'hello'])
-      expect(a).toHaveBeenLastCalledWith('hello', {abc: true})
+      expect(data).toEqual({args: ['hello'], options: {abc: true}})
       script.call(obj, ['a', '-a=123', 'hello'])
-      expect(a).toHaveBeenLastCalledWith('hello', {a: 123})
+      expect(data).toEqual({args: ['hello'], options: {a: 123}})
       script.call(obj, ['a', '--abc=test', 'hello'])
-      expect(a).toHaveBeenLastCalledWith('hello', {abc: 'test'})
+      expect(data).toEqual({args: ['hello'], options: {abc: 'test'}})
       script.call(obj, ['a', '-a', '--abc=test', 'hello'])
-      expect(a).toHaveBeenLastCalledWith('hello', {a: true, abc: 'test'})
+      expect(data).toEqual({args: ['hello'], options: {a: true, abc: 'test'}})
       script.call(obj, ['a', '-a', '--abc=test', '-b=4', 'hello', '-abc', '--def'])
-      expect(a).toHaveBeenLastCalledWith('hello', '-abc', {a: true, b: 4, abc: 'test', def: true})
+      expect(data).toEqual({args: ['hello', '-abc'], options: {a: true, b: 4, abc: 'test', def: true}})
       script.call(obj, ['a', '--ab-cd', '--ef-gh=test', '--ab.cd', '--ef.gh=123', 'hello', '-abc'])
-      expect(a).toHaveBeenLastCalledWith('hello', '-abc', {'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123})
+      expect(data).toEqual({args: ['hello', '-abc'], options: {'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123}})
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {

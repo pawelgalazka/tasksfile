@@ -20,10 +20,10 @@ echo 'Cleaning node_modules'
 rm -rf node_modules
 
 echo 'Installing runjs'
-npm install ../../
+yarn add file:../../
 
 echo 'Installing test package'
-npm install
+yarn
 
 echo 'Testing test package'
 ./node_modules/.bin/run echo 1 2 3

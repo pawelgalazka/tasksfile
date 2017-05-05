@@ -1,7 +1,7 @@
 import { run, ask } from 'runjs'
 
 export function echo (...args) {
-  console.log('echo ' + args.join(' '))
+  console.log('ECHO', args, this.options)
 }
 
 export function testapi () {

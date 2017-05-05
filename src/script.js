@@ -54,8 +54,8 @@ export function load (runfilePath, config, logger, requirer, access) {
 }
 
 function parseArgs (args) {
-  let options = {}
-  let nextArgs = args.filter(arg => {
+  const options = {}
+  const nextArgs = args.filter(arg => {
     const doubleDashMatch = arg.match(/^--([\w-.]+)=([\w-.]*)$/) || arg.match(/^--([\w-.]+)$/)
     const singleDashMatch = arg.match(/^-(?!-)([\w-.])=([\w-.]*)$/) || arg.match(/^-(?!-)([\w-.])$/)
 
@@ -72,10 +72,10 @@ function parseArgs (args) {
     return true
   })
 
-  if (Object.keys(options).length) {
-    nextArgs.push(options)
+  return {
+    nextArgs,
+    options
   }
-  return nextArgs
 }
 
 export function describe (obj, logger, namespace) {
@@ -106,38 +106,12 @@ export function describe (obj, logger, namespace) {
   })
 }
 
-export function decorate (obj, logger, namespace) {
-  let nextObj = {}
-  Object.keys(obj).forEach((key) => {
-    const value = obj[key]
-    const nextNamespace = namespace ? `${namespace}:${key}` : key
-
-    if (typeof value === 'function') {
-      nextObj[key] = function (...args) {
-        let time = Date.now()
-        if (args.length) {
-          logger.debug(`Running "${nextNamespace}" with ${JSON.stringify(args)}...`)
-        } else {
-          logger.debug(`Running "${nextNamespace}"...`)
-        }
-        value.apply(null, args)
-        time = ((Date.now() - time) / 1000).toFixed(2)
-        logger.debug(`Finished "${nextNamespace}" in ${time} sec`)
-      }
-    }
-
-    if (typeof value === 'object') {
-      nextObj[key] = decorate(value, logger, nextNamespace)
-    }
-  })
-  return nextObj
-}
-
 export function call (obj, args, depth = 0) {
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {
-    obj[taskName].apply(null, parseArgs(args.slice(1)))
+    const { nextArgs, options } = parseArgs(args.slice(1))
+    obj[taskName].apply({ options }, nextArgs)
     return obj[taskName]
   }
 
