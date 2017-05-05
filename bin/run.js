@@ -10,8 +10,7 @@ try {
   const ARGV = process.argv.slice(2)
 
   if (ARGV.length) {
-    let decoratedRunfile = script.decorate(runfile, api.logger)
-    script.call(decoratedRunfile, ARGV)
+    script.call(runfile, ARGV)
   } else {
     script.describe(runfile, api.logger)
   }

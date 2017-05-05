@@ -188,52 +188,6 @@ describe('script', () => {
     })
   })
 
-  describe('decorate()', () => {
-    let obj, a, c, e, h
-
-    beforeEach(() => {
-      a = jest.fn()
-      c = jest.fn()
-      e = jest.fn()
-      h = jest.fn()
-      obj = script.decorate({
-        a,
-        b: {
-          c,
-          d: {
-            e
-          }
-        },
-        'f:g:h': h
-      }, logger)
-    })
-
-    it('should log flat methods execution with given method arguments', () => {
-      obj.a()
-      expect(logger.debug).toHaveBeenCalledWith('Running "a"...')
-      obj.a('b', 'c')
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b","c"]...')
-      obj.a('b', {a: true})
-      expect(logger.debug).toHaveBeenCalledWith('Running "a" with ["b",{"a":true}]...')
-    })
-
-    it('should log nested methods execution with given method arguments', () => {
-      obj.b.c()
-      expect(logger.debug).toHaveBeenCalledWith('Running "b:c"...')
-      obj.b.c('b', 'c')
-      expect(logger.debug).toHaveBeenCalledWith('Running "b:c" with ["b","c"]...')
-      obj.b.d.e('b', {a: true})
-      expect(logger.debug).toHaveBeenCalledWith('Running "b:d:e" with ["b",{"a":true}]...')
-      obj['f:g:h']('1', '2')
-      expect(logger.debug).toHaveBeenCalledWith('Running "f:g:h" with ["1","2"]...')
-    })
-
-    it('should log execution time for called method', () => {
-      obj.a('b', 'c')
-      expect(logger.debug.mock.calls[1][0]).toMatch(/Finished "a" in \d{1,2}\.\d{2} sec/)
-    })
-  })
-
   describe('call()', () => {
     let obj, a, c, e, h
     beforeEach(() => {
