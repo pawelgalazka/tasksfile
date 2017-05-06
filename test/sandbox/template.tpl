@@ -1,0 +1,1 @@
+users: <% users.forEach(user => {%><%= user %> <%}) %>

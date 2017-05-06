@@ -1,4 +1,4 @@
-import { run, ask } from 'runjs'
+import { run, ask, generate } from 'runjs'
 
 export function echo (...args) {
   console.log('ECHO', args, this.options)
@@ -39,6 +39,10 @@ export function testask () {
   ask('Who are you?').then((answer) => {
     console.log(`Hello ${answer}!`)
   })
+}
+
+export function testgenerate () {
+  generate('./template.tpl', './template.txt', {users: ['Pawel', 'John']})
 }
 
 export const n1 = {
