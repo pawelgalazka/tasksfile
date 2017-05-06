@@ -80,13 +80,13 @@ function parseArgs (args) {
 
 export function describe (obj, logger, namespace) {
   if (!namespace) {
-    logger.debug('Available tasks:')
+    logger.debug('Available tasks:\n')
   }
 
   Object.keys(obj).forEach((key) => {
     const value = obj[key]
     const nextNamespace = namespace ? `${namespace}:${key}` : key
-    const doc = value.doc
+    const help = value.help
 
     if (typeof value === 'function') {
       let funcParams
@@ -96,14 +96,20 @@ export function describe (obj, logger, namespace) {
         funcParams = []
       }
       const paramsDoc = funcParams.length ? `[${funcParams.join(' ')}]` : ''
-      logger.info('\n', nextNamespace, paramsDoc)
-      if (doc) {
-        logger.log(`   ${doc}`)
+      logger.info(nextNamespace, paramsDoc)
+      if (help) {
+        logger.log(help)
       }
+      logger.info(' ')
     } else if (typeof value === 'object') {
       describe(value, logger, nextNamespace)
     }
   })
+}
+
+function help (task) {
+  console.log('DESCRIPTION')
+  console.log(task.help)
 }
 
 export function call (obj, args, depth = 0) {
@@ -111,7 +117,11 @@ export function call (obj, args, depth = 0) {
 
   if (typeof obj[taskName] === 'function') {
     const { nextArgs, options } = parseArgs(args.slice(1))
-    obj[taskName].apply({ options }, nextArgs)
+    if (options.help) {
+      help(obj[taskName])
+    } else {
+      obj[taskName].apply({ options }, nextArgs)
+    }
     return obj[taskName]
   }
 
