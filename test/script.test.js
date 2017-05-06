@@ -146,22 +146,22 @@ describe('script', () => {
     it('should log list of methods available in the object', () => {
       script.describe(obj, logger)
       expect(logger.debug).toHaveBeenCalledTimes(1)
-      expect(logger.info).toHaveBeenCalledTimes(2)
-      expect(logger.debug).toHaveBeenCalledWith('Available tasks:')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'a', '')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'b', '')
+      expect(logger.info).toHaveBeenCalledTimes(4)
+      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
+      expect(logger.info).toHaveBeenCalledWith('a', '')
+      expect(logger.info).toHaveBeenCalledWith('b', '')
     })
 
     it('should log list of methods from the object with description for each one if provided', () => {
-      obj.a.doc = 'Description for method a'
-      obj.b.doc = 'Description for method b'
+      obj.a.help = 'Description for method a'
+      obj.b.help = 'Description for method b'
       script.describe(obj, logger)
-      expect(logger.debug).toHaveBeenCalledWith('Available tasks:')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'a', '')
-      expect(logger.log).toHaveBeenCalledWith('   Description for method a')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'b', '')
-      expect(logger.log).toHaveBeenCalledWith('   Description for method b')
-      expect(logger.info).toHaveBeenCalledTimes(2)
+      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
+      expect(logger.info).toHaveBeenCalledWith('a', '')
+      expect(logger.log).toHaveBeenCalledWith('Description for method a')
+      expect(logger.info).toHaveBeenCalledWith('b', '')
+      expect(logger.log).toHaveBeenCalledWith('Description for method b')
+      expect(logger.info).toHaveBeenCalledTimes(4)
     })
 
     it('should log list of name spaced / nested methods', () => {
@@ -173,18 +173,18 @@ describe('script', () => {
         }
       }
 
-      obj.c.doc = 'Description for namespace c'
-      obj.c.e.f.doc = 'Description for method f'
+      obj.c.help = 'Description for namespace c'
+      obj.c.e.f.help = 'Description for method f'
 
       script.describe(obj, logger)
-      expect(logger.debug).toHaveBeenCalledWith('Available tasks:')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'a', '')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'b', '')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'c:d', '')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'c:e:f', '')
-      expect(logger.log).toHaveBeenCalledWith('   Description for method f')
-      expect(logger.info).toHaveBeenCalledWith('\n', 'c:e:g', '')
-      expect(logger.info).toHaveBeenCalledTimes(5)
+      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
+      expect(logger.info).toHaveBeenCalledWith('a', '')
+      expect(logger.info).toHaveBeenCalledWith('b', '')
+      expect(logger.info).toHaveBeenCalledWith('c:d', '')
+      expect(logger.info).toHaveBeenCalledWith('c:e:f', '')
+      expect(logger.log).toHaveBeenCalledWith('Description for method f')
+      expect(logger.info).toHaveBeenCalledWith('c:e:g', '')
+      expect(logger.info).toHaveBeenCalledTimes(10)
     })
   })
 
