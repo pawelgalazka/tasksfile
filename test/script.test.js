@@ -292,5 +292,21 @@ describe('script', () => {
         script.call(obj, ['b:d'])
       }).toThrowError(('Task b:d not found'))
     })
+
+    it('should log documentation for method if --help option given', () => {
+      obj.b.c = (arg1, arg2) => {}
+      obj.b.c.help = 'Test description'
+      script.call(obj, ['b:c', '--help'], logger)
+      expect(logger.info.mock.calls).toEqual([['ARGUMENTS'], ['DESCRIPTION']])
+      expect(logger.log.mock.calls).toEqual([[' '], ['[arg1 arg2]'], [' '], ['Test description'], [' ']])
+
+      logger.info.mockClear()
+      logger.log.mockClear()
+
+      obj.b.c = () => {}
+      script.call(obj, ['b:c', '--help'], logger)
+      expect(logger.info.mock.calls).toEqual([['ARGUMENTS'], ['DESCRIPTION']])
+      expect(logger.log.mock.calls).toEqual([[' '], ['None'], [' '], ['None'], [' ']])
+    })
   })
 })
