@@ -152,7 +152,7 @@ describe('script', () => {
       expect(logger.info).toHaveBeenCalledWith('b', '')
     })
 
-    it('should log list of methods from the object with description for each one if provided', () => {
+    it('should log list of methods with description for each one if provided', () => {
       obj.a.help = 'Description for method a'
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
@@ -185,6 +185,14 @@ describe('script', () => {
       expect(logger.log).toHaveBeenCalledWith('Description for method f')
       expect(logger.info).toHaveBeenCalledWith('c:e:g', '')
       expect(logger.info).toHaveBeenCalledTimes(10)
+    })
+
+    it('should log list of methods with available arguments', () => {
+      obj.b = (arg1, arg2) => {}
+      script.describe(obj, logger)
+      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
+      expect(logger.info).toHaveBeenCalledWith('a', '')
+      expect(logger.info).toHaveBeenCalledWith('b', '[arg1 arg2]')
     })
   })
 
