@@ -107,18 +107,22 @@ export function describe (obj, logger, namespace) {
   })
 }
 
-function help (task) {
-  console.log('DESCRIPTION')
-  console.log(task.help)
-}
-
-export function call (obj, args, depth = 0) {
+export function call (obj, args, logger, depth = 0) {
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {
     const { nextArgs, options } = parseArgs(args.slice(1))
     if (options.help) {
-      help(obj[taskName])
+      logger.info('ARGUMENTS')
+      const params = getParamNames(obj[taskName])
+      if (params.length) {
+        logger.log(`[${params.join(' ')}]`)
+      } else {
+        logger.log('None')
+      }
+      logger.log(' ')
+      logger.info('DESCRIPTION')
+      logger.log(obj[taskName].help || 'None')
     } else {
       obj[taskName].apply({ options }, nextArgs)
     }
@@ -132,7 +136,7 @@ export function call (obj, args, depth = 0) {
   nextArgs[0] = nextTaskName
 
   if (obj[rootNamespace]) {
-    const calledTask = call(obj[rootNamespace], nextArgs, depth + 1)
+    const calledTask = call(obj[rootNamespace], nextArgs, logger, depth + 1)
     if (calledTask) {
       return calledTask
     }
