@@ -306,7 +306,7 @@ object spread operator as with `common` tasks in the example above.
 
 ## Documenting tasks
 
-To display all available tasks from your `runfile.js` type `run` in your command line
+To display all available tasks for your `runfile.js` type `run` in your command line
 without any arguments:
 
     $ run
@@ -314,6 +314,7 @@ without any arguments:
     Processing runfile...
     
     Available tasks:
+    
     echo
     testapi
     
@@ -322,7 +323,7 @@ Add `help` property to your task to get additional description:
 ```javascript
 import { run } from 'runjs'
 
-export function buildjs () {
+export function buildjs (arg1, arg2) {
   
 }
 
@@ -332,8 +333,20 @@ buildjs.help = 'Compile JavaScript files'
     $ run
     Requiring babel-register...
     Processing runfile...
+    
     Available tasks:
     
-    buildjs
+    buildjs [arg1 arg2]
     Compile JavaScript files
     
+When running task with `--help` option, only help for that task will be displayed:
+
+    $ run buildjs --help
+    Requiring babel-register...
+    Processing runfile...
+    
+    ARGUMENTS
+    [arg1 arg2]
+    
+    DESCRIPTION
+    Compile JavaScript files
