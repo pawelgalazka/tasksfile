@@ -63,6 +63,8 @@ export function createcomponent (name) {
 export function lint (path = '.') {
   this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
+
+lint.help = 'Do linting for javascript files'
 ```
     
 Run:
@@ -71,6 +73,7 @@ run createcomponent AppContainer
 run build:js
 run build:all
 run lint --fix components/Button.js
+run lint --help
 ```
 
 Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
@@ -314,7 +317,7 @@ without any arguments:
     echo
     testapi
     
-Add `doc` property to your task to get additional description:
+Add `help` property to your task to get additional description:
 
 ```javascript
 import { run } from 'runjs'
@@ -323,13 +326,14 @@ export function buildjs () {
   
 }
 
-buildjs.doc = 'Compile JavaScript files'
+buildjs.help = 'Compile JavaScript files'
 ```
 
     $ run
     Requiring babel-register...
     Processing runfile...
-    
     Available tasks:
-    buildjs - Compile JavaScript files
+    
+    buildjs
+    Compile JavaScript files
     
