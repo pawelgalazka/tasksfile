@@ -223,32 +223,49 @@ describe('script', () => {
     })
 
     it('should handle dash arguments', () => {
-      let data = {}
+      let calls = {}
 
       function fn (...args) {
-        data.args = args
-        data.options = this.options
+        calls.args = args
+        calls.options = this.options
       }
 
       obj.a = fn
 
       script.call(obj, ['a', '-a', 'hello'])
-      expect(data).toEqual({args: ['hello'], options: {a: true}})
-      data = {}
+      expect(calls).toEqual({args: ['hello'], options: {a: true}})
+      calls = {}
       script.call(obj, ['a', 'hello', '-a'])
-      expect(data).toEqual({args: ['hello'], options: {a: true}})
+      expect(calls).toEqual({args: ['hello'], options: {a: true}})
       script.call(obj, ['a', '--abc', 'hello'])
-      expect(data).toEqual({args: ['hello'], options: {abc: true}})
+      expect(calls).toEqual({args: ['hello'], options: {abc: true}})
       script.call(obj, ['a', '-a=123', 'hello'])
-      expect(data).toEqual({args: ['hello'], options: {a: 123}})
+      expect(calls).toEqual({args: ['hello'], options: {a: 123}})
       script.call(obj, ['a', '--abc=test', 'hello'])
-      expect(data).toEqual({args: ['hello'], options: {abc: 'test'}})
+      expect(calls).toEqual({args: ['hello'], options: {abc: 'test'}})
       script.call(obj, ['a', '-a', '--abc=test', 'hello'])
-      expect(data).toEqual({args: ['hello'], options: {a: true, abc: 'test'}})
+      expect(calls).toEqual({args: ['hello'], options: {a: true, abc: 'test'}})
       script.call(obj, ['a', '-a', '--abc=test', '-b=4', 'hello', '-abc', '--def'])
-      expect(data).toEqual({args: ['hello', '-abc'], options: {a: true, b: 4, abc: 'test', def: true}})
+      expect(calls).toEqual({args: ['hello', '-abc'], options: {a: true, b: 4, abc: 'test', def: true}})
       script.call(obj, ['a', '--ab-cd', '--ef-gh=test', '--ab.cd', '--ef.gh=123', 'hello', '-abc'])
-      expect(data).toEqual({args: ['hello', '-abc'], options: {'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123}})
+      expect(calls).toEqual({args: ['hello', '-abc'], options: {'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123}})
+    })
+
+    it('should handle dash arguments in nested tasks', () => {
+      let calls = {}
+
+      function fn (...args) {
+        calls.args = args
+        calls.options = this.options
+      }
+
+      obj.b.c = fn
+
+      script.call(obj, ['b:c', '-a', 'hello'])
+      expect(calls).toEqual({args: ['hello'], options: {a: true}})
+      calls = {}
+      script.call(obj, ['b:c', 'hello', '-a'])
+      expect(calls).toEqual({args: ['hello'], options: {a: true}})
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
