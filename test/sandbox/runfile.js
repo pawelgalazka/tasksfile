@@ -61,6 +61,6 @@ export const n1 = {
 }
 
 
-echo.doc = 'Simple echo task'
-n1.nested1.doc = 'Description of nested task nr 1'
-n1['nested2:echo'].doc = 'Description of nested task nr 2'
+echo.help = 'Simple echo task'
+n1.nested1.help = 'Description of nested task nr 1'
+n1['nested2:echo'].help = 'Description of nested task nr 2'
