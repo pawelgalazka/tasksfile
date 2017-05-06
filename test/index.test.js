@@ -44,17 +44,6 @@ describe('api', () => {
           expect(output).toEqual(null)
           expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
         })
-
-        it('should throw an error if command fails', () => {
-          expect(() => {
-            api.run('node ./ghost.js', {}, logger)
-          }).toThrow(RunJSError)
-        })
-
-        it('should have access to environment variables by default', () => {
-          const output = api.run('echo $RUNJS_TEST', {}, logger)
-          expect(output).toEqual(null)
-        })
       })
     })
 
@@ -88,20 +77,6 @@ describe('api', () => {
           api.run('echo "echo test"', {async: true}, logger).then((output) => {
             expect(output).toEqual(null)
             expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
-            done()
-          })
-        })
-
-        it('should have access to environment variables by default', (done) => {
-          api.run('echo $RUNJS_TEST', {async: true}, logger).then((output) => {
-            expect(output).toEqual(null)
-            done()
-          })
-        })
-
-        it('should reject with an error if command fails', (done) => {
-          api.run('node ./ghost.js', {async: true}, logger).catch((error) => {
-            expect(error.message).toEqual('Command failed: node ./ghost.js with exit code 1')
             done()
           })
         })
