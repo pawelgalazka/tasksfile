@@ -100,7 +100,7 @@ export function run (command, options = {}, logger = loggerAlias) {
 export function generate (src, dst, context) {
   console.log(`Generating ${dst} from template ${src}`)
   let templateString = fs.readFileSync(src)
-  let content = template(templateString)(context)
+  let content = template(templateString, context)(context)
   fs.writeFileSync(dst, content)
 }
 
