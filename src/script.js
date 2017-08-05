@@ -23,75 +23,67 @@ export function config (filePath) {
 
 export function load (runfilePath, config, logger, requirer, access) {
   // try to load babel-register
-  let babelRegister = false
-  let tsRegister = false
-  let hasTsRunfile = false
+  let babelEnabled = false
+  let tsEnabled = false
   let hasJsRunfile = false
+  let hasTsRunfile = false
+  let importError = null
 
-  logger.log('Requiring babel-register...')
   if (config['babel-register']) {
     try {
       requirer(config['babel-register'])
-      babelRegister = true
+      babelEnabled = true
     } catch (error) {
-      babelRegister = error
+      importError = error
+    }
+  } else if (config['ts-register']) {
+    try {
+      requirer(config['ts-register'])
+      tsEnabled = true
+    } catch (error) {
+      importError = error
     }
   } else {
     try {
       requirer('./node_modules/babel-register')
-      babelRegister = true
+      babelEnabled = true
     } catch (error) {
-      babelRegister = error
+      importError = error
     }
-  }
 
-  try {
-    require.resolve('ts-node')
-
-    logger.log('Requiring ts-register...')
-    if (config['ts-register']) {
-      try {
-        requirer(config['ts-register'])
-        tsRegister = true
-      } catch (error) {
-        tsRegister = error
-      }
-    } else {
+    if (!babelEnabled) {
       try {
         requirer('./node_modules/ts-node/register')
-        tsRegister = true
+        tsEnabled = true
       } catch (error) {
-        tsRegister = error
+        importError = error
       }
     }
-  } catch (error) {
-    // Nothing to do
   }
 
-  if (config['babel-register'] && babelRegister instanceof Error) {
-    throw babelRegister
-  } else if (config['ts-register'] && tsRegister instanceof Error) {
-    throw tsRegister
+  if (babelEnabled) {
+    logger.log('Loaded babel-register')
+  } else if (tsEnabled) {
+    logger.log('Loaded ts-node/register')
+  } else if ((config['babel-register'] || config['ts-register']) && importError instanceof Error) {
+    throw importError
   }
 
   // process runfile.js
   logger.log('Processing runfile...')
-
-  if (tsRegister) {
-    try {
-      access(runfilePath + '.ts')
-      runfilePath = runfilePath + '.ts'
-      hasTsRunfile = true
-    } catch (error) {
-      hasTsRunfile = false
-    }
-  }
-
   try {
     access(runfilePath + '.js')
     hasJsRunfile = true
   } catch (error) {
-    hasJsRunfile = false
+    if (tsEnabled) {
+      try {
+        access(runfilePath + '.ts')
+        runfilePath = runfilePath + '.ts'
+        hasTsRunfile = true
+      } catch (error) {
+        hasTsRunfile = false
+      }
+    }
   }
 
   if (!hasJsRunfile && !hasTsRunfile) {
