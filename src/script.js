@@ -22,11 +22,12 @@ export function config (filePath) {
 }
 
 export function load (runfilePath, config, logger, requirer, access) {
-  // try to load babel-register
   let babelEnabled = false
   let tsEnabled = false
+  
   let hasJsRunfile = false
   let hasTsRunfile = false
+  
   let importError = null
 
   if (config['babel-register']) {
@@ -72,13 +73,13 @@ export function load (runfilePath, config, logger, requirer, access) {
   // process runfile.js
   logger.log('Processing runfile...')
   try {
-    access(runfilePath + '.js')
+    access(`${runfilePath}.js`)
     hasJsRunfile = true
   } catch (error) {
     if (tsEnabled) {
       try {
-        access(runfilePath + '.ts')
-        runfilePath = runfilePath + '.ts'
+        access(`${runfilePath}.ts`)
+        runfilePath = `${runfilePath}.ts`
         hasTsRunfile = true
       } catch (error) {
         hasTsRunfile = false
