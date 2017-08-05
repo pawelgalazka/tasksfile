@@ -24,10 +24,8 @@ export function config (filePath) {
 export function load (runfilePath, config, logger, requirer, access) {
   let babelEnabled = false
   let tsEnabled = false
-  
   let hasJsRunfile = false
   let hasTsRunfile = false
-  
   let importError = null
 
   if (config['babel-register']) {
