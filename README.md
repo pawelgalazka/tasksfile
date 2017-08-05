@@ -240,7 +240,7 @@ a path to it through config in your `package.json` (default path is
 
 
 If you are using Typescript and have `ts-node` already installed, RunJS will pick up it
-automatically and use it for you `runfile.ts`. If RunJS don't find `ts-node/register`
+automatically and use it for your `runfile.ts`. If RunJS don't find `ts-node/register`
 it will fallback to pure node.
 
 If you have very specific location for your `ts-node/register`, you can define
