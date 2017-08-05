@@ -22,31 +22,74 @@ export function config (filePath) {
 }
 
 export function load (runfilePath, config, logger, requirer, access) {
-  // try to load babel-register
-  try {
-    logger.log('Requiring babel-register...')
-    if (config['babel-register']) {
+  let babelEnabled = false
+  let tsEnabled = false
+  let hasJsRunfile = false
+  let hasTsRunfile = false
+  let importError = null
+
+  if (config['babel-register']) {
+    try {
       requirer(config['babel-register'])
-    } else {
+      babelEnabled = true
+    } catch (error) {
+      importError = error
+    }
+  } else if (config['ts-register']) {
+    try {
+      requirer(config['ts-register'])
+      tsEnabled = true
+    } catch (error) {
+      importError = error
+    }
+  } else {
+    try {
       requirer('./node_modules/babel-register')
+      babelEnabled = true
+    } catch (error) {
+      importError = error
     }
-  } catch (error) {
-    logger.log('Requiring failed. Fallback to pure node.')
-    if (config['babel-register']) {
-      throw error
+
+    if (!babelEnabled) {
+      try {
+        requirer('./node_modules/ts-node/register')
+        tsEnabled = true
+      } catch (error) {
+        importError = error
+      }
     }
+  }
+
+  if (babelEnabled) {
+    logger.log('Loaded babel-register')
+  } else if (tsEnabled) {
+    logger.log('Loaded ts-node/register')
+  } else if ((config['babel-register'] || config['ts-register']) && importError instanceof Error) {
+    throw importError
   }
 
   // process runfile.js
   logger.log('Processing runfile...')
-
   try {
     access(`${runfilePath}.js`)
+    hasJsRunfile = true
   } catch (error) {
-    throw new RunJSError(`No ${runfilePath}.js defined in ${process.cwd()}`)
+    if (tsEnabled) {
+      try {
+        access(`${runfilePath}.ts`)
+        runfilePath = `${runfilePath}.ts`
+        hasTsRunfile = true
+      } catch (error) {
+        hasTsRunfile = false
+      }
+    }
   }
 
-  const runfile = requirer(runfilePath)
+  if (!hasJsRunfile && !hasTsRunfile) {
+    throw new RunJSError(`No ${runfilePath} defined in ${process.cwd()}`)
+  }
+
+  var runfile = requirer(runfilePath)
   if (runfile.default) {
     return runfile.default
   }

@@ -102,7 +102,7 @@ describe('script', () => {
       }).toThrowError(script.RunJSError)
       expect(() => {
         script.load('./runfile', config, logger, requirer, access)
-      }).toThrowError(/^No \.\/runfile\.js defined in/)
+      }).toThrowError(/^No \.\/runfile defined in/)
     })
 
     it('should return runfile.js as a module if found', () => {

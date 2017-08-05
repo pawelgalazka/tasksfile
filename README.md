@@ -10,6 +10,7 @@ Minimalistic building tool
     - [generate](#generatesrc-dst-context)
     - [ask](#askquestion)
 - [Using Babel](#using-babel)
+- [Using Typescript](#using-typescript)
 - [Scaling](#scaling)
 - [Documenting tasks](#documenting-tasks)
 
@@ -45,11 +46,11 @@ export const build = {
   js () {
     run('webpack -p --config config/webpack/prod.js --progress');
   },
-  
+
   css () {
-    
+
   },
-  
+
   all () {
     build.js()
     build.css()
@@ -57,16 +58,16 @@ export const build = {
 }
 
 export function createcomponent (name) {
-  
+
 }
 
 export function lint (path = '.') {
-  this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+  this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`)
 }
 
 lint.help = 'Do linting for javascript files'
 ```
-    
+
 Run:
 ```
 run createcomponent AppContainer
@@ -98,7 +99,7 @@ we need more complex process which make them quite hard to read.
 Makefiles are simple, better for more complex processes
 but they depend on bash scripting. Within `runfile` you can use
 command line calls as well as JavaScript code and npm
-libraries which makes that approach much more flexible. Additionally 
+libraries which makes that approach much more flexible. Additionally
 each task and command call is reported in the console.
 
 
@@ -115,9 +116,9 @@ export function sayHello (who) {
 
     $ run sayHello world
     Hello world!
-    
+
 You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
-after task name. They will be always passed through `this.options` inside a function 
+after task name. They will be always passed through `this.options` inside a function
 in a form of JSON object.
 
 ```javascript
@@ -130,7 +131,7 @@ export function sayHello (who) {
     $ run sayHello -a --test=something world
     Hello world!
     Given options: { a: true, test: 'something' }
-    
+
 
 ## API
 
@@ -142,7 +143,7 @@ import {run, generate} from 'runjs';
 
 #### run(cmd, options)
 
-run given command as a child process and log the call in the output. 
+run given command as a child process and log the call in the output.
 `./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
 
 *Options:*
@@ -165,14 +166,14 @@ To get an output from `run` function we need to set `stdio` option to `pipe` oth
 ```javascript
 const output = run('ls -la', {stdio: 'pipe'})
 run('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
-  log(output) 
+  log(output)
 }).catch((error) => {
   throw error
 })
 ```
 
-For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 
-not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are passed 
+For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus
+not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are passed
 to the terminal, but `run` function will resolve (async) / return (sync)
 `null`.
 
@@ -208,7 +209,7 @@ import { ask } from 'runjs'
 
 export function prompt () {
   ask('Who are you?').then((name) => {
-    console.log(`Hello ${name}!`) 
+    console.log(`Hello ${name}!`)
   })
 }
 ```
@@ -216,28 +217,43 @@ export function prompt () {
     $ run prompt
     Who are you? Pawel
     Hello Pawel!
-    
+
 ## Using Babel
 
 
 If you have Babel and `babel-register` already installed, RunJS will pick up it
-automatically and use it for you `runfile.js`. If RunJS not finds `babel-register` 
+automatically and use it for you `runfile.js`. If RunJS not finds `babel-register`
 it will fallback to pure node.
 
 RunJS performs better with `npm>=3.0` when using with Babel. It is because new
 version of `npm` handles modules loading much more effective.
-    
+
 If you have very specific location for your `babel-register`, you can define
-a path to it through config in your `package.json` (default path is 
+a path to it through config in your `package.json` (default path is
 `./node_modules/babel-register`):
 
     "runjs": {
         "babel-register": "./node_modules/some_package/node_modules/babel-register"
     }
 
+## Using Typescript
+
+
+If you are using Typescript and have `ts-node` already installed, RunJS will pick up it
+automatically and use it for your `runfile.ts`. If RunJS don't find `ts-node/register`
+it will fallback to pure node.
+
+If you have very specific location for your `ts-node/register`, you can define
+a path to it through config in your `package.json` (default path is
+`./node_modules/ts-node/register`):
+
+    "runjs": {
+        "ts-register": "./node_modules/some_package/node_modules/ts-register"
+    }
+
 ## Scaling
 
-When `runfile.js` gets large it is a good idea to extract some logic to external modules 
+When `runfile.js` gets large it is a good idea to extract some logic to external modules
 and import them back to `runfile.js`:
 
 
@@ -278,14 +294,14 @@ export default {
   lint, // equals to lint: lint
   ...common,
   clean: () => {
-    run('rm -rf node_modules') 
+    run('rm -rf node_modules')
   },
   deploy: {
     'production': () => {
-      
+
     },
     'staging': () => {
-      
+
     }
   }
 }
@@ -301,7 +317,7 @@ run staging:staging
 ```
 
 You can notice a couple of approaches here but in general RunJS will treat object key as
-a namespace. It is also possible to bump tasks directly without the namespace by using ES7 
+a namespace. It is also possible to bump tasks directly without the namespace by using ES7
 object spread operator as with `common` tasks in the example above.
 
 ## Documenting tasks
@@ -312,19 +328,19 @@ without any arguments:
     $ run
     Requiring babel-register...
     Processing runfile...
-    
+
     Available tasks:
-    
+
     echo
     testapi
-    
+
 Add `help` property to your task to get additional description:
 
 ```javascript
 import { run } from 'runjs'
 
 export function buildjs (arg1, arg2) {
-  
+
 }
 
 buildjs.help = 'Compile JavaScript files'
@@ -333,20 +349,20 @@ buildjs.help = 'Compile JavaScript files'
     $ run
     Requiring babel-register...
     Processing runfile...
-    
+
     Available tasks:
-    
+
     buildjs [arg1 arg2]
     Compile JavaScript files
-    
+
 When running task with `--help` option, only help for that task will be displayed:
 
     $ run buildjs --help
     Requiring babel-register...
     Processing runfile...
-    
+
     ARGUMENTS
     [arg1 arg2]
-    
+
     DESCRIPTION
     Compile JavaScript files
