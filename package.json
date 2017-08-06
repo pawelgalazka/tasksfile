@@ -18,7 +18,8 @@
     "test": "yarn run test:fast && yarn run test:e2e",
     "test:fast": "yarn run lint && yarn run build && jest",
     "test:e2e": "bash ./test/e2e.test.sh",
-    "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules"
+    "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules",
+    "clean:sandbox": "rm -rf test/sandbox/node_modules"
   },
   "engines": {
     "node": ">=6"
