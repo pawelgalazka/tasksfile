@@ -9,7 +9,7 @@ const SCRIPT_API_PATH = './node_modules/runjs/lib/script.js'
 try {
   fs.accessSync(path.resolve(SCRIPT_API_PATH))
 } catch (error) {
-  console.error('RunJS not found. Do "npm install runjs" or "yarn add runjs" first')
+  console.error('RunJS not found. Do "npm install runjs --save-dev" or "yarn add --dev runjs" first.')
   process.exit(1)
 }
 
