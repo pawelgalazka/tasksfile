@@ -1,25 +1,6 @@
-import chalk from 'chalk'
 import childProcess from 'child_process'
 import path from 'path'
-import { RunJSError } from './common'
-
-export const logger = {
-  debug: (...args) => {
-    console.log(chalk.blue(...args))
-  },
-  info: (...args) => {
-    console.log(chalk.bold(...args))
-  },
-  log: (...args) => {
-    console.log(...args)
-  },
-  warning: (...args) => {
-    console.warn(chalk.yellow(...args))
-  },
-  error: (...args) => {
-    console.error(chalk.red(...args))
-  }
-}
+import { RunJSError, logger } from './common'
 
 const loggerAlias = logger
 
