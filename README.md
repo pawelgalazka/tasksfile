@@ -7,8 +7,6 @@ Minimalistic building tool
 - [Handling arguments](#handling-arguments)
 - [API](#api)
     - [run](#runcmd-options)
-    - [generate](#generatesrc-dst-context)
-    - [ask](#askquestion)
 - [Using Babel](#using-babel)
 - [Scaling](#scaling)
 - [Documenting tasks](#documenting-tasks)
@@ -176,49 +174,8 @@ not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are pa
 to the terminal, but `run` function will resolve (async) / return (sync)
 `null`.
 
-#### generate(src, dst, context)
 
-generate a file specified by `dst` path by given template file `src` and `context` object
-
-`file1.tmp.js`:
-```javascript
-{
-    author: '<%= AUTHOR %>'
-}
-```
-
-```javascript
-generate('file1.tmp.js', 'file1.js', {AUTHOR: 'Pawel'});
-```
-
-will generate `file1.js`:
-
-```
-{
-    author: 'Pawel'
-}
-```
-
-#### ask(question)
-
-Gather information from the user.
-
-```javascript
-import { ask } from 'runjs'
-
-export function prompt () {
-  ask('Who are you?').then((name) => {
-    console.log(`Hello ${name}!`) 
-  })
-}
-```
-
-    $ run prompt
-    Who are you? Pawel
-    Hello Pawel!
-    
 ## Using Babel
-
 
 If you have Babel and `babel-register` already installed, RunJS will pick up it
 automatically and use it for you `runfile.js`. If RunJS not finds `babel-register` 

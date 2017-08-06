@@ -83,8 +83,4 @@ describe('api', () => {
       })
     })
   })
-
-  describe('ask()', () => {
-
-  })
 })

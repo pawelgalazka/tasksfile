@@ -1,9 +1,6 @@
 import chalk from 'chalk'
 import childProcess from 'child_process'
-import template from 'lodash.template'
-import fs from 'fs'
 import path from 'path'
-import readline from 'readline'
 import { RunJSError } from './common'
 
 export const logger = {
@@ -95,31 +92,4 @@ export function run (command, options = {}, logger = loggerAlias) {
 
   // Handle sync call by default
   return runSync(command, options)
-}
-
-export function generate (src, dst, context) {
-  console.log(`Generating ${dst} from template ${src}`)
-  let templateString = fs.readFileSync(src)
-  let content = template(templateString)(context)
-  fs.writeFileSync(dst, content)
-}
-
-export function ask (question) {
-  const readlineInterface = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  })
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      try {
-        readlineInterface.question(question + ' ', (answer) => {
-          resolve(answer)
-          readlineInterface.close()
-        })
-      } catch (error) {
-        reject(error)
-        readlineInterface.close()
-      }
-    }, 0)
-  })
 }
