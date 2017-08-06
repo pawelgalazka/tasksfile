@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { RunJSError } from './common'
+import { RunJSError, logger } from './common'
 import getParamNames from 'get-parameter-names'
 
 export function requirer (filePath) {
@@ -11,10 +11,10 @@ export function hasAccess (filePath) {
   return fs.accessSync(path.resolve(filePath))
 }
 
-export function config (filePath) {
+export function getConfig (filePath) {
   let config
   try {
-    config = require(filePath).runjs || {}
+    config = requirer(filePath).runjs || {}
   } catch (error) {
     config = {}
   }
@@ -150,5 +150,26 @@ export function call (obj, args, logger, depth = 0) {
 
   if (!depth) {
     throw new RunJSError(`Task ${taskName} not found`)
+  }
+}
+
+export function main () {
+  try {
+    const config = getConfig('./package.json')
+    const runfile = load('./runfile', config, logger, requirer, hasAccess)
+    const ARGV = process.argv.slice(2)
+
+    if (ARGV.length) {
+      call(runfile, ARGV, logger)
+    } else {
+      describe(runfile, logger)
+    }
+  } catch (error) {
+    if (error instanceof RunJSError) {
+      logger.error(error.message)
+      process.exit(1)
+    } else {
+      throw error
+    }
   }
 }
