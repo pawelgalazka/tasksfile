@@ -154,6 +154,7 @@ run given command as a child process and log the call in the output.
     async: ... // run command asynchronously (true/false), false by default
     stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
     env: ... // environment key-value pairs (Object)
+    log: ... // log command to console (true/false), true by default
     timeout: ...
 }
 ```

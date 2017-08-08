@@ -50,6 +50,7 @@ function runAsync (command, options) {
 
 export function run (command, options = {}, logger = loggerAlias) {
   const binPath = path.resolve('./node_modules/.bin')
+  const shouldLog = options.log !== false
 
   // Pick relevant option keys and set default values
   options = {
@@ -64,7 +65,9 @@ export function run (command, options = {}, logger = loggerAlias) {
   // Include in PATH node_modules bin path
   options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
 
-  logger.info(command)
+  if (shouldLog) {
+    logger.info(command)
+  }
 
   // Handle async call
   if (options.async) {
