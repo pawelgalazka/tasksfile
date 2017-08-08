@@ -33,7 +33,9 @@ and add config to your `package.json`:
       "presets": ["es2015"]
     },
     "runjs": {
-      "transpiler": "./node_modules/babel-register"
+      "requires": [
+        "./node_modules/babel-register"
+      ]
     }
 
 Create `runfile.js`:
@@ -187,7 +189,9 @@ to your `babel-register` module in your `package.json` as part of runjs config.
 `package.json`:
 
     "runjs": {
-      "transpiler": "./node_modules/babel-register"
+      "requires": [
+        "./node_modules/babel-register"
+      ]
     }
 
 RunJS will require defined transpiler before requiring `runfile.js` so you can
@@ -208,7 +212,9 @@ You need to also define custom path to your runfile as TypeScript files have
 `package.json`:
 
     "runjs": {
-      "transpiler": "./node_modules/ts-node/register",
+      "requires": [
+        "./node_modules/ts-node/register"
+      ],
       "runfile": "./runfile.ts"
     }
 
