@@ -23,44 +23,9 @@ describe('script', () => {
       config = {}
     })
 
-    describe('when custom path to babel-register defined in config', () => {
-      beforeEach(() => {
-        config = {'babel-register': './custom/babel-register'}
-      })
-
-      it('should raise an error if specified babel-register cannot be found', () => {
-        requirer = jest.fn(() => {
-          throw new Error('Cannot find babel-register')
-        })
-        expect(() => {
-          script.load('./runfile', config, logger, requirer, access)
-        }).toThrowError('Cannot find babel-register')
-        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
-      })
-
-      it('should load specified babel-register', () => {
-        script.load('./runfile', config, logger, requirer, access)
-        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
-      })
-    })
-
     it('should load babel-register if found', () => {
       script.load('./runfile', config, logger, requirer, access)
       expect(requirer).toHaveBeenCalledWith('./node_modules/babel-register')
-    })
-
-    it('should ignore babel-register load error if module not found', () => {
-      requirer = jest.fn((mod) => {
-        switch (mod) {
-          case './node_modules/babel-register':
-            throw new Error('babel-register not found')
-          case './runfile':
-            return {test: 1}
-          default:
-            throw new Error('Unexpected import')
-        }
-      })
-      expect(script.load('./runfile', config, logger, requirer, access)).toEqual({test: 1})
     })
 
     it('should raise an error if runfile.js cannot be found', () => {
@@ -107,6 +72,27 @@ describe('script', () => {
         }
       })
       expect(script.load('./runfile', config, logger, requirer, access)).toEqual({test: 1})
+    })
+
+    describe('when custom path to babel-register defined in config', () => {
+      beforeEach(() => {
+        config = {'babel-register': './custom/babel-register'}
+      })
+
+      it('should raise an error if specified babel-register cannot be found', () => {
+        requirer = jest.fn(() => {
+          throw new Error('Cannot find babel-register')
+        })
+        expect(() => {
+          script.load('./runfile', config, logger, requirer, access)
+        }).toThrowError('Cannot find babel-register')
+        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
+      })
+
+      it('should load specified babel-register', () => {
+        script.load('./runfile', config, logger, requirer, access)
+        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
+      })
     })
   })
 
