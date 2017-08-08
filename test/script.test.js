@@ -45,20 +45,26 @@ describe('script', () => {
       expect(requirer).not.toHaveBeenCalled()
     })
 
-    describe('when transpiler defined in config', () => {
+    describe('when requires defined in config', () => {
       beforeEach(() => {
-        config = {'transpiler': './node_modules/babel-register'}
+        config = {
+          'requires': [
+            './node_modules/babel-polyfill',
+            './node_modules/babel-register'
+          ]
+        }
       })
 
-      it('should require specified transpiler before requiring runfile', () => {
+      it('should require specified "requires" before requiring runfile', () => {
         script.load(config, logger, requirer, access)
         expect(requirer.mock.calls).toEqual([
+          ['./node_modules/babel-polyfill'],
           ['./node_modules/babel-register'],
           ['./runfile.js']
         ])
       })
 
-      it('should raise an error if specified transpiler cannot be found', () => {
+      it('should raise an error if specified "requires" cannot be found', () => {
         requirer = jest.fn(() => {
           throw new Error('Cannot find ./node_modules/babel-register')
         })

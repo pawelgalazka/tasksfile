@@ -25,10 +25,12 @@ export function getConfig (filePath) {
 
 export function load (config, logger, requirer, access) {
   const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
-  // Load transpiler if given in config
-  if (config['transpiler']) {
-    logger.log(`Requiring ${config['transpiler']}...`)
-    requirer(config['transpiler'])
+  // Load requires if given in config
+  if (Array.isArray(config['requires'])) {
+    config['requires'].forEach(modulePath => {
+      logger.log(`Requiring ${modulePath}...`)
+      requirer(modulePath)
+    })
   }
 
   // Process runfile
