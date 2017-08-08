@@ -28,7 +28,6 @@ export function load (runfilePath, config, logger, requirer, access) {
     if (config['babel-register']) {
       requirer(config['babel-register'])
     } else {
-      requirer('./node_modules/babel-register')
     }
   } catch (error) {
     logger.log('Requiring failed. Fallback to pure node.')
