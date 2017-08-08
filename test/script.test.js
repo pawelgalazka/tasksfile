@@ -45,24 +45,26 @@ describe('script', () => {
       expect(requirer).not.toHaveBeenCalled()
     })
 
-    describe('when custom path to babel-register defined in config', () => {
+    describe('when transpiler defined in config', () => {
       beforeEach(() => {
-        config = {'babel-register': './custom/babel-register'}
+        config = {'transpiler': 'babel-register'}
       })
 
-      it('should raise an error if specified babel-register cannot be found', () => {
+      it('should require specified transpiler before requiring runfile', () => {
+        script.load('./runfile', config, logger, requirer, access)
+        expect(requirer.mock.calls).toEqual([
+          ['babel-register'],
+          ['./runfile']
+        ])
+      })
+
+      it('should raise an error if specified transpiler cannot be found', () => {
         requirer = jest.fn(() => {
           throw new Error('Cannot find babel-register')
         })
         expect(() => {
           script.load('./runfile', config, logger, requirer, access)
         }).toThrowError('Cannot find babel-register')
-        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
-      })
-
-      it('should load specified babel-register', () => {
-        script.load('./runfile', config, logger, requirer, access)
-        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
       })
     })
   })

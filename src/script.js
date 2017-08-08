@@ -24,9 +24,9 @@ export function getConfig (filePath) {
 export function load (runfilePath, config, logger, requirer, access) {
   // try to load babel-register
   try {
-    logger.log('Requiring babel-register...')
-    if (config['babel-register']) {
-      requirer(config['babel-register'])
+    if (config['transpiler']) {
+      logger.log(`Requiring ${config['transpiler']}...`)
+      requirer(config['transpiler'])
     } else {
     }
   } catch (error) {
