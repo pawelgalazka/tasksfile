@@ -35,6 +35,13 @@ export function testasync () {
   })
 }
 
+export async function testasyncawait () {
+  await run('ls -al | cat', {async: true}).then((data) => {
+    console.log('DATA', data)
+  })
+  console.log('After AWAIT message')
+}
+
 export const n1 = {
   nested1 () {
     console.log('Nested task nr 1 executed!')

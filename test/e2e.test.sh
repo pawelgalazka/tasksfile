@@ -30,6 +30,7 @@ yarn
 echo 'Testing test package'
 ./node_modules/.bin/run echo 1 2 3
 ./node_modules/.bin/run testapi
+./node_modules/.bin/run testasyncawait
 ./node_modules/.bin/run n1:nested1
 ./node_modules/.bin/run n1:nested2:echo
 
@@ -43,5 +44,6 @@ yarn
 echo 'Testing test package'
 ./node_modules/.bin/run echo 1 2 3
 ./node_modules/.bin/run testapi
+./node_modules/.bin/run testasyncawait
 ./node_modules/.bin/run n1:nested1
 ./node_modules/.bin/run n1:nested2:echo
