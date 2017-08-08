@@ -9,6 +9,7 @@ Minimalistic building tool
     - [run](#runcmd-options)
 - [Using Babel](#using-babel)
 - [Using TypeScript](#using-typescript)
+- [Using Async/Await](#using-asyncawait)
 - [Scaling](#scaling)
 - [Documenting tasks](#documenting-tasks)
 
@@ -223,6 +224,51 @@ RunJS will require defined transpiler before requiring `./runfile.ts`.
 If you don't have `ts-node` module, just install it:
 
     npm install ts-node --save-dev
+    
+## Using Async/Await
+
+For node >= 7.10 it is possible to use async functions out of the box since node 
+will support them natively.
+
+Expected usage in your runfile:
+
+```javascript
+import { run } from 'runjs'
+
+export async function testasyncawait () {
+  await run('ls -al | cat', {async: true}).then((data) => {
+    console.log('DATA', data)
+  })
+  console.log('After AWAIT message')
+}
+```
+
+and then just
+
+```
+$ run testasyncawait
+```
+
+If your node version is older you need to depend on transpilers, 
+either `Babel` or `TypeScript`. For `TypeScript` you do no more than transpiler
+setup which was described [above](#using-typescript) and async/await should just
+work.
+
+For `Babel` you additionally need `babel-preset-es2017` and `babel-polyfill`:
+
+    npm install babel-preset-es2017 babel-polyfill --save-dev
+    
+and proper config in your `package.json`:
+
+    "babel": {
+      "presets": ["es2017"]
+    },
+    "runjs": {
+      "requires": [
+        "./node_modules/babel-polyfill",
+        "./node_modules/babel-register"
+      ]
+    }
 
 ## Scaling
 
