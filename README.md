@@ -280,7 +280,7 @@ run lint:fix
 run serve
 run clean
 run deploy:production
-run staging:staging
+run deploy:staging
 ```
 
 You can notice a couple of approaches here but in general RunJS will treat object key as
