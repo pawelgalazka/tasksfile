@@ -19,9 +19,6 @@ cd test/sandbox
 echo 'Cleaning node_modules'
 rm -rf node_modules
 
-echo 'Installing runjs'
-yarn add file:../../
-
 echo 'Installing test package'
 yarn
 
