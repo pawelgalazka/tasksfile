@@ -8,6 +8,7 @@ Minimalistic building tool
 - [API](#api)
     - [run](#runcmd-options)
 - [Using Babel](#using-babel)
+- [Using TypeScript](#using-typescript)
 - [Scaling](#scaling)
 - [Documenting tasks](#documenting-tasks)
 
@@ -22,15 +23,17 @@ Install in your project (to use runjs api inside your `runfile.js`):
 
     npm install runjs --save-dev
 
-If you want to use Babel, install it. RunJS will pickup your
-`babel-register` automatically.
+If you want to use Babel transpiler, install it (for TypeScript click [here](#using-typescript)):
 
     npm install babel-core babel-preset-es2015 babel-register --save-dev
 
-Configure Babel in your `package.json`:
+and add config to your `package.json`:
 
     "babel": {
       "presets": ["es2015"]
+    },
+    "runjs": {
+      "transpiler": "./node_modules/babel-register"
     }
 
 Create `runfile.js`:
@@ -177,20 +180,42 @@ to the terminal, but `run` function will resolve (async) / return (sync)
 
 ## Using Babel
 
-If you have Babel and `babel-register` already installed, RunJS will pick up it
-automatically and use it for you `runfile.js`. If RunJS not finds `babel-register` 
-it will fallback to pure node.
+If you want to use Babel transpiler for your `runfile.js`, just define a path
+to your `babel-register` module in your `package.json` as part of runjs config.
 
-RunJS performs better with `npm>=3.0` when using with Babel. It is because new
-version of `npm` handles modules loading much more effective.
-    
-If you have very specific location for your `babel-register`, you can define
-a path to it through config in your `package.json` (default path is 
-`./node_modules/babel-register`):
+`package.json`:
 
     "runjs": {
-        "babel-register": "./node_modules/some_package/node_modules/babel-register"
+      "transpiler": "./node_modules/babel-register"
     }
+
+RunJS will require defined transpiler before requiring `runfile.js` so you can
+use all ES6/ES7 features which are not supported by your node version. 
+
+If you don't have `babel-register` module, just install it:
+
+    npm install babel-register --save-dev
+    
+    
+## Using TypeScript
+
+If you want to use TypeScript transpiler for your runfile, define a path
+to `ts-node/register` module as part of runjs config inside your `package.json`.
+You need to also define custom path to your runfile as TypeScript files have
+`*.ts` extension.
+
+`package.json`:
+
+    "runjs": {
+      "transpiler": "./node_modules/ts-node/register",
+      "runfile": "./runfile.ts"
+    }
+
+RunJS will require defined transpiler before requiring `./runfile.ts`.
+
+If you don't have `ts-node` module, just install it:
+
+    npm install ts-node --save-dev
 
 ## Scaling
 
