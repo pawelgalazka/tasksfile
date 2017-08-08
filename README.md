@@ -138,7 +138,7 @@ export function sayHello (who) {
 For inside `runfile.js` usage
 
 ```javascript
-import {run, generate} from 'runjs';
+import { run } from 'runjs';
 ```
 
 #### run(cmd, options)
