@@ -25,9 +25,8 @@ echo 'Testing test package'
 ./node_modules/.bin/run n1:nested1
 ./node_modules/.bin/run n1:nested2:echo
 
-
 echo 'TypeScript sandbox tests'
-cd test/typescript-sandbox
+cd ../typescript-sandbox
 
 echo 'Installing test package'
 yarn
