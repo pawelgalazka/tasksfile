@@ -25,22 +25,14 @@ export function getConfig (filePath) {
 
 export function load (config, logger, requirer, access) {
   const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
-  // try to load babel-register
-  try {
-    if (config['transpiler']) {
-      logger.log(`Requiring ${config['transpiler']}...`)
-      requirer(config['transpiler'])
-    } else {
-    }
-  } catch (error) {
-    logger.log('Requiring failed. Fallback to pure node.')
-    if (config['babel-register']) {
-      throw error
-    }
+  // Load transpiler if given in config
+  if (config['transpiler']) {
+    logger.log(`Requiring ${config['transpiler']}...`)
+    requirer(config['transpiler'])
   }
 
-  // process runfile.js
-  logger.log('Processing runfile...')
+  // Process runfile
+  logger.log(`Processing ${runfilePath}...`)
 
   try {
     access(runfilePath)
