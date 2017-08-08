@@ -3,6 +3,8 @@ import fs from 'fs'
 import { RunJSError, logger } from './common'
 import getParamNames from 'get-parameter-names'
 
+const DEFAULT_RUNFILE_PATH = './runfile.js'
+
 export function requirer (filePath) {
   return require(path.resolve(filePath))
 }
@@ -21,7 +23,8 @@ export function getConfig (filePath) {
   return config
 }
 
-export function load (runfilePath, config, logger, requirer, access) {
+export function load (config, logger, requirer, access) {
+  const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
   // try to load babel-register
   try {
     if (config['transpiler']) {
@@ -40,9 +43,9 @@ export function load (runfilePath, config, logger, requirer, access) {
   logger.log('Processing runfile...')
 
   try {
-    access(`${runfilePath}.js`)
+    access(runfilePath)
   } catch (error) {
-    throw new RunJSError(`No ${runfilePath}.js defined in ${process.cwd()}`)
+    throw new RunJSError(`No ${runfilePath} defined in ${process.cwd()}`)
   }
 
   const runfile = requirer(runfilePath)
@@ -155,7 +158,7 @@ export function call (obj, args, logger, depth = 0) {
 export function main () {
   try {
     const config = getConfig('./package.json')
-    const runfile = load('./runfile', config, logger, requirer, hasAccess)
+    const runfile = load(config, logger, requirer, hasAccess)
     const ARGV = process.argv.slice(2)
 
     if (ARGV.length) {

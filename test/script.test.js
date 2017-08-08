@@ -25,22 +25,22 @@ describe('script', () => {
 
     it('should return runfile.js as a module if found', () => {
       requirer = jest.fn().mockReturnValue({test: 1})
-      expect(script.load('./runfile', config, logger, requirer, access)).toEqual({test: 1})
-      expect(requirer).toHaveBeenCalledWith('./runfile')
+      expect(script.load(config, logger, requirer, access)).toEqual({test: 1})
+      expect(requirer).toHaveBeenCalledWith('./runfile.js')
       expect(requirer).toHaveBeenCalledTimes(1)
     })
 
     it('should return runfile.js module default context if found', () => {
       requirer = jest.fn().mockReturnValue({default: {test: 1}})
-      expect(script.load('./runfile', config, logger, requirer, access)).toEqual({test: 1})
-      expect(requirer).toHaveBeenCalledWith('./runfile')
+      expect(script.load(config, logger, requirer, access)).toEqual({test: 1})
+      expect(requirer).toHaveBeenCalledWith('./runfile.js')
       expect(requirer).toHaveBeenCalledTimes(1)
     })
 
     it('should raise an error if runfile.js cannot be found', () => {
       access = jest.fn(() => { throw new Error('No access') })
       expect(() => {
-        script.load('./runfile', config, logger, requirer, access)
+        script.load(config, logger, requirer, access)
       }).toThrowError(/^No \.\/runfile\.js defined in/)
       expect(requirer).not.toHaveBeenCalled()
     })
@@ -51,10 +51,10 @@ describe('script', () => {
       })
 
       it('should require specified transpiler before requiring runfile', () => {
-        script.load('./runfile', config, logger, requirer, access)
+        script.load(config, logger, requirer, access)
         expect(requirer.mock.calls).toEqual([
           ['babel-register'],
-          ['./runfile']
+          ['./runfile.js']
         ])
       })
 
@@ -63,8 +63,29 @@ describe('script', () => {
           throw new Error('Cannot find babel-register')
         })
         expect(() => {
-          script.load('./runfile', config, logger, requirer, access)
+          script.load(config, logger, requirer, access)
         }).toThrowError('Cannot find babel-register')
+      })
+    })
+
+    describe('when custom runfile path given', () => {
+      beforeEach(() => {
+        config = {'runfile': './runfile.ts'}
+      })
+
+      it('should return custom runfile as a module if found', () => {
+        requirer = jest.fn().mockReturnValue({test: 1})
+        expect(script.load(config, logger, requirer, access)).toEqual({test: 1})
+        expect(requirer).toHaveBeenCalledWith('./runfile.ts')
+        expect(requirer).toHaveBeenCalledTimes(1)
+      })
+
+      it('should raise an error if custom runfile cannot be found', () => {
+        access = jest.fn(() => { throw new Error('No access') })
+        expect(() => {
+          script.load(config, logger, requirer, access)
+        }).toThrowError(/^No \.\/runfile\.ts defined in/)
+        expect(requirer).not.toHaveBeenCalled()
       })
     })
   })
