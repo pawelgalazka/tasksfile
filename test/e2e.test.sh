@@ -7,6 +7,13 @@ function handle_error {
   exit 1
 }
 
+# Clean runjs from node_modules
+function clean_runjs_setup {
+  echo 'Cleaning RunJS setup'
+  rm -rf ./node_modules/runjs
+  rm -f ./node_modules/.bin/run
+  rm -f ./node_modules/.yarn-integrity
+}
 # Exit the script with a helpful error message when any error is encountered
 trap 'set +x; handle_error $LINENO $BASH_COMMAND' ERR
 
@@ -17,6 +24,7 @@ echo 'Babel sandbox tests'
 cd test/babel-sandbox
 
 echo 'Installing test package'
+clean_runjs_setup
 yarn
 
 echo 'Testing test package'
@@ -29,6 +37,7 @@ echo 'TypeScript sandbox tests'
 cd ../typescript-sandbox
 
 echo 'Installing test package'
+clean_runjs_setup
 yarn
 
 echo 'Testing test package'
