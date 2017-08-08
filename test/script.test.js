@@ -18,7 +18,7 @@ describe('script', () => {
     let requirer, access, config
 
     beforeEach(() => {
-      requirer = jest.fn()
+      requirer = jest.fn().mockReturnValue({})
       access = jest.fn().mockReturnValue(true)
       config = {}
     })
@@ -29,46 +29,22 @@ describe('script', () => {
       })
 
       it('should raise an error if specified babel-register cannot be found', () => {
-        requirer = jest.fn((mod) => {
-          switch (mod) {
-            case './custom/babel-register':
-              throw new Error('Cannot find babel-register')
-            default:
-              throw new Error('Unexpected import')
-          }
+        requirer = jest.fn(() => {
+          throw new Error('Cannot find babel-register')
         })
         expect(() => {
           script.load('./runfile', config, logger, requirer, access)
         }).toThrowError('Cannot find babel-register')
+        expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
       })
 
       it('should load specified babel-register', () => {
-        requirer = jest.fn((mod) => {
-          switch (mod) {
-            case './custom/babel-register':
-              return {}
-            case './runfile':
-              return {}
-            default:
-              throw new Error('Unexpected import')
-          }
-        })
         script.load('./runfile', config, logger, requirer, access)
         expect(requirer).toHaveBeenCalledWith('./custom/babel-register')
       })
     })
 
     it('should load babel-register if found', () => {
-      requirer = jest.fn((mod) => {
-        switch (mod) {
-          case './node_modules/babel-register':
-            return {}
-          case './runfile':
-            return {}
-          default:
-            throw new Error('Unexpected import')
-        }
-      })
       script.load('./runfile', config, logger, requirer, access)
       expect(requirer).toHaveBeenCalledWith('./node_modules/babel-register')
     })
