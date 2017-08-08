@@ -47,24 +47,24 @@ describe('script', () => {
 
     describe('when transpiler defined in config', () => {
       beforeEach(() => {
-        config = {'transpiler': 'babel-register'}
+        config = {'transpiler': './node_modules/babel-register'}
       })
 
       it('should require specified transpiler before requiring runfile', () => {
         script.load(config, logger, requirer, access)
         expect(requirer.mock.calls).toEqual([
-          ['babel-register'],
+          ['./node_modules/babel-register'],
           ['./runfile.js']
         ])
       })
 
       it('should raise an error if specified transpiler cannot be found', () => {
         requirer = jest.fn(() => {
-          throw new Error('Cannot find babel-register')
+          throw new Error('Cannot find ./node_modules/babel-register')
         })
         expect(() => {
           script.load(config, logger, requirer, access)
-        }).toThrowError('Cannot find babel-register')
+        }).toThrowError('Cannot find ./node_modules/babel-register')
       })
     })
 
