@@ -50,44 +50,44 @@ Create `runfile.js`:
 
 import { run, option } from 'runjs';
 
-export const build = {
-  js () {
-    run('webpack -p --config config/webpack/prod.js --progress');
-  },
+export function dev () {
   
-  css () {
-    
-  },
-  
-  all () {
-    build.js()
-    build.css()
-  }
 }
 
-export function createcomponent (name) {
-  
+export function build () {
+  run('webpack -p --config config/webpack/prod.js --progress');
 }
 
 export function lint (path = '.') {
   option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
 
+export function test (file) {
+  run('jest')
+}
+
+export const create = {
+  component (name) {
+    
+  }
+}
+
+
 lint.help = 'Do linting for javascript files'
 ```
     
 Run:
 ```
-run createcomponent AppContainer
-run build:js
-run build:all
+run dev
+run build
+run create:component SomeComponent
 run lint --fix components/Button.js
 run lint --help
 ```
 
 Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
-normal node.js module. Then based on command line arguments a proper exported function
-from `runfile.js` is run.
+normal node.js module. Then based on command line arguments proper exported function
+from `runfile.js` is called.
 
 
 ## Why runjs ?
