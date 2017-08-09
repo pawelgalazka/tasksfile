@@ -194,7 +194,7 @@ $ run lint --fix
 
 ## Transpilers
 
-#### Using Babel
+#### Babel
 
 If you want to use Babel transpiler for your `runfile.js`, just define a path
 to your `babel-register` module in your `package.json` as part of runjs config.
@@ -215,7 +215,7 @@ If you don't have `babel-register` module, just install it:
     npm install babel-register --save-dev
     
     
-#### Using TypeScript
+#### TypeScript
 
 If you want to use TypeScript transpiler for your runfile, define a path
 to `ts-node/register` module as part of runjs config inside your `package.json`.
