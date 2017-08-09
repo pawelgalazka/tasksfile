@@ -7,6 +7,7 @@ Minimalistic building tool
 - [Handling arguments](#handling-arguments)
 - [API](#api)
     - [run](#runcmd-options)
+    - [option](#optionthis-name)
 - [Using Babel](#using-babel)
 - [Using TypeScript](#using-typescript)
 - [Using Async/Await](#using-asyncawait)
@@ -43,7 +44,7 @@ Create `runfile.js`:
 
 ```javascript
 
-import {run} from 'runjs';
+import { run, option } from 'runjs';
 
 export const build = {
   js () {
@@ -65,7 +66,7 @@ export function createcomponent (name) {
 }
 
 export function lint (path = '.') {
-  this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+  option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
 
 lint.help = 'Do linting for javascript files'
@@ -181,6 +182,32 @@ not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are pa
 to the terminal, but `run` function will resolve (async) / return (sync)
 `null`.
 
+
+#### option(this, name)
+
+A helper which returns value for an option if given through dash param of command
+line script.
+
+Usage in runfile:
+```js
+export function lint (path = '.') {
+  option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
+```
+
+is the same as:
+
+```js
+export function lint (path = '.') {
+  this && this.options && this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
+```
+
+and can be triggered when:
+
+```sh
+$ run lint --fix
+```
 
 ## Using Babel
 
