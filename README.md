@@ -16,6 +16,9 @@ Minimalistic building tool
 - [Documenting tasks](#documenting-tasks)
 
 
+> For 3.x to 4.x migration instructions look [here](https://github.com/pawelgalazka/runjs/releases)
+
+
 ## Get started
 
 Install globally (for a command line script):
