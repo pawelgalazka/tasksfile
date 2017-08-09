@@ -17,6 +17,7 @@ echo 'Babel sandbox tests'
 cd test/babel-sandbox
 
 echo 'Installing test package'
+rm -rf ./node_modules
 yarn
 
 echo 'Testing test package'
@@ -30,6 +31,7 @@ echo 'TypeScript sandbox tests'
 cd ../typescript-sandbox
 
 echo 'Installing test package'
+rm -rf ./node_modules
 yarn
 
 echo 'Testing test package'
