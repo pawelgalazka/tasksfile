@@ -4,12 +4,13 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
-- [Handling arguments](#handling-arguments)
 - [API](#api)
     - [run](#runcmd-options)
     - [option](#optionthis-name)
-- [Using Babel](#using-babel)
-- [Using TypeScript](#using-typescript)
+- [Transpilers](#transpilers)
+    - [Babel](#babel)
+    - [TypeScript](#typescript)
+- [Handling arguments](#handling-arguments)
 - [Using Async/Await](#using-asyncawait)
 - [Scaling](#scaling)
 - [Documenting tasks](#documenting-tasks)
@@ -107,35 +108,6 @@ libraries which makes that approach much more flexible. Additionally
 each task and command call is reported in the console.
 
 
-## Handling arguments
-
-Provided arguments in the command line are passed to the function:
-
-
-```javascript
-export function sayHello (who) {
-  console.log(`Hello ${who}!`)
-}
-```
-
-    $ run sayHello world
-    Hello world!
-    
-You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
-after task name. They will be always passed through `this.options` inside a function 
-in a form of JSON object.
-
-```javascript
-export function sayHello (who) {
-  console.log(`Hello ${who}!`)
-  console.log('Given options:', this.options)
-}
-```
-
-    $ run sayHello -a --test=something world
-    Hello world!
-    Given options: { a: true, test: 'something' }
-    
 
 ## API
 
@@ -209,7 +181,9 @@ and can be triggered when:
 $ run lint --fix
 ```
 
-## Using Babel
+## Transpilers
+
+#### Using Babel
 
 If you want to use Babel transpiler for your `runfile.js`, just define a path
 to your `babel-register` module in your `package.json` as part of runjs config.
@@ -230,7 +204,7 @@ If you don't have `babel-register` module, just install it:
     npm install babel-register --save-dev
     
     
-## Using TypeScript
+#### Using TypeScript
 
 If you want to use TypeScript transpiler for your runfile, define a path
 to `ts-node/register` module as part of runjs config inside your `package.json`.
@@ -251,6 +225,37 @@ RunJS will require defined transpiler before requiring `./runfile.ts`.
 If you don't have `ts-node` module, just install it:
 
     npm install ts-node --save-dev
+
+
+## Handling arguments
+
+Provided arguments in the command line are passed to the function:
+
+
+```javascript
+export function sayHello (who) {
+  console.log(`Hello ${who}!`)
+}
+```
+
+    $ run sayHello world
+    Hello world!
+    
+You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
+after task name. They will be always passed through `this.options` inside a function 
+in a form of JSON object.
+
+```javascript
+export function sayHello (who) {
+  console.log(`Hello ${who}!`)
+  console.log('Given options:', this.options)
+}
+```
+
+    $ run sayHello -a --test=something world
+    Hello world!
+    Given options: { a: true, test: 'something' }
+    
     
 ## Using Async/Await
 
