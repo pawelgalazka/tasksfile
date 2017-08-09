@@ -95,4 +95,30 @@ describe('api', () => {
       })
     })
   })
+
+  describe('option()', () => {
+    let thisStub
+
+    beforeEach(() => {
+      thisStub = {
+        options: {
+          test: 'abcdef'
+        }
+      }
+    })
+
+    it('should return option value from a given possible "this" object of a task function', () => {
+      expect(api.option(thisStub, 'test')).toEqual('abcdef')
+    })
+
+    it('should return null if no option name given', () => {
+      expect(api.option(thisStub)).toBe(null)
+    })
+
+    it('should return null if option not found', () => {
+      expect(api.option(thisStub, 'ghost')).toBe(null)
+      expect(api.option(null, 'ghost')).toBe(null)
+      expect(api.option({}, 'ghost')).toBe(null)
+    })
+  })
 })
