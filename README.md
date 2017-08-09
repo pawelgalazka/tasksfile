@@ -51,7 +51,8 @@ Create `runfile.js`:
 import { run, option } from 'runjs';
 
 export function dev () {
-  
+  run('nodemon --exec node -- core/index.dev.js', {async: true})
+  run('webpack-dev-server --hot --progress --config config/webpack/dev.js', {async: true})
 }
 
 export function build () {
@@ -62,8 +63,12 @@ export function lint (path = '.') {
   option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
 
-export function test (file) {
-  run('jest')
+export function test (path = '.') {
+  const watchFlag = option(this, 'w') ? '--watch' : ''
+  if (!watchFlag) {
+    lint(path)
+  }
+  run(`jest ${path} ${watchFlag}`)
 }
 
 export const create = {
@@ -72,17 +77,20 @@ export const create = {
   }
 }
 
-
+dev.help = 'Run development environment'
+build.help = 'Build JavaScript files'
 lint.help = 'Do linting for javascript files'
+test.help = 'Run unit tests'
+create.component.help = 'Create React component file with given name'
 ```
     
 Run:
 ```
 run dev
-run build
 run create:component SomeComponent
 run lint --fix components/Button.js
 run lint --help
+run test -w
 ```
 
 Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
