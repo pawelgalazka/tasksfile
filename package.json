@@ -1,6 +1,6 @@
 {
   "name": "runjs",
-  "version": "3.4.1",
+  "version": "4.0.0",
   "description": "Minimalistic building tool",
   "keywords": [
     "build",
@@ -13,15 +13,15 @@
     "run": "bin/run.js"
   },
   "scripts": {
-    "build": "babel src/ --out-dir lib/",
-    "lint": "eslint src/ bin/ test/*.test.js",
+    "lint": "eslint lib/ bin/ test/*.test.js",
     "test": "yarn run test:fast && yarn run test:e2e",
-    "test:fast": "yarn run lint && yarn run build && jest",
+    "test:fast": "yarn run lint && jest",
     "test:e2e": "bash ./test/e2e.test.sh",
-    "clean": "rm -rf node_modules && rm -rf test/sandbox/node_modules"
+    "clean": "rm -rf node_modules && yarn run clean:sandbox",
+    "clean:sandbox": "rm -rf test/babel-sandbox/node_modules && rm -rf test/typescript-sandbox/node_modules"
   },
   "engines": {
-    "node": ">=4.8.0"
+    "node": ">=6.11.1"
   },
   "repository": {
     "type": "git",
@@ -35,31 +35,18 @@
   "homepage": "https://github.com/pawelgalazka/runjs#readme",
   "dependencies": {
     "chalk": "1.1.3",
-    "get-parameter-names": "0.3.0",
-    "lodash.template": "4.4.0"
+    "get-parameter-names": "0.3.0"
   },
   "devDependencies": {
-    "babel-cli": "6.16.0",
-    "babel-core": "6.16.0",
-    "babel-eslint": "7.0.0",
-    "babel-jest": "16.0.0",
-    "babel-preset-es2015": "6.16.0",
-    "babel-register": "6.16.3",
     "eslint": "3.6.1",
     "eslint-config-standard": "6.2.0",
     "eslint-plugin-promise": "2.0.1",
     "eslint-plugin-standard": "2.0.1",
     "jest": "16.0.2"
   },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  },
   "eslintConfig": {
     "extends": [
       "eslint-config-standard"
-    ],
-    "parser": "babel-eslint"
+    ]
   }
 }

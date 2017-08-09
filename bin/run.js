@@ -1,24 +1,22 @@
 #!/usr/bin/env node
-'use strict'
-const script = require('../lib/script')
-const api = require('../lib/index')
-const common = require('../lib/common')
+const path = require('path')
+const fs = require('fs')
+
+const SCRIPT_API_PATH = './node_modules/runjs/lib/script.js'
 
 try {
-  const config = script.config('./package.json')
-  const runfile = script.load('./runfile', config, api.logger, script.requirer, script.hasAccess)
-  const ARGV = process.argv.slice(2)
-
-  if (ARGV.length) {
-    script.call(runfile, ARGV, api.logger)
-  } else {
-    script.describe(runfile, api.logger)
-  }
+  fs.accessSync(path.resolve(SCRIPT_API_PATH))
 } catch (error) {
-  if (error instanceof common.RunJSError) {
-    api.logger.error(error.message)
-    process.exit(1)
-  } else {
-    throw error
-  }
+  console.error('RunJS not found. Do "npm install runjs --save-dev" or "yarn add --dev runjs" first.')
+  process.exit(1)
 }
+
+const script = require(path.resolve(SCRIPT_API_PATH))
+
+if (!script.main) {
+  console.error('Version of runjs inside your project seems to be not compatible with global run script.')
+  console.error('Do update to runjs >= 4.0')
+  process.exit(1)
+}
+
+script.main()

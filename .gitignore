@@ -2,6 +2,4 @@
 node_modules
 *.swp
 .DS_Store
-/lib
 npm-debug.log
-/test/sandbox/yarn.lock

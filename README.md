@@ -4,14 +4,19 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
-- [Handling arguments](#handling-arguments)
 - [API](#api)
     - [run](#runcmd-options)
-    - [generate](#generatesrc-dst-context)
-    - [ask](#askquestion)
-- [Using Babel](#using-babel)
+    - [option](#optionthis-name)
+- [Transpilers](#transpilers)
+    - [Babel](#babel)
+    - [TypeScript](#typescript)
+- [Handling arguments](#handling-arguments)
+- [Using Async/Await](#using-asyncawait)
 - [Scaling](#scaling)
 - [Documenting tasks](#documenting-tasks)
+
+
+> For 3.x to 4.x migration instructions look [here](https://github.com/pawelgalazka/runjs/releases)
 
 
 ## Get started
@@ -24,61 +29,73 @@ Install in your project (to use runjs api inside your `runfile.js`):
 
     npm install runjs --save-dev
 
-If you want to use Babel, install it. RunJS will pickup your
-`babel-register` automatically.
+If you want to use Babel transpiler, install it (for TypeScript click [here](#using-typescript)):
 
     npm install babel-core babel-preset-es2015 babel-register --save-dev
 
-Configure Babel in your `package.json`:
+and add config to your `package.json`:
 
     "babel": {
       "presets": ["es2015"]
+    },
+    "runjs": {
+      "requires": [
+        "./node_modules/babel-register"
+      ]
     }
 
 Create `runfile.js`:
 
 ```javascript
 
-import {run} from 'runjs';
+import { run, option } from 'runjs';
 
-export const build = {
-  js () {
-    run('webpack -p --config config/webpack/prod.js --progress');
-  },
-  
-  css () {
-    
-  },
-  
-  all () {
-    build.js()
-    build.css()
-  }
+export function dev () {
+  run('nodemon --exec node -- core/index.dev.js', {async: true})
+  run('webpack-dev-server --hot --progress --config config/webpack/dev.js', {async: true})
 }
 
-export function createcomponent (name) {
-  
+export function build () {
+  run('webpack -p --config config/webpack/prod.js --progress');
 }
 
 export function lint (path = '.') {
-  this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+  option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
 
+export function test (path = '.') {
+  const watchFlag = option(this, 'w') ? '--watch' : ''
+  if (!watchFlag) {
+    lint(path)
+  }
+  run(`jest ${path} ${watchFlag}`)
+}
+
+export const create = {
+  component (name) {
+    
+  }
+}
+
+dev.help = 'Run development environment'
+build.help = 'Build JavaScript files'
 lint.help = 'Do linting for javascript files'
+test.help = 'Run unit tests'
+create.component.help = 'Create React component file with given name'
 ```
     
 Run:
 ```
-run createcomponent AppContainer
-run build:js
-run build:all
+run dev
+run create:component SomeComponent
 run lint --fix components/Button.js
 run lint --help
+run test -w
 ```
 
 Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
-normal node.js module. Then based on command line arguments a proper exported function
-from `runfile.js` is run.
+normal node.js module. Then based on command line arguments proper exported function
+from `runfile.js` is called.
 
 
 ## Why runjs ?
@@ -100,6 +117,125 @@ but they depend on bash scripting. Within `runfile` you can use
 command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible. Additionally 
 each task and command call is reported in the console.
+
+
+
+## API
+
+For inside `runfile.js` usage
+
+```javascript
+import { run, option } from 'runjs';
+```
+
+#### run(cmd, options)
+
+run given command as a child process and log the call in the output. 
+`./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
+
+*Options:*
+
+```javascript
+{
+    cwd: ..., // current working directory (String)
+    async: ... // run command asynchronously (true/false), false by default
+    stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
+    env: ... // environment key-value pairs (Object)
+    log: ... // log command to console (true/false), true by default
+    timeout: ...
+}
+```
+
+*Examples:*
+
+To get an output from `run` function we need to set `stdio` option to `pipe` otherwise
+`output` will be `null`:
+
+```javascript
+const output = run('ls -la', {stdio: 'pipe'})
+run('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
+  log(output) 
+}).catch((error) => {
+  throw error
+})
+```
+
+For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 
+not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are passed 
+to the terminal, but `run` function will resolve (async) / return (sync)
+`null`.
+
+
+#### option(this, name)
+
+A helper which returns value for an option if given through dash param of command
+line script.
+
+Usage in runfile:
+```js
+export function lint (path = '.') {
+  option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
+```
+
+is the same as:
+
+```js
+export function lint (path = '.') {
+  this && this.options && this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
+```
+
+and can be triggered when:
+
+```sh
+$ run lint --fix
+```
+
+## Transpilers
+
+#### Using Babel
+
+If you want to use Babel transpiler for your `runfile.js`, just define a path
+to your `babel-register` module in your `package.json` as part of runjs config.
+
+`package.json`:
+
+    "runjs": {
+      "requires": [
+        "./node_modules/babel-register"
+      ]
+    }
+
+RunJS will require defined transpiler before requiring `runfile.js` so you can
+use all ES6/ES7 features which are not supported by your node version. 
+
+If you don't have `babel-register` module, just install it:
+
+    npm install babel-register --save-dev
+    
+    
+#### Using TypeScript
+
+If you want to use TypeScript transpiler for your runfile, define a path
+to `ts-node/register` module as part of runjs config inside your `package.json`.
+You need to also define custom path to your runfile as TypeScript files have
+`*.ts` extension.
+
+`package.json`:
+
+    "runjs": {
+      "requires": [
+        "./node_modules/ts-node/register"
+      ],
+      "runfile": "./runfile.ts"
+    }
+
+RunJS will require defined transpiler before requiring `./runfile.ts`.
+
+If you don't have `ts-node` module, just install it:
+
+    npm install ts-node --save-dev
 
 
 ## Handling arguments
@@ -131,108 +267,50 @@ export function sayHello (who) {
     Hello world!
     Given options: { a: true, test: 'something' }
     
+    
+## Using Async/Await
 
-## API
+For node >= 7.10 it is possible to use async functions out of the box since node 
+will support them natively.
 
-For inside `runfile.js` usage
-
-```javascript
-import {run, generate} from 'runjs';
-```
-
-#### run(cmd, options)
-
-run given command as a child process and log the call in the output. 
-`./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
-
-*Options:*
+Expected usage in your runfile:
 
 ```javascript
-{
-    cwd: ..., // current working directory (String)
-    async: ... // run command asynchronously (true/false), false by default
-    stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
-    env: ... // environment key-value pairs (Object)
-    timeout: ...
-}
-```
+import { run } from 'runjs'
 
-*Examples:*
-
-To get an output from `run` function we need to set `stdio` option to `pipe` otherwise
-`output` will be `null`:
-
-```javascript
-const output = run('ls -la', {stdio: 'pipe'})
-run('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
-  log(output) 
-}).catch((error) => {
-  throw error
-})
-```
-
-For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 
-not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are passed 
-to the terminal, but `run` function will resolve (async) / return (sync)
-`null`.
-
-#### generate(src, dst, context)
-
-generate a file specified by `dst` path by given template file `src` and `context` object
-
-`file1.tmp.js`:
-```javascript
-{
-    author: '<%= AUTHOR %>'
-}
-```
-
-```javascript
-generate('file1.tmp.js', 'file1.js', {AUTHOR: 'Pawel'});
-```
-
-will generate `file1.js`:
-
-```
-{
-    author: 'Pawel'
-}
-```
-
-#### ask(question)
-
-Gather information from the user.
-
-```javascript
-import { ask } from 'runjs'
-
-export function prompt () {
-  ask('Who are you?').then((name) => {
-    console.log(`Hello ${name}!`) 
+export async function testasyncawait () {
+  await run('ls -al | cat', {async: true}).then((data) => {
+    console.log('DATA', data)
   })
+  console.log('After AWAIT message')
 }
 ```
 
-    $ run prompt
-    Who are you? Pawel
-    Hello Pawel!
+and then just
+
+```
+$ run testasyncawait
+```
+
+If your node version is older you need to depend on transpilers, 
+either `Babel` or `TypeScript`. For `TypeScript` you do no more than transpiler
+setup which was described [above](#using-typescript) and async/await should just
+work.
+
+For `Babel` you additionally need `babel-preset-es2017` and `babel-polyfill`:
+
+    npm install babel-preset-es2017 babel-polyfill --save-dev
     
-## Using Babel
+and proper config in your `package.json`:
 
-
-If you have Babel and `babel-register` already installed, RunJS will pick up it
-automatically and use it for you `runfile.js`. If RunJS not finds `babel-register` 
-it will fallback to pure node.
-
-RunJS performs better with `npm>=3.0` when using with Babel. It is because new
-version of `npm` handles modules loading much more effective.
-    
-If you have very specific location for your `babel-register`, you can define
-a path to it through config in your `package.json` (default path is 
-`./node_modules/babel-register`):
-
+    "babel": {
+      "presets": ["es2017"]
+    },
     "runjs": {
-        "babel-register": "./node_modules/some_package/node_modules/babel-register"
+      "requires": [
+        "./node_modules/babel-polyfill",
+        "./node_modules/babel-register"
+      ]
     }
 
 ## Scaling
@@ -297,7 +375,7 @@ run lint:fix
 run serve
 run clean
 run deploy:production
-run staging:staging
+run deploy:staging
 ```
 
 You can notice a couple of approaches here but in general RunJS will treat object key as
@@ -310,8 +388,8 @@ To display all available tasks for your `runfile.js` type `run` in your command 
 without any arguments:
 
     $ run
-    Requiring babel-register...
-    Processing runfile...
+    Requiring ./node_modules/babel-register...
+    Processing runfile.js...
     
     Available tasks:
     
@@ -331,8 +409,8 @@ buildjs.help = 'Compile JavaScript files'
 ```
 
     $ run
-    Requiring babel-register...
-    Processing runfile...
+    Requiring ./node_modules/babel-register...
+    Processing runfile.js...
     
     Available tasks:
     
@@ -342,8 +420,8 @@ buildjs.help = 'Compile JavaScript files'
 When running task with `--help` option, only help for that task will be displayed:
 
     $ run buildjs --help
-    Requiring babel-register...
-    Processing runfile...
+    Requiring ./node_modules/babel-register...
+    Processing runfile.js...
     
     ARGUMENTS
     [arg1 arg2]

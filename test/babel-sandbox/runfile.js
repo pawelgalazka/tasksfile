@@ -1,4 +1,4 @@
-import { run, ask, generate } from 'runjs'
+import { run } from 'runjs'
 
 export function echo (...args) {
   console.log('ECHO', args, this.options)
@@ -35,14 +35,11 @@ export function testasync () {
   })
 }
 
-export function testask () {
-  ask('Who are you?').then((answer) => {
-    console.log(`Hello ${answer}!`)
+export async function testasyncawait () {
+  await run('ls -al | cat', {async: true}).then((data) => {
+    console.log('DATA', data)
   })
-}
-
-export function testgenerate () {
-  generate('./template.tpl', './template.txt', {users: ['Pawel', 'John']})
+  console.log('After AWAIT message')
 }
 
 export const n1 = {

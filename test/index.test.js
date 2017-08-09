@@ -1,6 +1,6 @@
 /* eslint-env jest */
-import * as api from '../lib/index'
-import { RunJSError } from '../lib/common'
+const api = require('../lib/index')
+const { RunJSError } = require('../lib/common')
 
 process.env.RUNJS_TEST = 'runjs test'
 
@@ -36,6 +36,11 @@ describe('api', () => {
           const output = api.run('echo $RUNJS_TEST', {stdio: 'pipe'}, logger)
           expect(output).toEqual('runjs test\n')
         })
+
+        it('should not log command if "log" option has "false"', () => {
+          api.run('echo "echo test"', {stdio: 'pipe', log: false}, logger)
+          expect(logger.info).not.toHaveBeenCalled()
+        })
       })
 
       describe('with stdio=inherit', () => {
@@ -70,6 +75,13 @@ describe('api', () => {
             done()
           })
         })
+
+        it('should not log command if "log" option has "false"', (done) => {
+          api.run('echo "echo test"', {async: true, stdio: 'pipe', log: false}, logger).then(() => {
+            expect(logger.info).not.toHaveBeenCalled()
+            done()
+          })
+        })
       })
 
       describe('with stdio=inherit', () => {
@@ -84,7 +96,29 @@ describe('api', () => {
     })
   })
 
-  describe('ask()', () => {
+  describe('option()', () => {
+    let thisStub
 
+    beforeEach(() => {
+      thisStub = {
+        options: {
+          test: 'abcdef'
+        }
+      }
+    })
+
+    it('should return option value from a given possible "this" object of a task function', () => {
+      expect(api.option(thisStub, 'test')).toEqual('abcdef')
+    })
+
+    it('should return null if no option name given', () => {
+      expect(api.option(thisStub)).toBe(null)
+    })
+
+    it('should return null if option not found', () => {
+      expect(api.option(thisStub, 'ghost')).toBe(null)
+      expect(api.option(null, 'ghost')).toBe(null)
+      expect(api.option({}, 'ghost')).toBe(null)
+    })
   })
 })
