@@ -294,7 +294,7 @@ $ run testasyncawait
 
 If your node version is older you need to depend on transpilers, 
 either `Babel` or `TypeScript`. For `TypeScript` you do no more than transpiler
-setup which was described [above](#using-typescript) and async/await should just
+setup which was described [above](#typescript) and async/await should just
 work.
 
 For `Babel` you additionally need `babel-preset-es2017` and `babel-polyfill`:
@@ -319,7 +319,7 @@ When `runfile.js` gets large it is a good idea to extract some logic to external
 and import them back to `runfile.js`:
 
 
-`./tasks/css`:
+`./tasks/css.js`:
 
 ```javascript
 export function compile () {
@@ -327,7 +327,7 @@ export function compile () {
 }
 ```
 
-`./tasks/lint`:
+`./tasks/lint.js`:
 
 ```javascript
 export function fix () {
@@ -335,7 +335,7 @@ export function fix () {
 }
 ```
 
-`./tasks/common`:
+`./tasks/common.js`:
 
 ```javascript
 export function serve () {
@@ -347,9 +347,9 @@ export function serve () {
 
 ```javascript
 import { run } from 'runjs'
-import lint from './tasks/lint'
-import css from './tasks/css'
-import common from './tasks/common'
+import * as lint from './tasks/lint'
+import * as css from './tasks/css'
+import * as common from './tasks/common'
 
 export default {
   css, // equals to css: css
