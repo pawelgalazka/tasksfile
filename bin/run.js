@@ -15,7 +15,7 @@ const script = require(path.resolve(SCRIPT_API_PATH))
 
 if (!script.main) {
   console.error('Version of runjs inside your project seems to be not compatible with global run script.')
-  console.error('Do update to runjs >= 4.0')
+  console.error('Upgrade your local runjs to >= 4.0 or downgrade your global runjs to version 3.x')
   process.exit(1)
 }
 
