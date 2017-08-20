@@ -36,11 +36,6 @@ describe('api', () => {
           const output = api.run('echo $RUNJS_TEST', {stdio: 'pipe'}, logger)
           expect(output).toEqual('runjs test\n')
         })
-
-        it('should not log command if "log" option has "false"', () => {
-          api.run('echo "echo test"', {stdio: 'pipe', log: false}, logger)
-          expect(logger.info).not.toHaveBeenCalled()
-        })
       })
 
       describe('with stdio=inherit', () => {
@@ -72,13 +67,6 @@ describe('api', () => {
         it('should reject with an error if command fails', (done) => {
           api.run('node ./ghost.js', {async: true, stdio: 'pipe'}, logger).catch((error) => {
             expect(error.message).toEqual('Command failed: node ./ghost.js with exit code 1')
-            done()
-          })
-        })
-
-        it('should not log command if "log" option has "false"', (done) => {
-          api.run('echo "echo test"', {async: true, stdio: 'pipe', log: false}, logger).then(() => {
-            expect(logger.info).not.toHaveBeenCalled()
             done()
           })
         })
