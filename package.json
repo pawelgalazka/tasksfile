@@ -15,7 +15,7 @@
   "scripts": {
     "lint": "eslint lib/ bin/ test/*.test.js",
     "test": "yarn run test:fast && yarn run test:e2e",
-    "test:fast": "yarn run lint && jest",
+    "test:fast": "yarn run lint && jest --coverage",
     "test:e2e": "bash ./test/e2e.test.sh",
     "clean": "rm -rf node_modules && yarn run clean:sandbox",
     "clean:sandbox": "rm -rf test/babel-sandbox/node_modules && rm -rf test/typescript-sandbox/node_modules"
@@ -52,6 +52,16 @@
     ]
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "lib/**/*.js",
+      "bin/**/*.js"
+    ],
+    "coverageReporters": ["text"],
+    "coverageThreshold": {
+      "global": {
+        "lines": 70
+      }
+    }
   }
 }
