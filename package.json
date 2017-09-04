@@ -16,7 +16,7 @@
     "lint": "eslint src/ bin/ test/*.test.js",
     "flow": "flow",
     "build": "babel src/ --out-dir lib/",
-    "test": "yarn run lint && yarn run test:coverage && yarn run build && yarn run test:e2e",
+    "test": "yarn run lint && yarn run flow -- check && yarn run test:coverage && yarn run build && yarn run test:e2e",
     "test:coverage": "jest --coverage",
     "test:unit": "jest",
     "test:watch": "jest --watch",
