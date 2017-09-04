@@ -6,6 +6,11 @@ const getParamNames = require('get-parameter-names')
 
 const DEFAULT_RUNFILE_PATH = './runfile.js'
 
+type Config = {
+  runfile?: string,
+  requires?: Array<string>
+}
+
 function requirer (filePath: string): Object {
   return require(path.resolve(filePath))
 }
@@ -14,7 +19,7 @@ function hasAccess (filePath: string): void {
   return fs.accessSync(path.resolve(filePath))
 }
 
-function getConfig (filePath: string): Object {
+function getConfig (filePath: string): Config {
   let config: Object
   try {
     config = requirer(filePath).runjs || {}
@@ -24,7 +29,7 @@ function getConfig (filePath: string): Object {
   return config
 }
 
-function load (config: Object, logger: Logger, requirer: (string) => Object, access: (string) => void) {
+function load (config: Config, logger: Logger, requirer: (string) => Object, access: (string) => void) {
   const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
   // Load requires if given in config
   if (Array.isArray(config['requires'])) {
