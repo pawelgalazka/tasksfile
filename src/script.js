@@ -1,3 +1,4 @@
+// @flow
 const path = require('path')
 const fs = require('fs')
 const { RunJSError, logger } = require('./common')
@@ -5,16 +6,16 @@ const getParamNames = require('get-parameter-names')
 
 const DEFAULT_RUNFILE_PATH = './runfile.js'
 
-function requirer (filePath) {
+function requirer (filePath: string): Object {
   return require(path.resolve(filePath))
 }
 
-function hasAccess (filePath) {
+function hasAccess (filePath: string): void {
   return fs.accessSync(path.resolve(filePath))
 }
 
-function getConfig (filePath) {
-  let config
+function getConfig (filePath: string): Object {
+  let config: Object
   try {
     config = requirer(filePath).runjs || {}
   } catch (error) {
@@ -23,7 +24,7 @@ function getConfig (filePath) {
   return config
 }
 
-function load (config, logger, requirer, access) {
+function load (config: Object, logger, requirer: (string) => any, access: (string) => void) {
   const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
   // Load requires if given in config
   if (Array.isArray(config['requires'])) {
@@ -74,7 +75,7 @@ function parseArgs (args) {
   }
 }
 
-function describe (obj, logger, namespace) {
+function describe (obj: Object, logger, namespace: ?string) {
   if (!namespace) {
     logger.debug('Available tasks:\n')
   }
@@ -118,7 +119,7 @@ function help (task, logger) {
   logger.log(' ')
 }
 
-function call (obj, args, logger, depth = 0) {
+function call (obj: Object, args: Array<any>, logger, depth: number = 0) {
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {

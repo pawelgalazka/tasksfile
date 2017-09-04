@@ -5,9 +5,21 @@ const { RunJSError, logger } = require('./common')
 
 const loggerAlias = logger
 
-function runSync (command: string, options: any) : ?string {
+type Options = {
+  cwd?: string,
+  async?: boolean,
+  stdio?: string | Array<any>,
+  env?: Object,
+  timeout?: number
+}
+
+function runSync (command: string, options: Options) : ?string {
   try {
-    const buffer = execSync(command, options)
+    const buffer = execSync(command, {
+      cwd: options.cwd,
+      stdio: options.stdio,
+      env: options.cwd
+    })
     if (buffer) {
       return buffer.toString()
     }
@@ -17,10 +29,10 @@ function runSync (command: string, options: any) : ?string {
   }
 }
 
-function runAsync (command: string, options: any): Promise<?string> {
+function runAsync (command: string, options: Options): Promise<?string> {
   return new Promise((resolve, reject) => {
     const asyncProcess = spawn(command, options)
-    let output = null
+    let output : ?string = null
 
     asyncProcess.on('error', (error) => {
       reject(new Error(`Failed to start command: ${command}; ${error}`))
@@ -35,7 +47,7 @@ function runAsync (command: string, options: any): Promise<?string> {
     })
 
     if (options.stdio === 'pipe') {
-      asyncProcess.stdout.on('data', (buffer) => {
+      asyncProcess.stdout.on('data', (buffer: Buffer) => {
         output = buffer.toString()
       })
     }
@@ -49,7 +61,7 @@ function runAsync (command: string, options: any): Promise<?string> {
   })
 }
 
-function run (command: string, options: any = {}, logger = loggerAlias) {
+function run (command: string, options: Options = {}, logger = loggerAlias) {
   const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
@@ -63,7 +75,9 @@ function run (command: string, options: any = {}, logger = loggerAlias) {
   }
 
   // Include in PATH node_modules bin path
-  options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
+  if (typeof options.env !== 'undefined') {
+    options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
+  }
 
   logger.info(command)
 
