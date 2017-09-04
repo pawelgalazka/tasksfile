@@ -9,23 +9,25 @@ function RunJSError (message: string) {
 RunJSError.prototype = Object.create(Error.prototype)
 RunJSError.prototype.constructor = RunJSError
 
-const logger = {
-  debug: (...args: Array<any>) => {
+class Logger {
+  debug (...args: Array<any>) {
     console.log(chalk.blue(...args))
-  },
-  info: (...args: Array<any>) => {
+  }
+  info (...args: Array<any>) {
     console.log(chalk.bold(...args))
-  },
-  log: (...args: Array<any>) => {
+  }
+  log (...args: Array<any>) {
     console.log(...args)
-  },
-  warning: (...args: Array<any>) => {
+  }
+  warning (...args: Array<any>) {
     console.warn(chalk.yellow(...args))
-  },
-  error: (...args: Array<any>) => {
+  }
+  error (...args: Array<any>) {
     console.error(chalk.red(...args))
   }
 }
+
+const logger = new Logger()
 
 module.exports = {
   RunJSError,
