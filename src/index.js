@@ -10,7 +10,8 @@ type Options = {
   async?: boolean,
   stdio?: string | Array<any>,
   env?: Object,
-  timeout?: number
+  timeout?: number,
+  shell?: boolean
 }
 
 function runSync (command: string, options: Options) : ?string {
@@ -36,7 +37,8 @@ function runAsync (command: string, options: Options): Promise<?string> {
     const nextOptions = {
       cwd: options.cwd,
       env: options.env,
-      stdio: options.stdio
+      stdio: options.stdio,
+      shell: options.shell
     }
     const asyncProcess = spawn(command, nextOptions)
     let output : ?string = null
