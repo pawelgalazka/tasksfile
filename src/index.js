@@ -13,9 +13,15 @@ type Options = {
   timeout?: number
 }
 
-function runSync (command: string, options: Object) : ?string {
+function runSync (command: string, options: Options) : ?string {
   try {
-    const buffer = execSync(command, options)
+    const nextOptions = {
+      cwd: options.cwd,
+      env: options.env,
+      stdio: options.stdio,
+      timeout: options.timeout
+    }
+    const buffer = execSync(command, nextOptions)
     if (buffer) {
       return buffer.toString()
     }
@@ -25,9 +31,14 @@ function runSync (command: string, options: Object) : ?string {
   }
 }
 
-function runAsync (command: string, options: Object): Promise<?string> {
+function runAsync (command: string, options: Options): Promise<?string> {
   return new Promise((resolve, reject) => {
-    const asyncProcess = spawn(command, options)
+    const nextOptions = {
+      cwd: options.cwd,
+      env: options.env,
+      stdio: options.stdio
+    }
+    const asyncProcess = spawn(command, nextOptions)
     let output : ?string = null
 
     asyncProcess.on('error', (error) => {
