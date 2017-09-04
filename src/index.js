@@ -13,7 +13,7 @@ type Options = {
   timeout?: number
 }
 
-function runSync (command: string, options: Options) : ?string {
+function runSync (command: string, options: Object) : ?string {
   try {
     const buffer = execSync(command, options)
     if (buffer) {
@@ -25,7 +25,7 @@ function runSync (command: string, options: Options) : ?string {
   }
 }
 
-function runAsync (command: string, options: Options): Promise<?string> {
+function runAsync (command: string, options: Object): Promise<?string> {
   return new Promise((resolve, reject) => {
     const asyncProcess = spawn(command, options)
     let output : ?string = null
