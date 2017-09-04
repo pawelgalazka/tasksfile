@@ -15,11 +15,7 @@ type Options = {
 
 function runSync (command: string, options: Options) : ?string {
   try {
-    const buffer = execSync(command, {
-      cwd: options.cwd,
-      stdio: options.stdio,
-      env: options.cwd
-    })
+    const buffer = execSync(command, options)
     if (buffer) {
       return buffer.toString()
     }
@@ -74,9 +70,11 @@ function run (command: string, options: Options = {}, logger = loggerAlias) {
     shell: true
   }
 
+  const env = options.env
+
   // Include in PATH node_modules bin path
-  if (typeof options.env !== 'undefined') {
-    options.env.PATH = [binPath, options.env.PATH || process.env.PATH].join(path.delimiter)
+  if (env) {
+    env.PATH = [binPath, env.PATH || process.env.PATH].join(path.delimiter)
   }
 
   logger.info(command)
@@ -90,7 +88,7 @@ function run (command: string, options: Options = {}, logger = loggerAlias) {
   return runSync(command, options)
 }
 
-function option (thisObj: any, name: string) {
+function option (thisObj: ?Object, name: string): mixed {
   return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
