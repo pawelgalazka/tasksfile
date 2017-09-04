@@ -1,12 +1,13 @@
-const childProcess = require('child_process')
+// @flow
+const { execSync, spawn } = require('child_process')
 const path = require('path')
 const { RunJSError, logger } = require('./common')
 
 const loggerAlias = logger
 
-function runSync (command, options) {
+function runSync (command: string, options: any) : ?string {
   try {
-    const buffer = childProcess.execSync(command, options)
+    const buffer = execSync(command, options)
     if (buffer) {
       return buffer.toString()
     }
@@ -16,9 +17,9 @@ function runSync (command, options) {
   }
 }
 
-function runAsync (command, options) {
+function runAsync (command: string, options: any): Promise<?string> {
   return new Promise((resolve, reject) => {
-    const asyncProcess = childProcess.spawn(command, options)
+    const asyncProcess = spawn(command, options)
     let output = null
 
     asyncProcess.on('error', (error) => {
@@ -48,7 +49,7 @@ function runAsync (command, options) {
   })
 }
 
-function run (command, options = {}, logger = loggerAlias) {
+function run (command: string, options: any = {}, logger = loggerAlias) {
   const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
@@ -75,7 +76,7 @@ function run (command, options = {}, logger = loggerAlias) {
   return runSync(command, options)
 }
 
-function option (thisObj, name) {
+function option (thisObj: any, name: string) {
   return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
