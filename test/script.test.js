@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const script = require('../lib/script')
+const script = require('../src/script')
 
 describe('script', () => {
   let logger

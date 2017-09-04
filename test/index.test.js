@@ -1,6 +1,6 @@
 /* eslint-env jest */
-const api = require('../lib/index')
-const { RunJSError } = require('../lib/common')
+const api = require('../src/index')
+const { RunJSError } = require('../src/common')
 
 process.env.RUNJS_TEST = 'runjs test'
 
