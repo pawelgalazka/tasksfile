@@ -13,9 +13,13 @@
     "run": "bin/run.js"
   },
   "scripts": {
-    "lint": "eslint lib/ bin/ test/*.test.js",
-    "test": "yarn run test:fast && yarn run test:e2e",
-    "test:fast": "yarn run lint && jest --coverage",
+    "lint": "eslint src/ bin/ test/*.test.js",
+    "flow": "flow",
+    "build": "babel src/ --out-dir lib/",
+    "test": "yarn run lint && yarn run test:coverage && yarn run build && yarn run test:e2e",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest",
+    "test:watch": "jest --watch",
     "test:e2e": "bash ./test/e2e.test.sh",
     "clean": "rm -rf node_modules && yarn run clean:sandbox",
     "clean:sandbox": "rm -rf test/babel-sandbox/node_modules && rm -rf test/typescript-sandbox/node_modules"
@@ -38,15 +42,29 @@
     "get-parameter-names": "0.3.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "7.2.3",
+    "babel-preset-flow": "^6.23.0",
     "eslint": "4.5.0",
     "eslint-config-standard": "10.2.1",
+    "eslint-plugin-flowtype": "2.35.1",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-node": "5.1.1",
     "eslint-plugin-promise": "3.5.0",
     "eslint-plugin-standard": "3.0.1",
+    "flow-bin": "0.54.0",
     "jest": "20.0.4"
   },
+  "babel": {
+    "presets": [
+      "flow"
+    ]
+  },
   "eslintConfig": {
+    "parser": "babel-eslint",
+    "plugins": [
+      "flowtype"
+    ],
     "extends": [
       "eslint-config-standard"
     ]
@@ -54,10 +72,12 @@
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
-      "lib/**/*.js",
+      "src/**/*.js",
       "bin/**/*.js"
     ],
-    "coverageReporters": ["text"],
+    "coverageReporters": [
+      "text"
+    ],
     "coverageThreshold": {
       "global": {
         "lines": 70
