@@ -1,7 +1,7 @@
 // @flow
 const path = require('path')
 const fs = require('fs')
-const { RunJSError, logger } = require('./common')
+const { RunJSError, logger, Logger } = require('./common')
 const getParamNames = require('get-parameter-names')
 
 const DEFAULT_RUNFILE_PATH = './runfile.js'
@@ -24,7 +24,7 @@ function getConfig (filePath: string): Object {
   return config
 }
 
-function load (config: Object, logger, requirer: (string) => any, access: (string) => void) {
+function load (config: Object, logger: Logger, requirer: (string) => Object, access: (string) => void) {
   const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
   // Load requires if given in config
   if (Array.isArray(config['requires'])) {
@@ -50,7 +50,7 @@ function load (config: Object, logger, requirer: (string) => any, access: (strin
   return runfile
 }
 
-function parseArgs (args) {
+function parseArgs (args: Array<string>) {
   const options = {}
   const nextArgs = args.filter(arg => {
     const doubleDashMatch = arg.match(/^--([\w-.]+)=([\w-.]*)$/) || arg.match(/^--([\w-.]+)$/)
@@ -75,7 +75,7 @@ function parseArgs (args) {
   }
 }
 
-function describe (obj: Object, logger, namespace: ?string) {
+function describe (obj: Object, logger: Logger, namespace: ?string) {
   if (!namespace) {
     logger.debug('Available tasks:\n')
   }
@@ -104,7 +104,7 @@ function describe (obj: Object, logger, namespace: ?string) {
   })
 }
 
-function help (task, logger) {
+function help (task: Function, logger: Logger) {
   logger.log(' ')
   logger.info('ARGUMENTS')
   const params = getParamNames(task)
@@ -119,7 +119,7 @@ function help (task, logger) {
   logger.log(' ')
 }
 
-function call (obj: Object, args: Array<any>, logger, depth: number = 0) {
+function call (obj: Object, args: Array<string>, logger: Logger, depth: number = 0) {
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {

@@ -31,5 +31,6 @@ const logger = new Logger()
 
 module.exports = {
   RunJSError,
-  logger
+  logger,
+  Logger
 }
