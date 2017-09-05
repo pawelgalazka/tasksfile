@@ -161,9 +161,13 @@ run('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
 ```
 
 For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 
-not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are passed 
+not printed out to the terminal. 
+
+For `stdio: 'inherit'` (default) outputs are passed 
 to the terminal, but `run` function will resolve (async) / return (sync)
 `null`.
+
+For `stdio: 'ignore'` nothing will be returned or printed
 
 
 #### options(this)
