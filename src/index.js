@@ -10,8 +10,7 @@ type Options = {
   async?: boolean,
   stdio?: string | Array<any>,
   env?: Object,
-  timeout?: number,
-  shell?: boolean
+  timeout?: number
 }
 
 function runSync (command: string, options: Options) : ?string {
@@ -22,7 +21,7 @@ function runSync (command: string, options: Options) : ?string {
       stdio: options.stdio,
       timeout: options.timeout
     }
-    const buffer = execSync(command, nextOptions)
+    const buffer: string | Buffer = execSync(command, nextOptions)
     if (buffer) {
       return buffer.toString()
     }
@@ -38,7 +37,7 @@ function runAsync (command: string, options: Options): Promise<?string> {
       cwd: options.cwd,
       env: options.env,
       stdio: options.stdio,
-      shell: options.shell
+      shell: true
     }
     const asyncProcess = spawn(command, nextOptions)
     let output : ?string = null
@@ -79,8 +78,7 @@ function run (command: string, options: Options = {}, logger = loggerAlias) {
     cwd: options.cwd,
     async: !!options.async,
     stdio: options.stdio || 'inherit',
-    timeout: options.timeout,
-    shell: true
+    timeout: options.timeout
   }
 
   const env = options.env
