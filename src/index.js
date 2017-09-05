@@ -25,7 +25,7 @@ function runSync (command: string, options: Options) : ?string {
     if (buffer) {
       return buffer.toString()
     }
-    return buffer
+    return null
   } catch (error) {
     throw new RunJSError(error.message)
   }
@@ -42,11 +42,11 @@ function runAsync (command: string, options: Options): Promise<?string> {
     const asyncProcess = spawn(command, nextOptions)
     let output : ?string = null
 
-    asyncProcess.on('error', (error) => {
-      reject(new Error(`Failed to start command: ${command}; ${error}`))
+    asyncProcess.on('error', (error: Error) => {
+      reject(new Error(`Failed to start command: ${command}; ${error.toString()}`))
     })
 
-    asyncProcess.on('close', (exitCode) => {
+    asyncProcess.on('close', (exitCode: number) => {
       if (exitCode === 0) {
         resolve(output)
       } else {
@@ -69,11 +69,11 @@ function runAsync (command: string, options: Options): Promise<?string> {
   })
 }
 
-function run (command: string, options: Options = {}, logger = loggerAlias) {
+function run (command: string, options: Options = {}, logger = loggerAlias): Promise<?string> | ?string {
   const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
-  options = {
+  const nextOptions: Options = {
     env: options.env || process.env,
     cwd: options.cwd,
     async: !!options.async,
@@ -92,11 +92,11 @@ function run (command: string, options: Options = {}, logger = loggerAlias) {
 
   // Handle async call
   if (options.async) {
-    return runAsync(command, options)
+    return runAsync(command, nextOptions)
   }
 
   // Handle sync call by default
-  return runSync(command, options)
+  return runSync(command, nextOptions)
 }
 
 /**
