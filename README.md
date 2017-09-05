@@ -6,6 +6,7 @@ Minimalistic building tool
 - [Why runjs ?](#why-runjs-)
 - [API](#api)
     - [run](#runcmd-options)
+    - [options](#optionsthis-name)
     - [option](#optionthis-name)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
@@ -165,7 +166,34 @@ to the terminal, but `run` function will resolve (async) / return (sync)
 `null`.
 
 
+#### options(this)
+
+A helper which returns an object with options which were given through dash params of command
+line script.
+
+Example:
+
+```bash
+$ run lint --fix
+```
+
+```js
+export function lint (path = '.') {
+  options(this).fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
+```
+
+Implementation of it is really simple:
+
+```js
+function options (thisObj) {
+  return (thisObj && thisObj.options) || {}
+}
+```
+
 #### option(this, name)
+
+> This helper is deprecated, use `options` instead
 
 A helper which returns value for an option if given through dash param of command
 line script.

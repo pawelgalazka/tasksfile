@@ -109,4 +109,25 @@ describe('api', () => {
       expect(api.option({}, 'ghost')).toBe(null)
     })
   })
+
+  describe('options()', () => {
+    let thisStub
+
+    beforeEach(() => {
+      thisStub = {
+        options: {
+          test: 'abcdef'
+        }
+      }
+    })
+
+    it('returns options object', () => {
+      expect(api.options(thisStub)).toEqual(thisStub.options)
+    })
+
+    it('returns empty object if options not found', () => {
+      expect(api.options(null)).toEqual({})
+      expect(api.options({})).toEqual({})
+    })
+  })
 })

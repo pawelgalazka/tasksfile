@@ -101,11 +101,19 @@ function run (command: string, options: Options = {}, logger = loggerAlias) {
   return runSync(command, options)
 }
 
+/**
+ * @deprecated
+ */
 function option (thisObj: ?Object, name: string): mixed {
   return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
+function options (thisObj: ?Object): Object {
+  return (thisObj && thisObj.options) || {}
+}
+
 module.exports = {
   run,
-  option
+  option,
+  options
 }
