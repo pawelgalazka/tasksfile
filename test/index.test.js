@@ -9,8 +9,7 @@ describe('api', () => {
 
   beforeEach(() => {
     logger = {
-      debug: jest.fn(),
-      info: jest.fn(),
+      title: jest.fn(),
       log: jest.fn(),
       warning: jest.fn(),
       error: jest.fn()
@@ -23,7 +22,7 @@ describe('api', () => {
         it('should execute basic shell commands', () => {
           const output = api.run('echo "echo test"', {stdio: 'pipe'}, logger)
           expect(output).toEqual('echo test\n')
-          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+          expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
         })
 
         it('should throw an error if command fails', () => {
@@ -42,7 +41,7 @@ describe('api', () => {
         it('should execute basic shell commands', () => {
           const output = api.run('echo "echo test"', {}, logger)
           expect(output).toEqual(null)
-          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+          expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
         })
       })
     })
@@ -52,7 +51,7 @@ describe('api', () => {
         it('should execute basic shell commands', (done) => {
           api.run('echo "echo test"', {async: true, stdio: 'pipe'}, logger).then((output) => {
             expect(output).toEqual('echo test\n')
-            expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+            expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
             done()
           })
         })
@@ -76,7 +75,7 @@ describe('api', () => {
         it('should execute basic shell commands', (done) => {
           api.run('echo "echo test"', {async: true}, logger).then((output) => {
             expect(output).toEqual(null)
-            expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+            expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
             done()
           })
         })

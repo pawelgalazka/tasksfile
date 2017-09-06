@@ -7,11 +7,8 @@ describe('script', () => {
   beforeEach(() => {
     mockLogger = jest.fn()
     logger = {
-      debug: (...args) => {
-        mockLogger('debug', ...args)
-      },
-      info: (...args) => {
-        mockLogger('info', ...args)
+      title: (...args) => {
+        mockLogger('title', ...args)
       },
       log: (...args) => {
         mockLogger('log', ...args)
@@ -119,7 +116,7 @@ describe('script', () => {
     it('should log list of methods', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['debug', 'Available tasks:\n'],
+        ['log', 'Available tasks:\n'],
         ['log', 'a'],
         ['log', 'b']
       ])
@@ -129,7 +126,7 @@ describe('script', () => {
       obj.b = (arg1, arg2) => {}
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['debug', 'Available tasks:\n'],
+        ['log', 'Available tasks:\n'],
         ['log', 'a'],
         ['log', 'b', '[arg1 arg2]']
       ])
@@ -141,7 +138,7 @@ describe('script', () => {
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['debug', 'Available tasks:\n'],
+        ['log', 'Available tasks:\n'],
         ['log', 'a', '-', 'Description for method a'],
         ['log', 'b', '[arg1 arg2]', '-', 'Description for method b']
       ])
@@ -152,7 +149,7 @@ describe('script', () => {
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['debug', 'Available tasks:\n'],
+        ['log', 'Available tasks:\n'],
         ['log', 'a', '-', 'Description for method a'],
         ['log', 'b', '-', 'Description for method b']
       ])
@@ -172,7 +169,7 @@ describe('script', () => {
 
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['debug', 'Available tasks:\n'],
+        ['log', 'Available tasks:\n'],
         ['log', 'a'],
         ['log', 'b'],
         ['log', 'c:d'],
@@ -285,10 +282,10 @@ describe('script', () => {
       script.call(obj, ['b:c', '--help'], logger)
       expect(mockLogger.mock.calls).toEqual([
         ['log', ' '],
-        ['info', 'ARGUMENTS'],
+        ['title', 'ARGUMENTS'],
         ['log', '[arg1 arg2]'],
         ['log', ' '],
-        ['info', 'DESCRIPTION'],
+        ['title', 'DESCRIPTION'],
         ['log', 'Test description'],
         ['log', ' ']
       ])
@@ -299,10 +296,10 @@ describe('script', () => {
       script.call(obj, ['b:c', '--help'], logger)
       expect(mockLogger.mock.calls).toEqual([
         ['log', ' '],
-        ['info', 'ARGUMENTS'],
+        ['title', 'ARGUMENTS'],
         ['log', 'None'],
         ['log', ' '],
-        ['info', 'DESCRIPTION'],
+        ['title', 'DESCRIPTION'],
         ['log', 'None'],
         ['log', ' ']
       ])

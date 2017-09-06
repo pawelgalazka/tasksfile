@@ -82,7 +82,7 @@ function parseArgs (args: Array<string>) {
 
 function describe (obj: Object, logger: Logger, namespace: ?string) {
   if (!namespace) {
-    logger.debug('Available tasks:\n')
+    logger.log('Available tasks:\n')
   }
 
   Object.keys(obj).forEach((key) => {
@@ -119,7 +119,7 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
 
 function help (task: Function, logger: Logger) {
   logger.log(' ')
-  logger.info('ARGUMENTS')
+  logger.title('ARGUMENTS')
   const params = getParamNames(task)
   if (params.length) {
     logger.log(`[${params.join(' ')}]`)
@@ -127,7 +127,7 @@ function help (task: Function, logger: Logger) {
     logger.log('None')
   }
   logger.log(' ')
-  logger.info('DESCRIPTION')
+  logger.title('DESCRIPTION')
   logger.log(task.help || 'None')
   logger.log(' ')
 }

@@ -88,7 +88,7 @@ function run (command: string, options: Options = {}, logger = loggerAlias): Pro
     env.PATH = [binPath, env.PATH || process.env.PATH].join(path.delimiter)
   }
 
-  logger.info(command)
+  logger.title(command)
 
   // Handle async call
   if (options.async) {

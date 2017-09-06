@@ -10,10 +10,7 @@ RunJSError.prototype = Object.create(Error.prototype)
 RunJSError.prototype.constructor = RunJSError
 
 class Logger {
-  debug (...args: Array<any>) {
-    console.log(chalk.blue(...args))
-  }
-  info (...args: Array<any>) {
+  title (...args: Array<any>) {
     console.log(chalk.bold(...args))
   }
   log (...args: Array<any>) {
