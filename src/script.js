@@ -83,7 +83,7 @@ function parseArgs (args: Array<string>) {
 
 function describe (obj: Object, logger: Logger, namespace: ?string) {
   if (!namespace) {
-    logger.log(chalk.dim('Available tasks:\n'))
+    logger.log(chalk.yellow('\nAvailable tasks:'))
   }
 
   Object.keys(obj).forEach((key) => {
