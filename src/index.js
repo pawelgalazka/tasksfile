@@ -1,9 +1,9 @@
 // @flow
 const { execSync, spawn } = require('child_process')
 const path = require('path')
-const { RunJSError, logger } = require('./common')
+const { RunJSError, logger, Logger } = require('./common')
 
-const loggerAlias = logger
+const loggerAlias: Logger = logger
 
 type Options = {
   cwd?: string,
@@ -69,7 +69,7 @@ function runAsync (command: string, options: Options): Promise<?string> {
   })
 }
 
-function run (command: string, options: Options = {}, logger = loggerAlias): Promise<?string> | ?string {
+function run (command: string, options: Options = {}, logger: Logger = loggerAlias): Promise<?string> | ?string {
   const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
