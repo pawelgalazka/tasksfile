@@ -91,18 +91,26 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
     const help = value.help
 
     if (typeof value === 'function') {
-      let funcParams
+      // Add task name
+      let funcParams, logArgs = [nextNamespace]
+
+      // Add task params
       try {
         funcParams = getParamNames(value)
       } catch (error) {
         funcParams = []
       }
-      const paramsDoc = funcParams.length ? `[${funcParams.join(' ')}]` : ''
-      logger.info(nextNamespace, paramsDoc)
-      if (help) {
-        logger.log(help.split('\n')[0])
+      if (Array.isArray(funcParams) && funcParams.length) {
+        logArgs.push(`[${funcParams.join(' ')}]`)
       }
-      logger.info(' ')
+
+      // Add description
+      if (help) {
+        logArgs.push('-', help.split('\n')[0])
+      }
+
+      // Log
+      logger.log(...logArgs)
     } else if (typeof value === 'object') {
       describe(value, logger, nextNamespace)
     }

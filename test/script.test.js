@@ -120,10 +120,8 @@ describe('script', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['debug', 'Available tasks:\n'],
-        ['info', 'a', ''],
-        ['info', ' '],
-        ['info', 'b', ''],
-        ['info', ' ']
+        ['log', 'a'],
+        ['log', 'b']
       ])
     })
 
@@ -132,25 +130,20 @@ describe('script', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['debug', 'Available tasks:\n'],
-        ['info', 'a', ''],
-        ['info', ' '],
-        ['info', 'b', '[arg1 arg2]'],
-        ['info', ' ']
+        ['log', 'a'],
+        ['log', 'b', '[arg1 arg2]']
       ])
     })
 
     it('should log method descriptions', () => {
+      obj.b = (arg1, arg2) => {}
       obj.a.help = 'Description for method a'
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['debug', 'Available tasks:\n'],
-        ['info', 'a', ''],
-        ['log', 'Description for method a'],
-        ['info', ' '],
-        ['info', 'b', ''],
-        ['log', 'Description for method b'],
-        ['info', ' ']
+        ['log', 'a', '-', 'Description for method a'],
+        ['log', 'b', '[arg1 arg2]', '-', 'Description for method b']
       ])
     })
 
@@ -160,12 +153,8 @@ describe('script', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['debug', 'Available tasks:\n'],
-        ['info', 'a', ''],
-        ['log', 'Description for method a'],
-        ['info', ' '],
-        ['info', 'b', ''],
-        ['log', 'Description for method b'],
-        ['info', ' ']
+        ['log', 'a', '-', 'Description for method a'],
+        ['log', 'b', '-', 'Description for method b']
       ])
     })
 
@@ -184,17 +173,11 @@ describe('script', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['debug', 'Available tasks:\n'],
-        ['info', 'a', ''],
-        ['info', ' '],
-        ['info', 'b', ''],
-        ['info', ' '],
-        ['info', 'c:d', ''],
-        ['info', ' '],
-        ['info', 'c:e:f', ''],
-        ['log', 'Description for method f'],
-        ['info', ' '],
-        ['info', 'c:e:g', ''],
-        ['info', ' ']
+        ['log', 'a'],
+        ['log', 'b'],
+        ['log', 'c:d'],
+        ['log', 'c:e:f', '-', 'Description for method f'],
+        ['log', 'c:e:g']
       ])
     })
   })
