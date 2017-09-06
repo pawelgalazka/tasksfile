@@ -1,6 +1,7 @@
 // @flow
 const path = require('path')
 const fs = require('fs')
+const chalk = require('chalk')
 const { RunJSError, logger, Logger } = require('./common')
 const getParamNames = require('get-parameter-names')
 
@@ -82,7 +83,7 @@ function parseArgs (args: Array<string>) {
 
 function describe (obj: Object, logger: Logger, namespace: ?string) {
   if (!namespace) {
-    logger.log('Available tasks:\n')
+    logger.log(chalk.dim('Available tasks:\n'))
   }
 
   Object.keys(obj).forEach((key) => {
@@ -92,7 +93,7 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
 
     if (typeof value === 'function') {
       // Add task name
-      let funcParams, logArgs = [nextNamespace]
+      let funcParams, logArgs = [chalk.bold(nextNamespace)]
 
       // Add task params
       try {

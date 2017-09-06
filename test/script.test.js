@@ -1,4 +1,5 @@
 /* eslint-env jest */
+const chalk = require('chalk')
 const script = require('../src/script')
 
 describe('script', () => {
@@ -116,9 +117,9 @@ describe('script', () => {
     it('should log list of methods', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', 'Available tasks:\n'],
-        ['log', 'a'],
-        ['log', 'b']
+        ['log', chalk.dim('Available tasks:\n')],
+        ['log', chalk.bold('a')],
+        ['log', chalk.bold('b')]
       ])
     })
 
@@ -126,9 +127,9 @@ describe('script', () => {
       obj.b = (arg1, arg2) => {}
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', 'Available tasks:\n'],
-        ['log', 'a'],
-        ['log', 'b', '[arg1 arg2]']
+        ['log', chalk.dim('Available tasks:\n')],
+        ['log', chalk.bold('a')],
+        ['log', chalk.bold('b'), '[arg1 arg2]']
       ])
     })
 
@@ -138,9 +139,9 @@ describe('script', () => {
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', 'Available tasks:\n'],
-        ['log', 'a', '-', 'Description for method a'],
-        ['log', 'b', '[arg1 arg2]', '-', 'Description for method b']
+        ['log', chalk.dim('Available tasks:\n')],
+        ['log', chalk.bold('a'), '-', 'Description for method a'],
+        ['log', chalk.bold('b'), '[arg1 arg2]', '-', 'Description for method b']
       ])
     })
 
@@ -149,9 +150,9 @@ describe('script', () => {
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', 'Available tasks:\n'],
-        ['log', 'a', '-', 'Description for method a'],
-        ['log', 'b', '-', 'Description for method b']
+        ['log', chalk.dim('Available tasks:\n')],
+        ['log', chalk.bold('a'), '-', 'Description for method a'],
+        ['log', chalk.bold('b'), '-', 'Description for method b']
       ])
     })
 
@@ -169,12 +170,12 @@ describe('script', () => {
 
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', 'Available tasks:\n'],
-        ['log', 'a'],
-        ['log', 'b'],
-        ['log', 'c:d'],
-        ['log', 'c:e:f', '-', 'Description for method f'],
-        ['log', 'c:e:g']
+        ['log', chalk.dim('Available tasks:\n')],
+        ['log', chalk.bold('a')],
+        ['log', chalk.bold('b')],
+        ['log', chalk.bold('c:d')],
+        ['log', chalk.bold('c:e:f'), '-', 'Description for method f'],
+        ['log', chalk.bold('c:e:g')]
       ])
     })
   })
