@@ -93,7 +93,8 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
 
     if (typeof value === 'function') {
       // Add task name
-      let funcParams, logArgs = [chalk.bold(nextNamespace)]
+      let funcParams
+      let logArgs = [chalk.bold(nextNamespace)]
 
       // Add task params
       try {
