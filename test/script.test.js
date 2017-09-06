@@ -116,7 +116,7 @@ describe('script', () => {
       }
     })
 
-    it('should log list of methods available in the object', () => {
+    it('should log list of methods', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['debug', 'Available tasks:\n'],
@@ -127,8 +127,35 @@ describe('script', () => {
       ])
     })
 
-    it('should log list of methods with description for each one if provided', () => {
+    it('should log list of methods with available arguments', () => {
+      obj.b = (arg1, arg2) => {}
+      script.describe(obj, logger)
+      expect(mockLogger.mock.calls).toEqual([
+        ['debug', 'Available tasks:\n'],
+        ['info', 'a', ''],
+        ['info', ' '],
+        ['info', 'b', '[arg1 arg2]'],
+        ['info', ' ']
+      ])
+    })
+
+    it('should log method descriptions', () => {
       obj.a.help = 'Description for method a'
+      obj.b.help = 'Description for method b'
+      script.describe(obj, logger)
+      expect(mockLogger.mock.calls).toEqual([
+        ['debug', 'Available tasks:\n'],
+        ['info', 'a', ''],
+        ['log', 'Description for method a'],
+        ['info', ' '],
+        ['info', 'b', ''],
+        ['log', 'Description for method b'],
+        ['info', ' ']
+      ])
+    })
+
+    it('should log only first line of method descriptions', () => {
+      obj.a.help = 'Description for method a\nsecond line\nthird line'
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
@@ -167,18 +194,6 @@ describe('script', () => {
         ['log', 'Description for method f'],
         ['info', ' '],
         ['info', 'c:e:g', ''],
-        ['info', ' ']
-      ])
-    })
-
-    it('should log list of methods with available arguments', () => {
-      obj.b = (arg1, arg2) => {}
-      script.describe(obj, logger)
-      expect(mockLogger.mock.calls).toEqual([
-        ['debug', 'Available tasks:\n'],
-        ['info', 'a', ''],
-        ['info', ' '],
-        ['info', 'b', '[arg1 arg2]'],
         ['info', ' ']
       ])
     })

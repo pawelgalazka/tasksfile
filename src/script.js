@@ -100,7 +100,7 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
       const paramsDoc = funcParams.length ? `[${funcParams.join(' ')}]` : ''
       logger.info(nextNamespace, paramsDoc)
       if (help) {
-        logger.log(help)
+        logger.log(help.split('\n')[0])
       }
       logger.info(' ')
     } else if (typeof value === 'object') {
