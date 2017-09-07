@@ -423,7 +423,6 @@ without any arguments:
     Processing runfile.js...
     
     Available tasks:
-    
     echo
     testapi
     
@@ -444,9 +443,7 @@ buildjs.help = 'Compile JavaScript files'
     Processing runfile.js...
     
     Available tasks:
-    
-    buildjs [arg1 arg2]
-    Compile JavaScript files
+    buildjs [arg1 arg2] - Compile JavaScript files
     
 When running task with `--help` option, only help for that task will be displayed:
 
