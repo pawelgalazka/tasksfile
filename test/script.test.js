@@ -117,7 +117,7 @@ describe('script', () => {
     it('should log list of methods', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', chalk.yellow('\nAvailable tasks:')],
+        ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a')],
         ['log', chalk.bold('b')]
       ])
@@ -127,7 +127,7 @@ describe('script', () => {
       obj.b = (arg1, arg2) => {}
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', chalk.yellow('\nAvailable tasks:')],
+        ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a')],
         ['log', chalk.bold('b') + ' [arg1 arg2]']
       ])
@@ -139,7 +139,7 @@ describe('script', () => {
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', chalk.yellow('\nAvailable tasks:')],
+        ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
         ['log', chalk.bold('b') + ' [arg1 arg2]                  ', '-', 'Description for method b']
       ])
@@ -150,7 +150,7 @@ describe('script', () => {
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', chalk.yellow('\nAvailable tasks:')],
+        ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
         ['log', chalk.bold('b') + '                              ', '-', 'Description for method b']
       ])
@@ -170,7 +170,7 @@ describe('script', () => {
 
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
-        ['log', chalk.yellow('\nAvailable tasks:')],
+        ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a')],
         ['log', chalk.bold('b')],
         ['log', chalk.bold('c:d')],
