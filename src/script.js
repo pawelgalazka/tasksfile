@@ -2,6 +2,7 @@
 const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
+const padEnd = require('lodash.padend')
 const { RunJSError, logger, Logger } = require('./common')
 const getParamNames = require('get-parameter-names')
 
@@ -103,11 +104,12 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
         funcParams = []
       }
       if (Array.isArray(funcParams) && funcParams.length) {
-        logArgs.push(`[${funcParams.join(' ')}]`)
+        logArgs[0] += ` [${funcParams.join(' ')}]`
       }
 
       // Add description
       if (help) {
+        logArgs[0] = padEnd(logArgs[0], 40) // format
         logArgs.push('-', help.split('\n')[0])
       }
 

@@ -39,7 +39,8 @@
   "homepage": "https://github.com/pawelgalazka/runjs#readme",
   "dependencies": {
     "chalk": "2.1.0",
-    "get-parameter-names": "0.3.0"
+    "get-parameter-names": "0.3.0",
+    "lodash.padend": "4.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
