@@ -36,13 +36,13 @@ function load (config: Config, logger: Logger, requirer: (string) => Object, acc
   // Load requires if given in config
   if (Array.isArray(config['requires'])) {
     config['requires'].forEach(modulePath => {
-      logger.log(`Requiring ${modulePath}...`)
+      logger.log(chalk.gray(`Requiring ${modulePath}...`))
       requirer(modulePath)
     })
   }
 
   // Process runfile
-  logger.log(`Processing ${runfilePath}...`)
+  logger.log(chalk.gray(`Processing ${runfilePath}...`))
 
   try {
     access(runfilePath)
