@@ -1,16 +1,25 @@
 /* eslint-env jest */
-const script = require('../lib/script')
+const chalk = require('chalk')
+const script = require('../src/script')
 
 describe('script', () => {
-  let logger
+  let logger, mockLogger
 
   beforeEach(() => {
+    mockLogger = jest.fn()
     logger = {
-      debug: jest.fn(),
-      info: jest.fn(),
-      log: jest.fn(),
-      warning: jest.fn(),
-      error: jest.fn()
+      title: (...args) => {
+        mockLogger('title', ...args)
+      },
+      log: (...args) => {
+        mockLogger('log', ...args)
+      },
+      warning: (...args) => {
+        mockLogger('warning', ...args)
+      },
+      error: (...args) => {
+        mockLogger('error', ...args)
+      }
     }
   })
 
@@ -105,25 +114,46 @@ describe('script', () => {
       }
     })
 
-    it('should log list of methods available in the object', () => {
+    it('should log list of methods', () => {
       script.describe(obj, logger)
-      expect(logger.debug).toHaveBeenCalledTimes(1)
-      expect(logger.info).toHaveBeenCalledTimes(4)
-      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
-      expect(logger.info).toHaveBeenCalledWith('a', '')
-      expect(logger.info).toHaveBeenCalledWith('b', '')
+      expect(mockLogger.mock.calls).toEqual([
+        ['log', chalk.yellow('Available tasks:')],
+        ['log', chalk.bold('a')],
+        ['log', chalk.bold('b')]
+      ])
     })
 
-    it('should log list of methods with description for each one if provided', () => {
+    it('should log list of methods with available arguments', () => {
+      obj.b = (arg1, arg2) => {}
+      script.describe(obj, logger)
+      expect(mockLogger.mock.calls).toEqual([
+        ['log', chalk.yellow('Available tasks:')],
+        ['log', chalk.bold('a')],
+        ['log', chalk.bold('b') + ' [arg1 arg2]']
+      ])
+    })
+
+    it('should log method descriptions', () => {
+      obj.b = (arg1, arg2) => {}
       obj.a.help = 'Description for method a'
       obj.b.help = 'Description for method b'
       script.describe(obj, logger)
-      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
-      expect(logger.info).toHaveBeenCalledWith('a', '')
-      expect(logger.log).toHaveBeenCalledWith('Description for method a')
-      expect(logger.info).toHaveBeenCalledWith('b', '')
-      expect(logger.log).toHaveBeenCalledWith('Description for method b')
-      expect(logger.info).toHaveBeenCalledTimes(4)
+      expect(mockLogger.mock.calls).toEqual([
+        ['log', chalk.yellow('Available tasks:')],
+        ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
+        ['log', chalk.bold('b') + ' [arg1 arg2]                  ', '-', 'Description for method b']
+      ])
+    })
+
+    it('should log only first line of method descriptions', () => {
+      obj.a.help = 'Description for method a\nsecond line\nthird line'
+      obj.b.help = 'Description for method b'
+      script.describe(obj, logger)
+      expect(mockLogger.mock.calls).toEqual([
+        ['log', chalk.yellow('Available tasks:')],
+        ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
+        ['log', chalk.bold('b') + '                              ', '-', 'Description for method b']
+      ])
     })
 
     it('should log list of name spaced / nested methods', () => {
@@ -139,22 +169,14 @@ describe('script', () => {
       obj.c.e.f.help = 'Description for method f'
 
       script.describe(obj, logger)
-      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
-      expect(logger.info).toHaveBeenCalledWith('a', '')
-      expect(logger.info).toHaveBeenCalledWith('b', '')
-      expect(logger.info).toHaveBeenCalledWith('c:d', '')
-      expect(logger.info).toHaveBeenCalledWith('c:e:f', '')
-      expect(logger.log).toHaveBeenCalledWith('Description for method f')
-      expect(logger.info).toHaveBeenCalledWith('c:e:g', '')
-      expect(logger.info).toHaveBeenCalledTimes(10)
-    })
-
-    it('should log list of methods with available arguments', () => {
-      obj.b = (arg1, arg2) => {}
-      script.describe(obj, logger)
-      expect(logger.debug).toHaveBeenCalledWith('Available tasks:\n')
-      expect(logger.info).toHaveBeenCalledWith('a', '')
-      expect(logger.info).toHaveBeenCalledWith('b', '[arg1 arg2]')
+      expect(mockLogger.mock.calls).toEqual([
+        ['log', chalk.yellow('Available tasks:')],
+        ['log', chalk.bold('a')],
+        ['log', chalk.bold('b')],
+        ['log', chalk.bold('c:d')],
+        ['log', chalk.bold('c:e:f') + '                          ', '-', 'Description for method f'],
+        ['log', chalk.bold('c:e:g')]
+      ])
     })
   })
 
@@ -259,16 +281,29 @@ describe('script', () => {
       obj.b.c = (arg1, arg2) => {}
       obj.b.c.help = 'Test description'
       script.call(obj, ['b:c', '--help'], logger)
-      expect(logger.info.mock.calls).toEqual([['ARGUMENTS'], ['DESCRIPTION']])
-      expect(logger.log.mock.calls).toEqual([[' '], ['[arg1 arg2]'], [' '], ['Test description'], [' ']])
+      expect(mockLogger.mock.calls).toEqual([
+        ['log', ' '],
+        ['title', 'ARGUMENTS'],
+        ['log', '[arg1 arg2]'],
+        ['log', ' '],
+        ['title', 'DESCRIPTION'],
+        ['log', 'Test description'],
+        ['log', ' ']
+      ])
 
-      logger.info.mockClear()
-      logger.log.mockClear()
+      mockLogger.mockClear()
 
       obj.b.c = () => {}
       script.call(obj, ['b:c', '--help'], logger)
-      expect(logger.info.mock.calls).toEqual([['ARGUMENTS'], ['DESCRIPTION']])
-      expect(logger.log.mock.calls).toEqual([[' '], ['None'], [' '], ['None'], [' ']])
+      expect(mockLogger.mock.calls).toEqual([
+        ['log', ' '],
+        ['title', 'ARGUMENTS'],
+        ['log', 'None'],
+        ['log', ' '],
+        ['title', 'DESCRIPTION'],
+        ['log', 'None'],
+        ['log', ' ']
+      ])
     })
   })
 })

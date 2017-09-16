@@ -6,6 +6,7 @@ Minimalistic building tool
 - [Why runjs ?](#why-runjs-)
 - [API](#api)
     - [run](#runcmd-options)
+    - [options](#optionsthis-name)
     - [option](#optionthis-name)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
@@ -141,7 +142,6 @@ run given command as a child process and log the call in the output.
     async: ... // run command asynchronously (true/false), false by default
     stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
     env: ... // environment key-value pairs (Object)
-    log: ... // log command to console (true/false), true by default
     timeout: ...
 }
 ```
@@ -161,12 +161,43 @@ run('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
 ```
 
 For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 
-not printed out to the terminal. For `stdio: 'inherit'` (default) outputs are passed 
+not printed out to the terminal. 
+
+For `stdio: 'inherit'` (default) outputs are passed 
 to the terminal, but `run` function will resolve (async) / return (sync)
 `null`.
 
+For `stdio: 'ignore'` nothing will be returned or printed
+
+
+#### options(this)
+
+A helper which returns an object with options which were given through dash params of command
+line script.
+
+Example:
+
+```bash
+$ run lint --fix
+```
+
+```js
+export function lint (path = '.') {
+  options(this).fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+}
+```
+
+Implementation of it is really simple:
+
+```js
+function options (thisObj) {
+  return (thisObj && thisObj.options) || {}
+}
+```
 
 #### option(this, name)
+
+> This helper is deprecated, use `options` instead
 
 A helper which returns value for an option if given through dash param of command
 line script.
@@ -392,7 +423,6 @@ without any arguments:
     Processing runfile.js...
     
     Available tasks:
-    
     echo
     testapi
     
@@ -413,9 +443,7 @@ buildjs.help = 'Compile JavaScript files'
     Processing runfile.js...
     
     Available tasks:
-    
-    buildjs [arg1 arg2]
-    Compile JavaScript files
+    buildjs [arg1 arg2] - Compile JavaScript files
     
 When running task with `--help` option, only help for that task will be displayed:
 

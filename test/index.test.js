@@ -1,6 +1,6 @@
 /* eslint-env jest */
-const api = require('../lib/index')
-const { RunJSError } = require('../lib/common')
+const api = require('../src/index')
+const { RunJSError } = require('../src/common')
 
 process.env.RUNJS_TEST = 'runjs test'
 
@@ -9,8 +9,7 @@ describe('api', () => {
 
   beforeEach(() => {
     logger = {
-      debug: jest.fn(),
-      info: jest.fn(),
+      title: jest.fn(),
       log: jest.fn(),
       warning: jest.fn(),
       error: jest.fn()
@@ -23,7 +22,7 @@ describe('api', () => {
         it('should execute basic shell commands', () => {
           const output = api.run('echo "echo test"', {stdio: 'pipe'}, logger)
           expect(output).toEqual('echo test\n')
-          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+          expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
         })
 
         it('should throw an error if command fails', () => {
@@ -36,18 +35,13 @@ describe('api', () => {
           const output = api.run('echo $RUNJS_TEST', {stdio: 'pipe'}, logger)
           expect(output).toEqual('runjs test\n')
         })
-
-        it('should not log command if "log" option has "false"', () => {
-          api.run('echo "echo test"', {stdio: 'pipe', log: false}, logger)
-          expect(logger.info).not.toHaveBeenCalled()
-        })
       })
 
       describe('with stdio=inherit', () => {
         it('should execute basic shell commands', () => {
           const output = api.run('echo "echo test"', {}, logger)
           expect(output).toEqual(null)
-          expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+          expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
         })
       })
     })
@@ -57,7 +51,7 @@ describe('api', () => {
         it('should execute basic shell commands', (done) => {
           api.run('echo "echo test"', {async: true, stdio: 'pipe'}, logger).then((output) => {
             expect(output).toEqual('echo test\n')
-            expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+            expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
             done()
           })
         })
@@ -75,20 +69,13 @@ describe('api', () => {
             done()
           })
         })
-
-        it('should not log command if "log" option has "false"', (done) => {
-          api.run('echo "echo test"', {async: true, stdio: 'pipe', log: false}, logger).then(() => {
-            expect(logger.info).not.toHaveBeenCalled()
-            done()
-          })
-        })
       })
 
       describe('with stdio=inherit', () => {
         it('should execute basic shell commands', (done) => {
           api.run('echo "echo test"', {async: true}, logger).then((output) => {
             expect(output).toEqual(null)
-            expect(logger.info).toHaveBeenCalledWith('echo "echo test"')
+            expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
             done()
           })
         })
@@ -119,6 +106,27 @@ describe('api', () => {
       expect(api.option(thisStub, 'ghost')).toBe(null)
       expect(api.option(null, 'ghost')).toBe(null)
       expect(api.option({}, 'ghost')).toBe(null)
+    })
+  })
+
+  describe('options()', () => {
+    let thisStub
+
+    beforeEach(() => {
+      thisStub = {
+        options: {
+          test: 'abcdef'
+        }
+      }
+    })
+
+    it('returns options object', () => {
+      expect(api.options(thisStub)).toEqual(thisStub.options)
+    })
+
+    it('returns empty object if options not found', () => {
+      expect(api.options(null)).toEqual({})
+      expect(api.options({})).toEqual({})
     })
   })
 })

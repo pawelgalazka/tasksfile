@@ -1,20 +1,28 @@
+// @flow
 const path = require('path')
 const fs = require('fs')
-const { RunJSError, logger } = require('./common')
+const chalk = require('chalk')
+const padEnd = require('lodash.padend')
+const { RunJSError, logger, Logger } = require('./common')
 const getParamNames = require('get-parameter-names')
 
 const DEFAULT_RUNFILE_PATH = './runfile.js'
 
-function requirer (filePath) {
+type Config = {
+  runfile?: string,
+  requires?: Array<string>
+}
+
+function requirer (filePath: string): Object {
   return require(path.resolve(filePath))
 }
 
-function hasAccess (filePath) {
+function hasAccess (filePath: string): void {
   return fs.accessSync(path.resolve(filePath))
 }
 
-function getConfig (filePath) {
-  let config
+function getConfig (filePath: string): Config {
+  let config: Object
   try {
     config = requirer(filePath).runjs || {}
   } catch (error) {
@@ -23,18 +31,18 @@ function getConfig (filePath) {
   return config
 }
 
-function load (config, logger, requirer, access) {
+function load (config: Config, logger: Logger, requirer: (string) => Object, access: (string) => void) {
   const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
   // Load requires if given in config
   if (Array.isArray(config['requires'])) {
     config['requires'].forEach(modulePath => {
-      logger.log(`Requiring ${modulePath}...`)
+      logger.log(chalk.gray(`Requiring ${modulePath}...`))
       requirer(modulePath)
     })
   }
 
   // Process runfile
-  logger.log(`Processing ${runfilePath}...`)
+  logger.log(chalk.gray(`Processing ${runfilePath}...`))
 
   try {
     access(runfilePath)
@@ -49,7 +57,7 @@ function load (config, logger, requirer, access) {
   return runfile
 }
 
-function parseArgs (args) {
+function parseArgs (args: Array<string>) {
   const options = {}
   const nextArgs = args.filter(arg => {
     const doubleDashMatch = arg.match(/^--([\w-.]+)=([\w-.]*)$/) || arg.match(/^--([\w-.]+)$/)
@@ -74,9 +82,9 @@ function parseArgs (args) {
   }
 }
 
-function describe (obj, logger, namespace) {
+function describe (obj: Object, logger: Logger, namespace: ?string) {
   if (!namespace) {
-    logger.debug('Available tasks:\n')
+    logger.log(chalk.yellow('Available tasks:'))
   }
 
   Object.keys(obj).forEach((key) => {
@@ -85,27 +93,37 @@ function describe (obj, logger, namespace) {
     const help = value.help
 
     if (typeof value === 'function') {
+      // Add task name
       let funcParams
+      let logArgs = [chalk.bold(nextNamespace)]
+
+      // Add task params
       try {
         funcParams = getParamNames(value)
       } catch (error) {
         funcParams = []
       }
-      const paramsDoc = funcParams.length ? `[${funcParams.join(' ')}]` : ''
-      logger.info(nextNamespace, paramsDoc)
-      if (help) {
-        logger.log(help)
+      if (Array.isArray(funcParams) && funcParams.length) {
+        logArgs[0] += ` [${funcParams.join(' ')}]`
       }
-      logger.info(' ')
+
+      // Add description
+      if (help) {
+        logArgs[0] = padEnd(logArgs[0], 40) // format
+        logArgs.push('-', help.split('\n')[0])
+      }
+
+      // Log
+      logger.log(...logArgs)
     } else if (typeof value === 'object') {
       describe(value, logger, nextNamespace)
     }
   })
 }
 
-function help (task, logger) {
+function help (task: Function, logger: Logger) {
   logger.log(' ')
-  logger.info('ARGUMENTS')
+  logger.title('ARGUMENTS')
   const params = getParamNames(task)
   if (params.length) {
     logger.log(`[${params.join(' ')}]`)
@@ -113,12 +131,12 @@ function help (task, logger) {
     logger.log('None')
   }
   logger.log(' ')
-  logger.info('DESCRIPTION')
+  logger.title('DESCRIPTION')
   logger.log(task.help || 'None')
   logger.log(' ')
 }
 
-function call (obj, args, logger, depth = 0) {
+function call (obj: Object, args: Array<string>, logger: Logger, depth: number = 0) {
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {

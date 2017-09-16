@@ -47,7 +47,7 @@ export const n1 = {
     console.log('Nested task nr 1 executed!')
   },
 
-  'nested2:echo': () => {
+  'nested2:echo': (arg1, arg2) => {
     console.log('Nested task nr 2 executed!')
   },
 
@@ -57,7 +57,6 @@ export const n1 = {
   }
 }
 
-
 echo.help = 'Simple echo task'
 n1.nested1.help = 'Description of nested task nr 1'
-n1['nested2:echo'].help = 'Description of nested task nr 2'
+n1['nested2:echo'].help = 'Description of nested task nr 2\nsecond line'
