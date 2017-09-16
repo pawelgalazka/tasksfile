@@ -119,6 +119,10 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
       describe(value, logger, nextNamespace)
     }
   })
+
+  if (!namespace) {
+    logger.log('\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.'))
+  }
 }
 
 function help (task: Function, logger: Logger) {
