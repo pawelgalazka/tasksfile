@@ -49,7 +49,7 @@ Create `runfile.js`:
 
 ```javascript
 
-import { run, option } from 'runjs';
+import { run, options } from 'runjs';
 
 export function dev () {
   run('nodemon --exec node -- core/index.dev.js', {async: true})
@@ -61,11 +61,11 @@ export function build () {
 }
 
 export function lint (path = '.') {
-  option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
+  options(this).fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
 
 export function test (path = '.') {
-  const watchFlag = option(this, 'w') ? '--watch' : ''
+  const watchFlag = options(this).w ? '--watch' : ''
   if (!watchFlag) {
     lint(path)
   }
