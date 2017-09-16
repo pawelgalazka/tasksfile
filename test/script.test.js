@@ -119,7 +119,8 @@ describe('script', () => {
       expect(mockLogger.mock.calls).toEqual([
         ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a')],
-        ['log', chalk.bold('b')]
+        ['log', chalk.bold('b')],
+        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
       ])
     })
 
@@ -129,7 +130,8 @@ describe('script', () => {
       expect(mockLogger.mock.calls).toEqual([
         ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a')],
-        ['log', chalk.bold('b') + ' [arg1 arg2]']
+        ['log', chalk.bold('b') + ' [arg1 arg2]'],
+        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
       ])
     })
 
@@ -141,7 +143,8 @@ describe('script', () => {
       expect(mockLogger.mock.calls).toEqual([
         ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
-        ['log', chalk.bold('b') + ' [arg1 arg2]                  ', '-', 'Description for method b']
+        ['log', chalk.bold('b') + ' [arg1 arg2]                  ', '-', 'Description for method b'],
+        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
       ])
     })
 
@@ -152,7 +155,8 @@ describe('script', () => {
       expect(mockLogger.mock.calls).toEqual([
         ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
-        ['log', chalk.bold('b') + '                              ', '-', 'Description for method b']
+        ['log', chalk.bold('b') + '                              ', '-', 'Description for method b'],
+        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
       ])
     })
 
@@ -175,7 +179,8 @@ describe('script', () => {
         ['log', chalk.bold('b')],
         ['log', chalk.bold('c:d')],
         ['log', chalk.bold('c:e:f') + '                          ', '-', 'Description for method f'],
-        ['log', chalk.bold('c:e:g')]
+        ['log', chalk.bold('c:e:g')],
+        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
       ])
     })
   })
