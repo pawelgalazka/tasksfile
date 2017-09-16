@@ -126,7 +126,7 @@ each task and command call is reported in the console.
 For inside `runfile.js` usage
 
 ```javascript
-import { run, option } from 'runjs';
+import { run, options } from 'runjs';
 ```
 
 #### run(cmd, options)
