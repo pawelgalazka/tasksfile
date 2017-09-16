@@ -582,6 +582,10 @@ json5@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.4.0.tgz#054352e4c4c80c86c0923877d449de176a732c8d"
 
+lodash.padend@4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/lodash.padend/-/lodash.padend-4.6.1.tgz#53ccba047d06e158d311f45da625f4e49e6f166e"
+
 lodash@^4.2.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
@@ -675,8 +679,9 @@ repeating@^2.0.0:
 "runjs@file:../../":
   version "4.0.1"
   dependencies:
-    chalk "1.1.3"
+    chalk "2.1.0"
     get-parameter-names "0.3.0"
+    lodash.padend "4.6.1"
 
 shebang-regex@^1.0.0:
   version "1.0.0"
