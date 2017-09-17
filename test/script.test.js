@@ -238,6 +238,8 @@ describe('script', () => {
       expect(calls).toEqual({args: ['hello', '-abc'], options: {a: true, b: 4, abc: 'test', def: true}})
       script.call(obj, ['a', '--ab-cd', '--ef-gh=test', '--ab.cd', '--ef.gh=123', 'hello', '-abc'])
       expect(calls).toEqual({args: ['hello', '-abc'], options: {'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123}})
+      script.call(obj, ['a', '--host=http://www.google.com/', 'hello'])
+      expect(calls).toEqual({args: ['hello'], options: {host: 'http://www.google.com/'}})
     })
 
     it('should handle dash arguments in nested tasks', () => {
