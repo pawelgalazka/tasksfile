@@ -24,7 +24,7 @@ Minimalistic building tool
 
 Install globally (for a command line script):
 
-    npm install runjs -g
+    npm install -g runjs-cli
 
 Install in your project (to use runjs api inside your `runfile.js`):
 
