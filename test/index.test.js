@@ -54,6 +54,11 @@ describe('api', () => {
           api.run('cli-command', {stdio: 'pipe'}, logger)
           expect(execSync.mock.calls[0][1].env).toHaveProperty('RUNJS_TEST', 'runjs test')
         })
+
+        it('should include in PATH node_modules/.bin', () => {
+          api.run('cli-command', {stdio: 'pipe'}, logger)
+          expect(execSync.mock.calls[0][1].env.PATH).toContain('node_modules/.bin')
+        })
       })
 
       describe('with stdio=inherit', () => {
@@ -93,6 +98,15 @@ describe('api', () => {
           const runProcess = api.run('cli-cmd', {async: true, stdio: 'pipe'}, logger)
           spawnProcessMock.emit('close', 1)
           return expect(runProcess).rejects.toHaveProperty('message', 'Command failed: cli-cmd with exit code 1')
+        })
+
+        it('should include in PATH node_modules/.bin', () => {
+          const runProcess = api.run('cli-cmd', {async: true, stdio: 'pipe'}, logger).then(() => {
+            expect(spawn.mock.calls[0][1].env.PATH).toContain('node_modules/.bin')
+          })
+          spawnProcessMock.stdout.emit('data', 'output')
+          spawnProcessMock.emit('close', 0)
+          return runProcess
         })
       })
 
