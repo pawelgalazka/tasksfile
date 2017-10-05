@@ -22,7 +22,8 @@
     "test:watch": "jest --watch",
     "test:e2e": "bash ./test/e2e.test.sh",
     "clean": "rm -rf node_modules && yarn run clean:sandbox",
-    "clean:sandbox": "rm -rf test/babel-sandbox/node_modules && rm -rf test/typescript-sandbox/node_modules"
+    "clean:sandbox": "rm -rf test/babel-sandbox/node_modules && rm -rf test/typescript-sandbox/node_modules",
+    "precommit": "yarn run lint && yarn run flow"
   },
   "engines": {
     "node": ">=6.11.1"
@@ -54,6 +55,7 @@
     "eslint-plugin-promise": "3.5.0",
     "eslint-plugin-standard": "3.0.1",
     "flow-bin": "0.54.0",
+    "husky": "0.14.3",
     "jest": "20.0.4"
   },
   "babel": {
