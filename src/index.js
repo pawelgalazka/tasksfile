@@ -81,7 +81,7 @@ function run (command: string, options: Options = {}, logger: Logger = loggerAli
     timeout: options.timeout
   }
 
-  const env = options.env
+  const env = nextOptions.env
 
   // Include in PATH node_modules bin path
   if (env) {
