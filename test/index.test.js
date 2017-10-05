@@ -51,14 +51,14 @@ describe('api', () => {
         })
 
         it('should have access to environment variables by default', () => {
-          const output = api.run('cli-command', {stdio: 'pipe'}, logger)
+          api.run('cli-command', {stdio: 'pipe'}, logger)
           expect(execSync.mock.calls[0][1].env).toHaveProperty('RUNJS_TEST', 'runjs test')
         })
       })
 
       describe('with stdio=inherit', () => {
         it('should execute basic shell commands', () => {
-          const output = api.run('cli-command', {}, logger)
+          api.run('cli-command', {}, logger)
           expect(execSync.mock.calls[0][0]).toEqual('cli-command')
           expect(execSync.mock.calls[0][1]).toHaveProperty('stdio', 'inherit')
           expect(logger.title).toHaveBeenCalledWith('cli-command')
