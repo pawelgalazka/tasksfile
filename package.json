@@ -41,7 +41,8 @@
   "dependencies": {
     "chalk": "2.1.0",
     "get-parameter-names": "0.3.0",
-    "lodash.padend": "4.6.1"
+    "lodash.padend": "4.6.1",
+    "microargs": "1.1.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",

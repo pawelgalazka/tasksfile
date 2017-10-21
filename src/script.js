@@ -3,8 +3,10 @@ const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
 const padEnd = require('lodash.padend')
-const { RunJSError, logger, Logger } = require('./common')
 const getParamNames = require('get-parameter-names')
+const microargs = require('microargs')
+
+const { RunJSError, logger, Logger } = require('./common')
 
 const DEFAULT_RUNFILE_PATH = './runfile.js'
 
@@ -55,31 +57,6 @@ function load (config: Config, logger: Logger, requirer: (string) => Object, acc
     return runfile.default
   }
   return runfile
-}
-
-function parseArgs (args: Array<string>) {
-  const options = {}
-  const nextArgs = args.filter(arg => {
-    const doubleDashMatch = arg.match(/^--([\w-.]+)=(\S*)$/) || arg.match(/^--([\w-.]+)$/)
-    const singleDashMatch = arg.match(/^-(?!-)([\w-.])=(\S*)$/) || arg.match(/^-(?!-)([\w-.])$/)
-
-    if (singleDashMatch) {
-      options[singleDashMatch[1]] = Number(singleDashMatch[2]) || singleDashMatch[2] || true
-      return false
-    }
-
-    if (doubleDashMatch) {
-      options[doubleDashMatch[1]] = Number(doubleDashMatch[2]) || doubleDashMatch[2] || true
-      return false
-    }
-
-    return true
-  })
-
-  return {
-    nextArgs,
-    options
-  }
 }
 
 function describe (obj: Object, logger: Logger, namespace: ?string) {
@@ -144,11 +121,11 @@ function call (obj: Object, args: Array<string>, logger: Logger, depth: number =
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {
-    const { nextArgs, options } = parseArgs(args.slice(1))
+    const { params, options } = microargs(args.slice(1))
     if (options.help) {
       help(obj[taskName], logger)
     } else {
-      obj[taskName].apply({ options }, nextArgs)
+      obj[taskName].apply({ options }, params)
     }
     return obj[taskName]
   }
