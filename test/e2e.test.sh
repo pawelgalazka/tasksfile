@@ -17,26 +17,28 @@ echo 'Babel sandbox tests'
 cd test/babel-sandbox
 
 echo 'Installing test package'
-rm -rf ./node_modules
 yarn
+rm -f ./node_modules/runjs
+ln -s ../../../ ./node_modules/runjs
 
 echo 'Testing test package'
-./node_modules/.bin/run echo 1 2 3
-./node_modules/.bin/run testapi
-./node_modules/.bin/run testasyncawait
-./node_modules/.bin/run n1:nested1
-./node_modules/.bin/run n1:nested2:echo
+../../cli/bin/run.js echo 1 2 3
+../../cli/bin/run.js testapi
+../../cli/bin/run.js testasyncawait
+../../cli/bin/run.js n1:nested1
+../../cli/bin/run.js n1:nested2:echo
 
 echo 'TypeScript sandbox tests'
 cd ../typescript-sandbox
 
 echo 'Installing test package'
-rm -rf ./node_modules
 yarn
+rm -f ./node_modules/runjs
+ln -s ../../../ ./node_modules/runjs
 
 echo 'Testing test package'
-./node_modules/.bin/run echo 1 2 3
-./node_modules/.bin/run testapi
-./node_modules/.bin/run testasyncawait
-./node_modules/.bin/run n1:nested1
-./node_modules/.bin/run n1:nested2:echo
+../../cli/bin/run.js echo 1 2 3
+../../cli/bin/run.js testapi
+../../cli/bin/run.js testasyncawait
+../../cli/bin/run.js n1:nested1
+../../cli/bin/run.js n1:nested2:echo

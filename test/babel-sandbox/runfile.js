@@ -1,4 +1,4 @@
-import { run } from 'runjs'
+import { run } from '../../lib'
 
 export function echo (...args) {
   console.log('ECHO', args, this.options)
