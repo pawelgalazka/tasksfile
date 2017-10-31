@@ -1,5 +1,6 @@
 {
   "name": "babel-sandbox",
+  "private": true,
   "version": "1.0.0",
   "devDependencies": {
     "babel-core": "6.16.0",
