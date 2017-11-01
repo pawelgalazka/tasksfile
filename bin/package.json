@@ -9,7 +9,7 @@
     "tool"
   ],
   "bin": {
-    "run": "bin/run.js"
+    "run": "run.js"
   },
   "engines": {
     "node": ">=6.11.1"

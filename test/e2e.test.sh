@@ -22,11 +22,11 @@ rm -f ./node_modules/runjs
 ln -s ../../../ ./node_modules/runjs
 
 echo 'Testing test package'
-../../cli/bin/run.js echo 1 2 3
-../../cli/bin/run.js testapi
-../../cli/bin/run.js testasyncawait
-../../cli/bin/run.js n1:nested1
-../../cli/bin/run.js n1:nested2:echo
+../../bin/run.js echo 1 2 3
+../../bin/run.js testapi
+../../bin/run.js testasyncawait
+../../bin/run.js n1:nested1
+../../bin/run.js n1:nested2:echo
 
 echo 'TypeScript sandbox tests'
 cd ../typescript-sandbox
@@ -37,8 +37,8 @@ rm -f ./node_modules/runjs
 ln -s ../../../ ./node_modules/runjs
 
 echo 'Testing test package'
-../../cli/bin/run.js echo 1 2 3
-../../cli/bin/run.js testapi
-../../cli/bin/run.js testasyncawait
-../../cli/bin/run.js n1:nested1
-../../cli/bin/run.js n1:nested2:echo
+../../bin/run.js echo 1 2 3
+../../bin/run.js testapi
+../../bin/run.js testasyncawait
+../../bin/run.js n1:nested1
+../../bin/run.js n1:nested2:echo
