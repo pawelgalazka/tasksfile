@@ -16,11 +16,11 @@
     "lint": "eslint src/ bin/ test/*.test.js",
     "flow": "flow",
     "build": "babel src/ --out-dir lib/",
-    "test": "yarn run lint && yarn run flow -- check && yarn run test:coverage && yarn run build && yarn run test:e2e",
+    "test": "yarn run lint && yarn run flow check && yarn run test:coverage && yarn run build && yarn run test:e2e",
     "test:coverage": "jest --coverage",
     "test:unit": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "bash ./test/e2e.test.sh",
+    "test:e2e": "bash ./test/e2e/e2e.test.sh",
     "clean": "rm -rf node_modules && yarn run clean:sandbox",
     "clean:sandbox": "rm -rf test/babel-sandbox/node_modules && rm -rf test/typescript-sandbox/node_modules",
     "precommit": "yarn run lint && yarn run flow"

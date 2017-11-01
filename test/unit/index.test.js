@@ -1,6 +1,6 @@
 /* eslint-env jest */
-const api = require('../src/index')
-const { RunJSError } = require('../src/common')
+const api = require('../../src/index')
+const { RunJSError } = require('../../src/common')
 const { execSync, spawn } = require('child_process')
 const { EventEmitter } = require('events')
 

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const chalk = require('chalk')
-const script = require('../src/script')
+const script = require('../../src/script')
 
 describe('script', () => {
   let logger, mockLogger
