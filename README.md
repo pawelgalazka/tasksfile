@@ -7,7 +7,6 @@ Minimalistic building tool
 - [API](#api)
     - [run](#runcmd-options)
     - [options](#optionsthis-name)
-    - [option](#optionthis-name)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
     - [TypeScript](#typescript)
@@ -193,34 +192,6 @@ Implementation of it is really simple:
 function options (thisObj) {
   return (thisObj && thisObj.options) || {}
 }
-```
-
-#### option(this, name)
-
-> This helper is deprecated, use `options` instead
-
-A helper which returns value for an option if given through dash param of command
-line script.
-
-Usage in runfile:
-```js
-export function lint (path = '.') {
-  option(this, 'fix') ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
-}
-```
-
-is the same as:
-
-```js
-export function lint (path = '.') {
-  this && this.options && this.options.fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
-}
-```
-
-and can be triggered when:
-
-```sh
-$ run lint --fix
 ```
 
 ## Transpilers
