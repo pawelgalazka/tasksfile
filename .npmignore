@@ -3,4 +3,4 @@
 node_modules
 /test
 /src
-/cli
+/bin/package.json
