@@ -62,7 +62,7 @@ describe('runjs', () => {
       sh('ln -s ../../../../../ ./node_modules/runjs')
     })
 
-    it.skip('executes simple task', () => {
+    it('executes simple task', () => {
       expect(sh('../../../../bin/run.js echo 1 2 3 --foo --bar'))
         .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
