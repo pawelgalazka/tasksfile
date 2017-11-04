@@ -67,7 +67,7 @@ describe('runjs', () => {
         .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
-    it('executes shell commands in a task', () => {
+    it.skip('executes shell commands in a task', () => {
       expect(sh('../../../../bin/run.js commands'))
         .toContain(
           'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe\n\n' +
