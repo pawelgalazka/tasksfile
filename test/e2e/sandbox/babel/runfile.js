@@ -37,14 +37,6 @@ export function testserver () {
   run('http-server', {async: true})
 }
 
-export function testasync () {
-  run('ls -al | cat', {async: true}).then((data) => {
-    console.log('DATA', data)
-  }).catch((error) => {
-    console.log('ERROR', error)
-  })
-}
-
 export async function testasyncawait () {
   await run('ls -al | cat', {async: true}).then((data) => {
     console.log('DATA', data)
@@ -52,21 +44,5 @@ export async function testasyncawait () {
   console.log('After AWAIT message')
 }
 
-export const n1 = {
-  nested1 () {
-    console.log('Nested task nr 1 executed!')
-  },
-
-  'nested2:echo': (arg1, arg2) => {
-    console.log('Nested task nr 2 executed!')
-  },
-
-  all () {
-    n1.nested1()
-    n1['nested2:echo']()
-  }
-}
-
 echo.help = 'Simple echo task'
-n1.nested1.help = 'Description of nested task nr 1'
-n1['nested2:echo'].help = 'Description of nested task nr 2\nsecond line'
+nested.echo.help = 'Description of nested task'
