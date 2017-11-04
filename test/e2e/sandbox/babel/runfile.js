@@ -5,8 +5,11 @@ export function echo (...args) {
 }
 
 export function command () {
-  run('echo "sync"')
-  run('echo "async"', { async: true })
+  run('echo "sync terminal"')
+  console.log('output', run('echo "sync pipe"', { stdio: 'pipe' }))
+  run('echo "async terminal"', { async: true })
+  run('echo "async terminal"', { async: true, stdio: 'pipe' })
+    .then(output => console.log('output', output))
 }
 
 export const nested = {
