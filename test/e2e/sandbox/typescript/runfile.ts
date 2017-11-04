@@ -18,9 +18,8 @@ export const nested = {
   }
 }
 
-export async function testasyncawait () {
-  await run('ls -al | cat', {async: true}).then((data) => {
-    console.log('DATA', data)
-  })
-  console.log('After AWAIT message')
+export async function asyncawait () {
+  const output = await run('echo "async and await"', {async: true, stdio: 'pipe'})
+  console.log('output', output)
+  console.log('after await')
 }

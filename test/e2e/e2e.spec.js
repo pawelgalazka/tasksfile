@@ -29,7 +29,7 @@ describe('runjs', () => {
     })
 
     it('executes tasks with async and await', () => {
-      sh('../../../../bin/run.js testasyncawait')
+      sh('../../../../bin/run.js asyncawait')
     })
   })
 
@@ -54,7 +54,7 @@ describe('runjs', () => {
     })
 
     it('executes tasks with async and await', () => {
-      sh('../../../../bin/run.js testasyncawait')
+      sh('../../../../bin/run.js asyncawait')
     })
   })
 })

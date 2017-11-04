@@ -18,6 +18,12 @@ export const nested = {
   }
 }
 
+export async function asyncawait () {
+  const output = await run('echo "async and await"', {async: true, stdio: 'pipe'})
+  console.log('output', output)
+  console.log('after await')
+}
+
 export function testerror (async) {
   if (async) {
     run('node ./scripts/error.js', {async: true}).catch((error) => {
@@ -35,13 +41,6 @@ export function testcolor () {
 
 export function testserver () {
   run('http-server', {async: true})
-}
-
-export async function testasyncawait () {
-  await run('ls -al | cat', {async: true}).then((data) => {
-    console.log('DATA', data)
-  })
-  console.log('After AWAIT message')
 }
 
 echo.help = 'Simple echo task'
