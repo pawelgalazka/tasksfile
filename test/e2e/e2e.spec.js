@@ -5,7 +5,7 @@ describe('runjs', () => {
   let cwd
 
   function sh (cmd) {
-    return execSync(cmd, { cwd, stdio: 'inherit' })
+    return execSync(cmd, { cwd, stdio: 'pipe' }).toString()
   }
 
   describe('with babel transpiler', () => {
@@ -17,24 +17,30 @@ describe('runjs', () => {
     })
 
     it('executes simple task', () => {
-      sh('../../../../bin/run.js echo 1 2 3 --foo --bar')
+      expect(sh('../../../../bin/run.js echo 1 2 3 --foo --bar'))
+        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
     it('executes shell commands in a task', () => {
-      sh('../../../../bin/run.js commands')
+      expect(sh('../../../../bin/run.js commands'))
+        .toContain(
+          'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe\n\n' +
+          'echo "async terminal"\necho "async terminal"\nasync terminal\noutput async terminal')
     })
 
     it('executes name spaced tasks', () => {
-      sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
+      expect(sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar'))
+        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
     it('includes ./node_modules/.bin to PATH when executing commands', () => {
       sh('cp -p ./scripts/hello.js ./node_modules/.bin/hello')
-      sh('../../../../bin/run.js localbin')
+      expect(sh('../../../../bin/run.js localbin')).toContain('Hello!')
     })
 
     it('executes tasks with async and await', () => {
-      sh('../../../../bin/run.js asyncawait')
+      expect(sh('../../../../bin/run.js asyncawait'))
+        .toContain('echo "async and await"\noutput async and await\n\nafter await')
     })
   })
 
@@ -47,24 +53,30 @@ describe('runjs', () => {
     })
 
     it('executes simple task', () => {
-      sh('../../../../bin/run.js echo 1 2 3 --foo --bar')
+      expect(sh('../../../../bin/run.js echo 1 2 3 --foo --bar'))
+        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
     it('executes shell commands in a task', () => {
-      sh('../../../../bin/run.js commands')
+      expect(sh('../../../../bin/run.js commands'))
+        .toContain(
+          'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe\n\n' +
+          'echo "async terminal"\necho "async terminal"\nasync terminal\noutput async terminal')
     })
 
     it('executes name spaced tasks', () => {
-      sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
+      expect(sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar'))
+        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
     it('includes ./node_modules/.bin to PATH when executing commands', () => {
       sh('cp -p ../babel/scripts/hello.js ./node_modules/.bin/hello')
-      sh('../../../../bin/run.js localbin')
+      expect(sh('../../../../bin/run.js localbin')).toContain('Hello!')
     })
 
     it('executes tasks with async and await', () => {
-      sh('../../../../bin/run.js asyncawait')
+      expect(sh('../../../../bin/run.js asyncawait'))
+        .toContain('echo "async and await"\noutput async and await\n\nafter await')
     })
   })
 })
