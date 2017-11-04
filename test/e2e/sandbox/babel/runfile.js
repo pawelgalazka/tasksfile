@@ -1,11 +1,12 @@
-import { run } from '../../../../lib'
+import { run, options } from '../../../../lib'
 
 export function echo (...args) {
-  console.log('ECHO', args, this.options)
+  console.log('echo', args, options(this))
 }
 
-export function testapi () {
-  run('ls -al | cat')
+export function command () {
+  run('echo "sync"')
+  run('echo "async"', { async: true })
 }
 
 export function testerror (async) {
