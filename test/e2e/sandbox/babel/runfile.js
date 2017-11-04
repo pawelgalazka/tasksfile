@@ -28,23 +28,14 @@ export async function asyncawait () {
   console.log('after await')
 }
 
-export function testerror (async) {
-  if (async) {
-    run('node ./scripts/error.js', {async: true}).catch((error) => {
-      console.log('ERROR', error)
-    })
-  } else {
-    run('node ./scripts/error.js')
-  }
+export function error () {
+  run('node ../../scripts/error.js', {async: true})
+  run('node ../../scripts/error.js')
 }
 
-export function testcolor () {
-  run('node ./scripts/color.js')
-  run('node ./scripts/color.js', {async: true})
-}
-
-export function testserver () {
-  run('http-server', {async: true})
+export function color () {
+  run('node ../../scripts/color.js')
+  run('node ../../scripts/color.js', {async: true})
 }
 
 echo.help = 'Simple echo task'

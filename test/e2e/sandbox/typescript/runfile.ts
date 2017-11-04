@@ -27,3 +27,8 @@ export async function asyncawait () {
   console.log('output', output)
   console.log('after await')
 }
+
+export function error () {
+  run('node ../../scripts/error.js', {async: true})
+  run('node ../../scripts/error.js')
+}

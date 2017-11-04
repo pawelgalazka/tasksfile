@@ -1,2 +1,1 @@
-console.log('test')
-throw "abc"
+throw new Error('error message')

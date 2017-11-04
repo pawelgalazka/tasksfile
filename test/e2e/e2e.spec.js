@@ -47,6 +47,11 @@ describe('runjs', () => {
       expect(sh('../../../../bin/run.js echo --help'))
         .toContain('Simple echo task')
     })
+
+    it('displays error from executed command', () => {
+      expect(() => sh('../../../../bin/run.js error'))
+        .toThrow('Command failed: ../../../../bin/run.js error')
+    })
   })
 
   describe('with typescript transpiler', () => {
@@ -82,6 +87,11 @@ describe('runjs', () => {
     it('executes tasks with async and await', () => {
       expect(sh('../../../../bin/run.js asyncawait'))
         .toContain('echo "async and await"\noutput async and await\n\nafter await')
+    })
+
+    it('displays error from executed command', () => {
+      expect(() => sh('../../../../bin/run.js error'))
+        .toThrow('Command failed: ../../../../bin/run.js error')
     })
   })
 })
