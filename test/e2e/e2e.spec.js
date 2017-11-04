@@ -42,6 +42,11 @@ describe('runjs', () => {
       expect(sh('../../../../bin/run.js asyncawait'))
         .toContain('echo "async and await"\noutput async and await\n\nafter await')
     })
+
+    it('displays help for a task', () => {
+      expect(sh('../../../../bin/run.js echo --help'))
+        .toContain('Simple echo task')
+    })
   })
 
   describe('with typescript transpiler', () => {
