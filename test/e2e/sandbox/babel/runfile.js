@@ -10,17 +10,17 @@ export function testapi () {
 
 export function testerror (async) {
   if (async) {
-    run('node ./error_script.js', {async: true}).catch((error) => {
+    run('node ./scripts/error.js', {async: true}).catch((error) => {
       console.log('ERROR', error)
     })
   } else {
-    run('node ./error_script.js')
+    run('node ./scripts/error.js')
   }
 }
 
 export function testcolor () {
-  run('node ./color_script.js')
-  run('node ./color_script.js', {async: true})
+  run('node ./scripts/color.js')
+  run('node ./scripts/color.js', {async: true})
 }
 
 export function testserver () {
