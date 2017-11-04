@@ -28,6 +28,11 @@ describe('runjs', () => {
       sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
     })
 
+    it('includes ./node_modules/.bin to PATH when executing commands', () => {
+      sh('cp -p ./scripts/hello.js ./node_modules/.bin/hello')
+      sh('../../../../bin/run.js localbin')
+    })
+
     it('executes tasks with async and await', () => {
       sh('../../../../bin/run.js asyncawait')
     })
@@ -51,6 +56,11 @@ describe('runjs', () => {
 
     it('executes name spaced tasks', () => {
       sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
+    })
+
+    it('includes ./node_modules/.bin to PATH when executing commands', () => {
+      sh('cp -p ../babel/scripts/hello.js ./node_modules/.bin/hello')
+      sh('../../../../bin/run.js localbin')
     })
 
     it('executes tasks with async and await', () => {

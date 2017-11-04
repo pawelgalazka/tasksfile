@@ -18,6 +18,10 @@ export const nested = {
   }
 }
 
+export function localbin () {
+  run('hello')
+}
+
 export async function asyncawait () {
   const output = await run('echo "async and await"', {async: true, stdio: 'pipe'})
   console.log('output', output)
