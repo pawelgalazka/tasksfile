@@ -21,11 +21,14 @@ describe('runjs', () => {
         .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
-    it.skip('executes shell commands in a task', () => {
-      expect(sh('../../../../bin/run.js commands'))
-        .toContain(
-          'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe\n\n' +
-          'echo "async terminal"\necho "async terminal"\nasync terminal\noutput async terminal')
+    it('executes shell commands in a task', () => {
+      const output = sh('../../../../bin/run.js commands')
+      expect(output)
+        .toContain('echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe')
+      expect(output)
+        .toContain('\nasync terminal\n')
+      expect(output)
+        .toContain('\noutput async terminal\n')
     })
 
     it('executes name spaced tasks', () => {
@@ -67,11 +70,14 @@ describe('runjs', () => {
         .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
-    it.skip('executes shell commands in a task', () => {
-      expect(sh('../../../../bin/run.js commands'))
-        .toContain(
-          'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe\n\n' +
-          'echo "async terminal"\necho "async terminal"\nasync terminal\noutput async terminal')
+    it('executes shell commands in a task', () => {
+      const output = sh('../../../../bin/run.js commands')
+      expect(output)
+        .toContain('echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe')
+      expect(output)
+        .toContain('\nasync terminal\n')
+      expect(output)
+        .toContain('\noutput async terminal\n')
     })
 
     it('executes name spaced tasks', () => {
