@@ -34,7 +34,7 @@ describe('runjs', () => {
     })
 
     it('includes ./node_modules/.bin to PATH when executing commands', () => {
-      sh('cp -p ./scripts/hello.js ./node_modules/.bin/hello')
+      sh('cp -p ../../scripts/hello.js ./node_modules/.bin/hello')
       expect(sh('../../../../bin/run.js localbin')).toContain('Hello!')
     })
 
@@ -70,7 +70,7 @@ describe('runjs', () => {
     })
 
     it('includes ./node_modules/.bin to PATH when executing commands', () => {
-      sh('cp -p ../babel/scripts/hello.js ./node_modules/.bin/hello')
+      sh('cp -p ../../scripts/hello.js ./node_modules/.bin/hello')
       expect(sh('../../../../bin/run.js localbin')).toContain('Hello!')
     })
 
