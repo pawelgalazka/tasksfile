@@ -9,6 +9,12 @@ export function command () {
   run('echo "async"', { async: true })
 }
 
+export const nested = {
+  echo (...args) {
+    console.log('nested echo', args, options(this))
+  }
+}
+
 export function testerror (async) {
   if (async) {
     run('node ./scripts/error.js', {async: true}).catch((error) => {

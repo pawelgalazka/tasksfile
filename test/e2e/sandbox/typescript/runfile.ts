@@ -9,6 +9,12 @@ export function command () {
   run('echo "async"', { async: true })
 }
 
+export const nested = {
+  echo (...args) {
+    console.log('nested echo', args, options(this))
+  }
+}
+
 export async function testasyncawait () {
   await run('ls -al | cat', {async: true}).then((data) => {
     console.log('DATA', data)
