@@ -15,11 +15,16 @@
   "scripts": {
     "lint": "eslint src/ bin/ test/*.test.js",
     "build": "babel src/ --out-dir lib/",
-    "test": "yarn run lint && flow check && yarn run build && jest ./test --coverage",
+    "test": "yarn run lint && flow check && yarn run build && yarn run sandbox:setup && jest ./test --coverage",
     "test:unit": "jest ./test/unit/",
     "test:e2e": "jest ./test/e2e/",
+    "sandbox:setup": "yarn run sandbox:yarn && yarn run sandbox:link:dev",
+    "sandbox:yarn": "(cd ./test/e2e/sandbox/babel && yarn) && (cd ./test/e2e/sandbox/typescript && yarn)",
+    "sandbox:clean": "rm -rf ./test/e2e/sandbox/babel/node_modules && rm -rf ./test/e2e/sandbox/typescript/node_modules",
+    "sandbox:link:dev": "yarn run sandbox:link:dev:babel && yarn run sandbox:link:dev:typescript",
+    "sandbox:link:dev:babel": "rm -rf ./test/e2e/sandbox/babel/node_modules/runjs && ln -s ../../../../../ ./test/e2e/sandbox/babel/node_modules/runjs",
+    "sandbox:link:dev:typescript": "rm -rf ./test/e2e/sandbox/typescript/node_modules/runjs && ln -s ../../../../../ ./test/e2e/sandbox/typescript/node_modules/runjs",
     "clean": "rm -rf node_modules && yarn run clean:sandbox",
-    "clean:sandbox": "rm -rf test/e2e/sandbox/babel/node_modules && rm -rf test/e2e/sandbox/typescript/node_modules",
     "precommit": "yarn run lint && yarn run flow"
   },
   "engines": {

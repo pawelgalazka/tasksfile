@@ -11,9 +11,6 @@ describe('runjs', () => {
   describe('with babel transpiler', () => {
     beforeAll(() => {
       cwd = './test/e2e/sandbox/babel'
-      sh('yarn')
-      sh('rm -f ./node_modules/runjs')
-      sh('ln -s ../../../../../ ./node_modules/runjs')
     })
 
     it('executes simple task', () => {
@@ -60,9 +57,6 @@ describe('runjs', () => {
   describe('with typescript transpiler', () => {
     beforeAll(() => {
       cwd = './test/e2e/sandbox/typescript'
-      sh('yarn')
-      sh('rm -f ./node_modules/runjs')
-      sh('ln -s ../../../../../ ./node_modules/runjs')
     })
 
     it('executes simple task', () => {
