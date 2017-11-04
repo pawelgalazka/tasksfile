@@ -18,7 +18,7 @@ describe('runjs', () => {
 
     it('executes runjs tasks', () => {
       sh('../../../../bin/run.js echo 1 2 3 --foo --bar')
-      sh('../../../../bin/run.js command')
+      sh('../../../../bin/run.js commands')
       sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
       sh('../../../../bin/run.js testasyncawait')
     })
@@ -34,7 +34,7 @@ describe('runjs', () => {
 
     it('executes runjs tasks', () => {
       sh('../../../../bin/run.js echo 1 2 3 --foo --bar')
-      sh('../../../../bin/run.js command')
+      sh('../../../../bin/run.js commands')
       sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
       sh('../../../../bin/run.js testasyncawait')
     })

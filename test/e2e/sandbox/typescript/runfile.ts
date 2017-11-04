@@ -4,7 +4,7 @@ export function echo (...args) {
   console.log('echo', args, options(this))
 }
 
-export function command () {
+export function commands () {
   run('echo "sync terminal"')
   console.log('output', run('echo "sync pipe"', { stdio: 'pipe' }))
   run('echo "async terminal"', { async: true })
