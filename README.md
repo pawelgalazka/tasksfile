@@ -390,40 +390,66 @@ To display all available tasks for your `runfile.js` type `run` in your command 
 without any arguments:
 
     $ run
-    Requiring ./node_modules/babel-register...
     Processing runfile.js...
     
     Available tasks:
-    echo
-    testapi
+    echo                    - echo task description
+    buildjs                 - Compile JS files
     
-Add `help` property to your task to get additional description:
+Use `help` utility function for your task to get additional description:
 
 ```javascript
-import { run } from 'runjs'
+import { run, help } from 'runjs'
 
-export function buildjs (arg1, arg2) {
+export function buildjs () {
   
 }
 
-buildjs.help = 'Compile JavaScript files'
+help(buildjs, 'Compile JS files')
 ```
 
-    $ run
-    Requiring ./node_modules/babel-register...
-    Processing runfile.js...
-    
-    Available tasks:
-    buildjs [arg1 arg2] - Compile JavaScript files
-    
-When running task with `--help` option, only help for that task will be displayed:
-
     $ run buildjs --help
-    Requiring ./node_modules/babel-register...
     Processing runfile.js...
     
-    ARGUMENTS
-    [arg1 arg2]
+    Usage: buildjs
     
-    DESCRIPTION
-    Compile JavaScript files
+    Compile JS files
+    
+You can provide detailed annotation to give even more info about the task:
+
+```javascript
+import dedent from 'dedent'
+import { run, help } from 'runjs'
+
+export function test (file) {
+  
+}
+
+help(test, {
+  description: 'Run unit tests',
+  params: ['file'],
+  options: {
+    watch: 'run tests in a watch mode'
+  },
+  examples: dedent`
+    run test dummyComponent.js
+    run test dummyComponent.js --watch
+  `
+})
+```
+
+    $ run test --help
+    Processing runfile.js...
+    
+    Usage: described [options] [file]
+    
+    Run unit tests
+    
+    Options:
+    
+      --watch       run tests in a watch mode
+      
+    Examples:
+    
+    run test dummyComponent.js
+    run test dummyComponent.js --watch
