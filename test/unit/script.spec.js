@@ -136,23 +136,6 @@ describe('script', () => {
       ])
     })
 
-    it('should log list of methods with available arguments', () => {
-      obj.b = (arg1, arg2) => {}
-      script.describe(obj, logger)
-      expect(mockLogger.mock.calls).toEqual([
-        ['log', chalk.yellow('Available tasks:')],
-        ['log', chalk.bold('a')],
-        ['log', chalk.bold('b') + ' [arg1 arg2]'],
-        [
-          'log',
-          '\n' +
-            chalk.blue(
-              'Type "run [taskname] --help" to get more info if available.'
-            )
-        ]
-      ])
-    })
-
     it('should log method descriptions', () => {
       obj.b = (arg1, arg2) => {}
       obj.a.help = 'Description for method a'
@@ -168,7 +151,7 @@ describe('script', () => {
         ],
         [
           'log',
-          chalk.bold('b') + ' [arg1 arg2]                  ',
+          chalk.bold('b') + '                              ',
           '-',
           'Description for method b'
         ],
