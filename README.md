@@ -48,7 +48,7 @@ Create `runfile.js`:
 
 ```javascript
 
-import { run, options } from 'runjs';
+import { run, options, help } from 'runjs';
 
 export function dev () {
   run('nodemon --exec node -- core/index.dev.js', {async: true})
@@ -77,11 +77,11 @@ export const create = {
   }
 }
 
-dev.help = 'Run development environment'
-build.help = 'Build JavaScript files'
-lint.help = 'Do linting for javascript files'
-test.help = 'Run unit tests'
-create.component.help = 'Create React component file with given name'
+help(dev, 'Run development environment')
+help(build, 'Build JavaScript files')
+help(lint, 'Do linting for javascript files')
+help(test, 'Run unit tests')
+help(create.component, 'Create React component file with given name')
 ```
     
 Run:
