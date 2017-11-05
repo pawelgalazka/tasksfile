@@ -207,46 +207,54 @@ function options (thisObj) {
 
 #### Babel
 
-If you want to use Babel transpiler for your `runfile.js`, just define a path
-to your `babel-register` module in your `package.json` as part of runjs config.
+If you want to use Babel transpiler for your `runfile.js` install it:
 
-`package.json`:
+    npm install babel-core babel-preset-es2015 babel-register --save-dev
 
-    "runjs": {
-      "requires": [
-        "./node_modules/babel-register"
-      ]
-    }
+and in your `package.json` write:
+
+```json
+{
+  "babel": {
+    "presets": ["es2015"]
+  },
+  "runjs": {
+    "requires": [
+      "./node_modules/babel-register"
+    ]
+  }
+}
+
+```
 
 RunJS will require defined transpiler before requiring `runfile.js` so you can
 use all ES6/ES7 features which are not supported by your node version. 
 
-If you don't have `babel-register` module, just install it:
-
-    npm install babel-register --save-dev
-    
     
 #### TypeScript
 
-If you want to use TypeScript transpiler for your runfile, define a path
-to `ts-node/register` module as part of runjs config inside your `package.json`.
+If you want to use TypeScript transpiler for your runfile, install TypeScript 
+tooling:
+
+    npm install typescript ts-node --save-dev
+
+and then in your `package.json` define a path to `ts-node/register` and 
+`runfile.ts`.
+
+```json
+{
+  "runjs": {
+    "requires": [
+      "./node_modules/ts-node/register"
+    ],
+    "runfile": "./runfile.ts"
+  }
+}
+```
+
 You need to also define custom path to your runfile as TypeScript files have
-`*.ts` extension.
-
-`package.json`:
-
-    "runjs": {
-      "requires": [
-        "./node_modules/ts-node/register"
-      ],
-      "runfile": "./runfile.ts"
-    }
-
-RunJS will require defined transpiler before requiring `./runfile.ts`.
-
-If you don't have `ts-node` module, just install it:
-
-    npm install ts-node --save-dev
+`*.ts` extension. RunJS will require defined transpiler before requiring 
+`./runfile.ts`.
 
 
 ## Handling arguments
