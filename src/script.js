@@ -15,15 +15,15 @@ type Config = {
   requires?: Array<string>
 }
 
-function requirer (filePath: string): Object {
+function requirer(filePath: string): Object {
   return require(path.resolve(filePath))
 }
 
-function hasAccess (filePath: string): void {
+function hasAccess(filePath: string): void {
   return fs.accessSync(path.resolve(filePath))
 }
 
-function getConfig (filePath: string): Config {
+function getConfig(filePath: string): Config {
   let config: Object
   try {
     config = requirer(filePath).runjs || {}
@@ -33,7 +33,12 @@ function getConfig (filePath: string): Config {
   return config
 }
 
-function load (config: Config, logger: Logger, requirer: (string) => Object, access: (string) => void) {
+function load(
+  config: Config,
+  logger: Logger,
+  requirer: string => Object,
+  access: string => void
+) {
   const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
   // Load requires if given in config
   if (Array.isArray(config['requires'])) {
@@ -59,12 +64,12 @@ function load (config: Config, logger: Logger, requirer: (string) => Object, acc
   return runfile
 }
 
-function describe (obj: Object, logger: Logger, namespace: ?string) {
+function describe(obj: Object, logger: Logger, namespace: ?string) {
   if (!namespace) {
     logger.log(chalk.yellow('Available tasks:'))
   }
 
-  Object.keys(obj).forEach((key) => {
+  Object.keys(obj).forEach(key => {
     const value = obj[key]
     const nextNamespace = namespace ? `${namespace}:${key}` : key
     const help = value.help
@@ -98,11 +103,16 @@ function describe (obj: Object, logger: Logger, namespace: ?string) {
   })
 
   if (!namespace) {
-    logger.log('\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.'))
+    logger.log(
+      '\n' +
+        chalk.blue(
+          'Type "run [taskname] --help" to get more info if available.'
+        )
+    )
   }
 }
 
-function help (task: Function, logger: Logger) {
+function help(task: Function, logger: Logger) {
   logger.log(' ')
   logger.title('ARGUMENTS')
   const params = getParamNames(task)
@@ -117,7 +127,12 @@ function help (task: Function, logger: Logger) {
   logger.log(' ')
 }
 
-function call (obj: Object, args: Array<string>, logger: Logger, depth: number = 0) {
+function call(
+  obj: Object,
+  args: Array<string>,
+  logger: Logger,
+  depth: number = 0
+) {
   const taskName = args[0]
 
   if (typeof obj[taskName] === 'function') {
@@ -148,7 +163,7 @@ function call (obj: Object, args: Array<string>, logger: Logger, depth: number =
   }
 }
 
-function main () {
+function main() {
   try {
     const config = getConfig('./package.json')
     const runfile = load(config, logger, requirer, hasAccess)
