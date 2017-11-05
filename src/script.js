@@ -79,9 +79,10 @@ function describe(obj: Object, logger: Logger, namespace: ?string) {
       let logArgs = [chalk.bold(nextNamespace)]
 
       // Add description
-      if (help) {
+      if (help && (help.description || typeof help === 'string')) {
+        const description = help.description || help
         logArgs[0] = padEnd(logArgs[0], 40) // format
-        logArgs.push('-', help.split('\n')[0])
+        logArgs.push('-', description.split('\n')[0])
       }
 
       // Log

@@ -118,7 +118,7 @@ function options(thisObj: ?Object): Object {
   return (thisObj && thisObj.options) || {}
 }
 
-function help(func: () => void, annotation?: string) {
+function help(func: () => void, annotation?: string | Object) {
   func.help = annotation
 }
 

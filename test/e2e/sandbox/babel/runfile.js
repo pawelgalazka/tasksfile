@@ -13,6 +13,10 @@ export function commands() {
   )
 }
 
+export function described(p1, p2) {
+  console.log(p1, p2, options(this))
+}
+
 export const nested = {
   echo(...args) {
     console.log('nested echo', args, options(this))
@@ -44,3 +48,10 @@ export function color() {
 
 help(echo, 'Simple echo task')
 help(nested.echo, 'Description of nested task')
+help(described, {
+  description: 'Task description',
+  params: ['p1', 'p2'],
+  options: {
+    foo: 'foo option'
+  }
+})

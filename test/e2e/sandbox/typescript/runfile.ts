@@ -12,6 +12,10 @@ export function commands () {
     .then(output => console.log('output', output))
 }
 
+export function described(p1, p2) {
+  console.log(p1, p2, options(this))
+}
+
 export const nested = {
   echo (...args) {
     console.log('nested echo', args, options(this))
@@ -35,3 +39,10 @@ export function error () {
 
 help(echo, 'Simple echo task')
 help(nested.echo, 'Description of nested task')
+help(described, {
+  description: 'Task description',
+  params: ['p1', 'p2'],
+  options: {
+    foo: 'foo option'
+  }
+})
