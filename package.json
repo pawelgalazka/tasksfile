@@ -59,16 +59,16 @@
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
-    "babel-eslint": "^8.0.1",
+    "babel-eslint": "8.0.1",
     "babel-preset-flow": "6.23.0",
     "eslint": "4.10.0",
-    "eslint-config-prettier": "^2.7.0",
-    "eslint-plugin-flowtype": "^2.39.1",
-    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-config-prettier": "2.7.0",
+    "eslint-plugin-flowtype": "2.39.1",
+    "eslint-plugin-prettier": "2.3.1",
     "flow-bin": "0.58.0",
     "husky": "0.14.3",
     "jest": "20.0.4",
-    "lint-staged": "^4.3.0",
+    "lint-staged": "4.3.0",
     "prettier": "1.7.4"
   },
   "babel": {
