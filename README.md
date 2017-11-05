@@ -97,6 +97,16 @@ Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` 
 normal node.js module. Then based on command line arguments proper exported function
 from `runfile.js` is called.
 
+RunJS in a nutshell
+
+```js
+const runfile = require(path.resolve('runfile'))
+const taskName = process.argv[2]
+const { options, params } = parseArgs(process.argv.slice(2))
+
+runfile[taskName].apply({ options }, params)
+```
+
 
 ## Why runjs ?
 
