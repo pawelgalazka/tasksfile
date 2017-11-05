@@ -1,4 +1,4 @@
-import { run, options } from '../../../../lib'
+import { run, options, help } from '../../../../lib'
 
 export function echo(...args) {
   console.log('echo', args, options(this))
@@ -42,5 +42,5 @@ export function color() {
   run('node ../../scripts/color.js', { async: true })
 }
 
-echo.help = 'Simple echo task'
-nested.echo.help = 'Description of nested task'
+help(echo, 'Simple echo task')
+help(nested.echo, 'Description of nested task')

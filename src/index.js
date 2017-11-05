@@ -118,8 +118,13 @@ function options(thisObj: ?Object): Object {
   return (thisObj && thisObj.options) || {}
 }
 
+function help(func: () => void, annotation?: string) {
+  func.help = annotation
+}
+
 module.exports = {
   run,
   option,
-  options
+  options,
+  help
 }
