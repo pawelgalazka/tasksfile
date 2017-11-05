@@ -441,7 +441,7 @@ help(test, {
     $ run test --help
     Processing runfile.js...
     
-    Usage: described [options] [file]
+    Usage: test [options] [file]
     
     Run unit tests
     
