@@ -52,10 +52,10 @@
   },
   "homepage": "https://github.com/pawelgalazka/runjs#readme",
   "dependencies": {
-    "chalk": "2.1.0",
+    "chalk": "2.3.0",
     "get-parameter-names": "0.3.0",
     "lodash.padend": "4.6.1",
-    "microargs": "1.1.0"
+    "microargs": "1.1.1"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -67,7 +67,7 @@
     "eslint-plugin-prettier": "2.3.1",
     "flow-bin": "0.58.0",
     "husky": "0.14.3",
-    "jest": "20.0.4",
+    "jest": "21.2.1",
     "lint-staged": "4.3.0",
     "prettier": "1.7.4"
   },
