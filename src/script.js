@@ -3,8 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
 const padEnd = require('lodash.padend')
-const getParamNames = require('get-parameter-names')
-const microargs = require('microargs')
+const microcli = require('microcli')
 
 const { RunJSError, logger, Logger } = require('./common')
 
@@ -79,16 +78,6 @@ function describe(obj: Object, logger: Logger, namespace: ?string) {
       let funcParams
       let logArgs = [chalk.bold(nextNamespace)]
 
-      // Add task params
-      try {
-        funcParams = getParamNames(value)
-      } catch (error) {
-        funcParams = []
-      }
-      if (Array.isArray(funcParams) && funcParams.length) {
-        logArgs[0] += ` [${funcParams.join(' ')}]`
-      }
-
       // Add description
       if (help) {
         logArgs[0] = padEnd(logArgs[0], 40) // format
@@ -112,53 +101,35 @@ function describe(obj: Object, logger: Logger, namespace: ?string) {
   }
 }
 
-function help(task: Function, logger: Logger) {
-  logger.log(' ')
-  logger.title('ARGUMENTS')
-  const params = getParamNames(task)
-  if (params.length) {
-    logger.log(`[${params.join(' ')}]`)
-  } else {
-    logger.log('None')
-  }
-  logger.log(' ')
-  logger.title('DESCRIPTION')
-  logger.log(task.help || 'None')
-  logger.log(' ')
-}
-
 function call(
   obj: Object,
   args: Array<string>,
   logger: Logger,
-  depth: number = 0
+  subtaskName?: string
 ) {
-  const taskName = args[0]
+  const taskName = subtaskName || args[2]
 
   if (typeof obj[taskName] === 'function') {
-    const { params, options } = microargs(args.slice(1))
-    if (options.help) {
-      help(obj[taskName], logger)
-    } else {
+    const cli = microcli(args.slice(1), obj[taskName].help, null, logger)
+
+    cli((options, ...params) => {
       obj[taskName].apply({ options }, params)
-    }
+    })
     return obj[taskName]
   }
 
   let namespaces = taskName.split(':')
   const rootNamespace = namespaces.shift()
-  const nextTaskName = namespaces.join(':')
-  let nextArgs = args.slice()
-  nextArgs[0] = nextTaskName
+  const nextSubtaskName = namespaces.join(':')
 
   if (obj[rootNamespace]) {
-    const calledTask = call(obj[rootNamespace], nextArgs, logger, depth + 1)
+    const calledTask = call(obj[rootNamespace], args, logger, nextSubtaskName)
     if (calledTask) {
       return calledTask
     }
   }
 
-  if (!depth) {
+  if (!nextSubtaskName) {
     throw new RunJSError(`Task ${taskName} not found`)
   }
 }
@@ -167,9 +138,9 @@ function main() {
   try {
     const config = getConfig('./package.json')
     const runfile = load(config, logger, requirer, hasAccess)
-    const ARGV = process.argv.slice(2)
+    const ARGV = process.argv.slice()
 
-    if (ARGV.length) {
+    if (ARGV.length > 2) {
       call(runfile, ARGV, logger)
     } else {
       describe(runfile, logger)
