@@ -13,7 +13,7 @@
     "run": "bin/run.js"
   },
   "scripts": {
-    "lint": "eslint src/ bin/ test/*.test.js",
+    "lint": "eslint src/ bin/ test/**/*.js",
     "build": "babel src/ --out-dir lib/",
     "test": "yarn run lint && flow check && yarn run build && yarn run sandbox:setup:dev && jest ./test --coverage",
     "test:unit": "jest ./test/unit/",
@@ -26,11 +26,17 @@
     "sandbox:link:dev": "yarn run sandbox:link:dev:babel && yarn run sandbox:link:dev:typescript",
     "sandbox:link:dev:babel": "rm -rf ./test/e2e/sandbox/babel/node_modules/runjs && ln -s ../../../../../ ./test/e2e/sandbox/babel/node_modules/runjs",
     "sandbox:link:dev:typescript": "rm -rf ./test/e2e/sandbox/typescript/node_modules/runjs && ln -s ../../../../../ ./test/e2e/sandbox/typescript/node_modules/runjs",
-    "sandbox:link:prod":"yarn run sandbox:link:prod:babel && yarn run sandbox:link:prod:typescript",
+    "sandbox:link:prod": "yarn run sandbox:link:prod:babel && yarn run sandbox:link:prod:typescript",
     "sandbox:link:prod:babel": "rm -rf ./test/e2e/sandbox/babel/node_modules/runjs && (cd ./test/e2e/sandbox/babel && yarn add runjs)",
     "sandbox:link:prod:typescript": "rm -rf ./test/e2e/sandbox/typescript/node_modules/runjs && (cd ./test/e2e/sandbox/typescript && yarn add runjs)",
     "clean": "rm -rf node_modules && yarn run sandbox:clean",
-    "precommit": "yarn run lint && yarn run flow"
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "engines": {
     "node": ">=6.11.1"
@@ -53,31 +59,19 @@
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
-    "babel-eslint": "7.2.3",
     "babel-preset-flow": "6.23.0",
-    "eslint": "4.5.0",
-    "eslint-config-standard": "10.2.1",
-    "eslint-plugin-flowtype": "2.35.1",
-    "eslint-plugin-import": "2.7.0",
-    "eslint-plugin-node": "5.1.1",
-    "eslint-plugin-promise": "3.5.0",
-    "eslint-plugin-standard": "3.0.1",
-    "flow-bin": "0.54.0",
+    "eslint": "4.10.0",
+    "eslint-config-prettier": "^2.7.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "flow-bin": "0.58.0",
     "husky": "0.14.3",
-    "jest": "20.0.4"
+    "jest": "20.0.4",
+    "lint-staged": "^4.3.0",
+    "prettier": "1.7.4"
   },
   "babel": {
     "presets": [
       "flow"
-    ]
-  },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "plugins": [
-      "flowtype"
-    ],
-    "extends": [
-      "eslint-config-standard"
     ]
   },
   "jest": {
