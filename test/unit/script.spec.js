@@ -136,23 +136,6 @@ describe('script', () => {
       ])
     })
 
-    it('should log list of methods with available arguments', () => {
-      obj.b = (arg1, arg2) => {}
-      script.describe(obj, logger)
-      expect(mockLogger.mock.calls).toEqual([
-        ['log', chalk.yellow('Available tasks:')],
-        ['log', chalk.bold('a')],
-        ['log', chalk.bold('b') + ' [arg1 arg2]'],
-        [
-          'log',
-          '\n' +
-            chalk.blue(
-              'Type "run [taskname] --help" to get more info if available.'
-            )
-        ]
-      ])
-    })
-
     it('should log method descriptions', () => {
       obj.b = (arg1, arg2) => {}
       obj.a.help = 'Description for method a'
@@ -168,7 +151,7 @@ describe('script', () => {
         ],
         [
           'log',
-          chalk.bold('b') + ' [arg1 arg2]                  ',
+          chalk.bold('b') + '                              ',
           '-',
           'Description for method b'
         ],
@@ -266,9 +249,9 @@ describe('script', () => {
     })
 
     it('calls the method from a given object by given method name and its arguments', () => {
-      script.call(obj, ['a'])
+      script.call(obj, ['node', 'run', 'a'])
       expect(a).toHaveBeenLastCalledWith()
-      script.call(obj, ['a', '1', '2'])
+      script.call(obj, ['node', 'run', 'a', '1', '2'])
       expect(a).toHaveBeenLastCalledWith('1', '2')
     })
 
@@ -282,23 +265,25 @@ describe('script', () => {
 
       obj.a = fn
 
-      script.call(obj, ['a', '-a', 'hello'])
+      script.call(obj, ['node', 'run', 'a', '-a', 'hello'])
       expect(calls).toEqual({ args: ['hello'], options: { a: true } })
       calls = {}
-      script.call(obj, ['a', 'hello', '-a'])
+      script.call(obj, ['node', 'run', 'a', 'hello', '-a'])
       expect(calls).toEqual({ args: ['hello'], options: { a: true } })
-      script.call(obj, ['a', '--abc', 'hello'])
+      script.call(obj, ['node', 'run', 'a', '--abc', 'hello'])
       expect(calls).toEqual({ args: ['hello'], options: { abc: true } })
-      script.call(obj, ['a', '-a=123', 'hello'])
+      script.call(obj, ['node', 'run', 'a', '-a=123', 'hello'])
       expect(calls).toEqual({ args: ['hello'], options: { a: 123 } })
-      script.call(obj, ['a', '--abc=test', 'hello'])
+      script.call(obj, ['node', 'run', 'a', '--abc=test', 'hello'])
       expect(calls).toEqual({ args: ['hello'], options: { abc: 'test' } })
-      script.call(obj, ['a', '-a', '--abc=test', 'hello'])
+      script.call(obj, ['node', 'run', 'a', '-a', '--abc=test', 'hello'])
       expect(calls).toEqual({
         args: ['hello'],
         options: { a: true, abc: 'test' }
       })
       script.call(obj, [
+        'node',
+        'run',
         'a',
         '-a',
         '--abc=test',
@@ -312,6 +297,8 @@ describe('script', () => {
         options: { a: true, b: 4, abc: 'test', def: true }
       })
       script.call(obj, [
+        'node',
+        'run',
         'a',
         '--ab-cd',
         '--ef-gh=test',
@@ -324,7 +311,13 @@ describe('script', () => {
         args: ['hello', '-abc'],
         options: { 'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123 }
       })
-      script.call(obj, ['a', '--host=http://www.google.com/', 'hello'])
+      script.call(obj, [
+        'node',
+        'run',
+        'a',
+        '--host=http://www.google.com/',
+        'hello'
+      ])
       expect(calls).toEqual({
         args: ['hello'],
         options: { host: 'http://www.google.com/' }
@@ -341,65 +334,36 @@ describe('script', () => {
 
       obj.b.c = fn
 
-      script.call(obj, ['b:c', '-a', 'hello'])
+      script.call(obj, ['node', 'run', 'b:c', '-a', 'hello'])
       expect(calls).toEqual({ args: ['hello'], options: { a: true } })
       calls = {}
-      script.call(obj, ['b:c', 'hello', '-a'])
+      script.call(obj, ['node', 'run', 'b:c', 'hello', '-a'])
       expect(calls).toEqual({ args: ['hello'], options: { a: true } })
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
-      script.call(obj, ['a', '1', '2'])
+      script.call(obj, ['node', 'run', 'a', '1', '2'])
       expect(a).toHaveBeenLastCalledWith('1', '2')
-      script.call(obj, ['b:c', '1', '2'])
+      script.call(obj, ['node', 'run', 'b:c', '1', '2'])
       expect(c).toHaveBeenLastCalledWith('1', '2')
-      script.call(obj, ['b:d:e', '1', '2'])
+      script.call(obj, ['node', 'run', 'b:d:e', '1', '2'])
       expect(e).toHaveBeenLastCalledWith('1', '2')
-      script.call(obj, ['f:g:h', '1', '2'])
+      script.call(obj, ['node', 'run', 'f:g:h', '1', '2'])
       expect(h).toHaveBeenLastCalledWith('1', '2')
     })
 
     it('should raise an error if called method cannot be found', () => {
       expect(() => {
-        script.call(obj, ['abc'])
+        script.call(obj, ['node', 'run', 'abc'])
       }).toThrowError('Task abc not found')
 
       expect(() => {
-        script.call(obj, ['abc'])
+        script.call(obj, ['node', 'run', 'abc'])
       }).toThrowError(script.RunJSError)
 
       expect(() => {
-        script.call(obj, ['b:d'])
+        script.call(obj, ['node', 'run', 'b:d'])
       }).toThrowError('Task b:d not found')
-    })
-
-    it('should log documentation for method if --help option given', () => {
-      obj.b.c = (arg1, arg2) => {}
-      obj.b.c.help = 'Test description'
-      script.call(obj, ['b:c', '--help'], logger)
-      expect(mockLogger.mock.calls).toEqual([
-        ['log', ' '],
-        ['title', 'ARGUMENTS'],
-        ['log', '[arg1 arg2]'],
-        ['log', ' '],
-        ['title', 'DESCRIPTION'],
-        ['log', 'Test description'],
-        ['log', ' ']
-      ])
-
-      mockLogger.mockClear()
-
-      obj.b.c = () => {}
-      script.call(obj, ['b:c', '--help'], logger)
-      expect(mockLogger.mock.calls).toEqual([
-        ['log', ' '],
-        ['title', 'ARGUMENTS'],
-        ['log', 'None'],
-        ['log', ' '],
-        ['title', 'DESCRIPTION'],
-        ['log', 'None'],
-        ['log', ' ']
-      ])
     })
   })
 })
