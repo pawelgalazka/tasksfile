@@ -129,7 +129,7 @@ function call(
     }
   }
 
-  if (!nextSubtaskName) {
+  if (!subtaskName) {
     throw new RunJSError(`Task ${taskName} not found`)
   }
 }
