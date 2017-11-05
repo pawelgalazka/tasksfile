@@ -33,21 +33,23 @@ describe('script', () => {
     })
 
     it('should return runfile.js as a module if found', () => {
-      requirer = jest.fn().mockReturnValue({test: 1})
-      expect(script.load(config, logger, requirer, access)).toEqual({test: 1})
+      requirer = jest.fn().mockReturnValue({ test: 1 })
+      expect(script.load(config, logger, requirer, access)).toEqual({ test: 1 })
       expect(requirer).toHaveBeenCalledWith('./runfile.js')
       expect(requirer).toHaveBeenCalledTimes(1)
     })
 
     it('should return runfile.js module default context if found', () => {
-      requirer = jest.fn().mockReturnValue({default: {test: 1}})
-      expect(script.load(config, logger, requirer, access)).toEqual({test: 1})
+      requirer = jest.fn().mockReturnValue({ default: { test: 1 } })
+      expect(script.load(config, logger, requirer, access)).toEqual({ test: 1 })
       expect(requirer).toHaveBeenCalledWith('./runfile.js')
       expect(requirer).toHaveBeenCalledTimes(1)
     })
 
     it('should raise an error if runfile.js cannot be found', () => {
-      access = jest.fn(() => { throw new Error('No access') })
+      access = jest.fn(() => {
+        throw new Error('No access')
+      })
       expect(() => {
         script.load(config, logger, requirer, access)
       }).toThrowError(/^No \.\/runfile\.js defined in/)
@@ -57,7 +59,7 @@ describe('script', () => {
     describe('when requires defined in config', () => {
       beforeEach(() => {
         config = {
-          'requires': [
+          requires: [
             './node_modules/babel-polyfill',
             './node_modules/babel-register'
           ]
@@ -85,18 +87,22 @@ describe('script', () => {
 
     describe('when custom runfile path given', () => {
       beforeEach(() => {
-        config = {'runfile': './runfile.ts'}
+        config = { runfile: './runfile.ts' }
       })
 
       it('should return custom runfile as a module if found', () => {
-        requirer = jest.fn().mockReturnValue({test: 1})
-        expect(script.load(config, logger, requirer, access)).toEqual({test: 1})
+        requirer = jest.fn().mockReturnValue({ test: 1 })
+        expect(script.load(config, logger, requirer, access)).toEqual({
+          test: 1
+        })
         expect(requirer).toHaveBeenCalledWith('./runfile.ts')
         expect(requirer).toHaveBeenCalledTimes(1)
       })
 
       it('should raise an error if custom runfile cannot be found', () => {
-        access = jest.fn(() => { throw new Error('No access') })
+        access = jest.fn(() => {
+          throw new Error('No access')
+        })
         expect(() => {
           script.load(config, logger, requirer, access)
         }).toThrowError(/^No \.\/runfile\.ts defined in/)
@@ -120,7 +126,13 @@ describe('script', () => {
         ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a')],
         ['log', chalk.bold('b')],
-        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
+        [
+          'log',
+          '\n' +
+            chalk.blue(
+              'Type "run [taskname] --help" to get more info if available.'
+            )
+        ]
       ])
     })
 
@@ -131,7 +143,13 @@ describe('script', () => {
         ['log', chalk.yellow('Available tasks:')],
         ['log', chalk.bold('a')],
         ['log', chalk.bold('b') + ' [arg1 arg2]'],
-        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
+        [
+          'log',
+          '\n' +
+            chalk.blue(
+              'Type "run [taskname] --help" to get more info if available.'
+            )
+        ]
       ])
     })
 
@@ -142,9 +160,25 @@ describe('script', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['log', chalk.yellow('Available tasks:')],
-        ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
-        ['log', chalk.bold('b') + ' [arg1 arg2]                  ', '-', 'Description for method b'],
-        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
+        [
+          'log',
+          chalk.bold('a') + '                              ',
+          '-',
+          'Description for method a'
+        ],
+        [
+          'log',
+          chalk.bold('b') + ' [arg1 arg2]                  ',
+          '-',
+          'Description for method b'
+        ],
+        [
+          'log',
+          '\n' +
+            chalk.blue(
+              'Type "run [taskname] --help" to get more info if available.'
+            )
+        ]
       ])
     })
 
@@ -154,9 +188,25 @@ describe('script', () => {
       script.describe(obj, logger)
       expect(mockLogger.mock.calls).toEqual([
         ['log', chalk.yellow('Available tasks:')],
-        ['log', chalk.bold('a') + '                              ', '-', 'Description for method a'],
-        ['log', chalk.bold('b') + '                              ', '-', 'Description for method b'],
-        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
+        [
+          'log',
+          chalk.bold('a') + '                              ',
+          '-',
+          'Description for method a'
+        ],
+        [
+          'log',
+          chalk.bold('b') + '                              ',
+          '-',
+          'Description for method b'
+        ],
+        [
+          'log',
+          '\n' +
+            chalk.blue(
+              'Type "run [taskname] --help" to get more info if available.'
+            )
+        ]
       ])
     })
 
@@ -178,9 +228,20 @@ describe('script', () => {
         ['log', chalk.bold('a')],
         ['log', chalk.bold('b')],
         ['log', chalk.bold('c:d')],
-        ['log', chalk.bold('c:e:f') + '                          ', '-', 'Description for method f'],
+        [
+          'log',
+          chalk.bold('c:e:f') + '                          ',
+          '-',
+          'Description for method f'
+        ],
         ['log', chalk.bold('c:e:g')],
-        ['log', '\n' + chalk.blue('Type "run [taskname] --help" to get more info if available.')]
+        [
+          'log',
+          '\n' +
+            chalk.blue(
+              'Type "run [taskname] --help" to get more info if available.'
+            )
+        ]
       ])
     })
   })
@@ -214,7 +275,7 @@ describe('script', () => {
     it('should handle dash arguments', () => {
       let calls = {}
 
-      function fn (...args) {
+      function fn(...args) {
         calls.args = args
         calls.options = this.options
       }
@@ -222,30 +283,58 @@ describe('script', () => {
       obj.a = fn
 
       script.call(obj, ['a', '-a', 'hello'])
-      expect(calls).toEqual({args: ['hello'], options: {a: true}})
+      expect(calls).toEqual({ args: ['hello'], options: { a: true } })
       calls = {}
       script.call(obj, ['a', 'hello', '-a'])
-      expect(calls).toEqual({args: ['hello'], options: {a: true}})
+      expect(calls).toEqual({ args: ['hello'], options: { a: true } })
       script.call(obj, ['a', '--abc', 'hello'])
-      expect(calls).toEqual({args: ['hello'], options: {abc: true}})
+      expect(calls).toEqual({ args: ['hello'], options: { abc: true } })
       script.call(obj, ['a', '-a=123', 'hello'])
-      expect(calls).toEqual({args: ['hello'], options: {a: 123}})
+      expect(calls).toEqual({ args: ['hello'], options: { a: 123 } })
       script.call(obj, ['a', '--abc=test', 'hello'])
-      expect(calls).toEqual({args: ['hello'], options: {abc: 'test'}})
+      expect(calls).toEqual({ args: ['hello'], options: { abc: 'test' } })
       script.call(obj, ['a', '-a', '--abc=test', 'hello'])
-      expect(calls).toEqual({args: ['hello'], options: {a: true, abc: 'test'}})
-      script.call(obj, ['a', '-a', '--abc=test', '-b=4', 'hello', '-abc', '--def'])
-      expect(calls).toEqual({args: ['hello', '-abc'], options: {a: true, b: 4, abc: 'test', def: true}})
-      script.call(obj, ['a', '--ab-cd', '--ef-gh=test', '--ab.cd', '--ef.gh=123', 'hello', '-abc'])
-      expect(calls).toEqual({args: ['hello', '-abc'], options: {'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123}})
+      expect(calls).toEqual({
+        args: ['hello'],
+        options: { a: true, abc: 'test' }
+      })
+      script.call(obj, [
+        'a',
+        '-a',
+        '--abc=test',
+        '-b=4',
+        'hello',
+        '-abc',
+        '--def'
+      ])
+      expect(calls).toEqual({
+        args: ['hello', '-abc'],
+        options: { a: true, b: 4, abc: 'test', def: true }
+      })
+      script.call(obj, [
+        'a',
+        '--ab-cd',
+        '--ef-gh=test',
+        '--ab.cd',
+        '--ef.gh=123',
+        'hello',
+        '-abc'
+      ])
+      expect(calls).toEqual({
+        args: ['hello', '-abc'],
+        options: { 'ab-cd': true, 'ef-gh': 'test', 'ab.cd': true, 'ef.gh': 123 }
+      })
       script.call(obj, ['a', '--host=http://www.google.com/', 'hello'])
-      expect(calls).toEqual({args: ['hello'], options: {host: 'http://www.google.com/'}})
+      expect(calls).toEqual({
+        args: ['hello'],
+        options: { host: 'http://www.google.com/' }
+      })
     })
 
     it('should handle dash arguments in nested tasks', () => {
       let calls = {}
 
-      function fn (...args) {
+      function fn(...args) {
         calls.args = args
         calls.options = this.options
       }
@@ -253,10 +342,10 @@ describe('script', () => {
       obj.b.c = fn
 
       script.call(obj, ['b:c', '-a', 'hello'])
-      expect(calls).toEqual({args: ['hello'], options: {a: true}})
+      expect(calls).toEqual({ args: ['hello'], options: { a: true } })
       calls = {}
       script.call(obj, ['b:c', 'hello', '-a'])
-      expect(calls).toEqual({args: ['hello'], options: {a: true}})
+      expect(calls).toEqual({ args: ['hello'], options: { a: true } })
     })
 
     it('should call methods from nested objects by method name name-spacing', () => {
@@ -273,7 +362,7 @@ describe('script', () => {
     it('should raise an error if called method cannot be found', () => {
       expect(() => {
         script.call(obj, ['abc'])
-      }).toThrowError(('Task abc not found'))
+      }).toThrowError('Task abc not found')
 
       expect(() => {
         script.call(obj, ['abc'])
@@ -281,7 +370,7 @@ describe('script', () => {
 
       expect(() => {
         script.call(obj, ['b:d'])
-      }).toThrowError(('Task b:d not found'))
+      }).toThrowError('Task b:d not found')
     })
 
     it('should log documentation for method if --help option given', () => {

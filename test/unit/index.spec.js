@@ -9,7 +9,7 @@ jest.mock('child_process', () => ({
   spawn: jest.fn()
 }))
 
-process.env = {RUNJS_TEST: 'runjs test'}
+process.env = { RUNJS_TEST: 'runjs test' }
 
 describe('api', () => {
   let logger, spawnProcessMock
@@ -36,7 +36,7 @@ describe('api', () => {
     describe('sync version', () => {
       describe('with stdio=pipe', () => {
         it('should execute basic shell commands', () => {
-          const output = api.run('echo "echo test"', {stdio: 'pipe'}, logger)
+          const output = api.run('echo "echo test"', { stdio: 'pipe' }, logger)
           expect(execSync.mock.calls[0][0]).toEqual('echo "echo test"')
           expect(execSync.mock.calls[0][1]).toHaveProperty('stdio', 'pipe')
           expect(output).toEqual('output')
@@ -44,20 +44,27 @@ describe('api', () => {
         })
 
         it('should throw an error if command fails', () => {
-          execSync.mockImplementation(() => { throw new Error('test') })
+          execSync.mockImplementation(() => {
+            throw new Error('test')
+          })
           expect(() => {
-            api.run('node ./ghost.js', {stdio: 'pipe'}, logger)
+            api.run('node ./ghost.js', { stdio: 'pipe' }, logger)
           }).toThrow(RunJSError)
         })
 
         it('should have access to environment variables by default', () => {
-          api.run('cli-command', {stdio: 'pipe'}, logger)
-          expect(execSync.mock.calls[0][1].env).toHaveProperty('RUNJS_TEST', 'runjs test')
+          api.run('cli-command', { stdio: 'pipe' }, logger)
+          expect(execSync.mock.calls[0][1].env).toHaveProperty(
+            'RUNJS_TEST',
+            'runjs test'
+          )
         })
 
         it('should include in PATH node_modules/.bin', () => {
-          api.run('cli-command', {stdio: 'pipe'}, logger)
-          expect(execSync.mock.calls[0][1].env.PATH).toContain('node_modules/.bin')
+          api.run('cli-command', { stdio: 'pipe' }, logger)
+          expect(execSync.mock.calls[0][1].env.PATH).toContain(
+            'node_modules/.bin'
+          )
         })
       })
 
@@ -74,36 +81,54 @@ describe('api', () => {
     describe('async version', () => {
       describe('with stdio=pipe', () => {
         it('should execute basic shell commands', () => {
-          const runProcess = api.run('cli-cmd', {async: true, stdio: 'pipe'}, logger).then((output) => {
-            expect(spawn.mock.calls[0][0]).toEqual('cli-cmd')
-            expect(spawn.mock.calls[0][1]).toHaveProperty('stdio', 'pipe')
-            expect(output).toEqual('output')
-            expect(logger.title).toHaveBeenCalledWith('cli-cmd')
-          })
+          const runProcess = api
+            .run('cli-cmd', { async: true, stdio: 'pipe' }, logger)
+            .then(output => {
+              expect(spawn.mock.calls[0][0]).toEqual('cli-cmd')
+              expect(spawn.mock.calls[0][1]).toHaveProperty('stdio', 'pipe')
+              expect(output).toEqual('output')
+              expect(logger.title).toHaveBeenCalledWith('cli-cmd')
+            })
           spawnProcessMock.stdout.emit('data', 'output')
           spawnProcessMock.emit('close', 0)
           return runProcess
         })
 
         it('should have access to environment variables by default', () => {
-          const runProcess = api.run('cli-cmd', {async: true, stdio: 'pipe'}, logger).then(() => {
-            expect(spawn.mock.calls[0][1].env).toHaveProperty('RUNJS_TEST', 'runjs test')
-          })
+          const runProcess = api
+            .run('cli-cmd', { async: true, stdio: 'pipe' }, logger)
+            .then(() => {
+              expect(spawn.mock.calls[0][1].env).toHaveProperty(
+                'RUNJS_TEST',
+                'runjs test'
+              )
+            })
           spawnProcessMock.stdout.emit('data', 'output')
           spawnProcessMock.emit('close', 0)
           return runProcess
         })
 
         it('should reject with an error if command fails', () => {
-          const runProcess = api.run('cli-cmd', {async: true, stdio: 'pipe'}, logger)
+          const runProcess = api.run(
+            'cli-cmd',
+            { async: true, stdio: 'pipe' },
+            logger
+          )
           spawnProcessMock.emit('close', 1)
-          return expect(runProcess).rejects.toHaveProperty('message', 'Command failed: cli-cmd with exit code 1')
+          return expect(runProcess).rejects.toHaveProperty(
+            'message',
+            'Command failed: cli-cmd with exit code 1'
+          )
         })
 
         it('should include in PATH node_modules/.bin', () => {
-          const runProcess = api.run('cli-cmd', {async: true, stdio: 'pipe'}, logger).then(() => {
-            expect(spawn.mock.calls[0][1].env.PATH).toContain('node_modules/.bin')
-          })
+          const runProcess = api
+            .run('cli-cmd', { async: true, stdio: 'pipe' }, logger)
+            .then(() => {
+              expect(spawn.mock.calls[0][1].env.PATH).toContain(
+                'node_modules/.bin'
+              )
+            })
           spawnProcessMock.stdout.emit('data', 'output')
           spawnProcessMock.emit('close', 0)
           return runProcess
@@ -112,12 +137,14 @@ describe('api', () => {
 
       describe('with stdio=inherit', () => {
         it('should execute basic shell commands', () => {
-          const runProcess = api.run('cli-cmd', {async: true, stdio: 'inherit'}, logger).then((output) => {
-            expect(spawn.mock.calls[0][0]).toEqual('cli-cmd')
-            expect(spawn.mock.calls[0][1]).toHaveProperty('stdio', 'inherit')
-            expect(output).toEqual(null)
-            expect(logger.title).toHaveBeenCalledWith('cli-cmd')
-          })
+          const runProcess = api
+            .run('cli-cmd', { async: true, stdio: 'inherit' }, logger)
+            .then(output => {
+              expect(spawn.mock.calls[0][0]).toEqual('cli-cmd')
+              expect(spawn.mock.calls[0][1]).toHaveProperty('stdio', 'inherit')
+              expect(output).toEqual(null)
+              expect(logger.title).toHaveBeenCalledWith('cli-cmd')
+            })
           spawnProcessMock.stdout.emit('data', 'output')
           spawnProcessMock.emit('close', 0)
           return runProcess

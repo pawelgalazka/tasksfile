@@ -13,7 +13,7 @@ type Options = {
   timeout?: number
 }
 
-function runSync (command: string, options: Options) : ?string {
+function runSync(command: string, options: Options): ?string {
   try {
     const nextOptions = {
       cwd: options.cwd,
@@ -31,7 +31,7 @@ function runSync (command: string, options: Options) : ?string {
   }
 }
 
-function runAsync (command: string, options: Options): Promise<?string> {
+function runAsync(command: string, options: Options): Promise<?string> {
   return new Promise((resolve, reject) => {
     const nextOptions = {
       cwd: options.cwd,
@@ -40,17 +40,21 @@ function runAsync (command: string, options: Options): Promise<?string> {
       shell: true
     }
     const asyncProcess = spawn(command, nextOptions)
-    let output : ?string = null
+    let output: ?string = null
 
     asyncProcess.on('error', (error: Error) => {
-      reject(new Error(`Failed to start command: ${command}; ${error.toString()}`))
+      reject(
+        new Error(`Failed to start command: ${command}; ${error.toString()}`)
+      )
     })
 
     asyncProcess.on('close', (exitCode: number) => {
       if (exitCode === 0) {
         resolve(output)
       } else {
-        reject(new Error(`Command failed: ${command} with exit code ${exitCode}`))
+        reject(
+          new Error(`Command failed: ${command} with exit code ${exitCode}`)
+        )
       }
     })
 
@@ -69,7 +73,11 @@ function runAsync (command: string, options: Options): Promise<?string> {
   })
 }
 
-function run (command: string, options: Options = {}, logger: Logger = loggerAlias): Promise<?string> | ?string {
+function run(
+  command: string,
+  options: Options = {},
+  logger: Logger = loggerAlias
+): Promise<?string> | ?string {
   const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
@@ -102,11 +110,11 @@ function run (command: string, options: Options = {}, logger: Logger = loggerAli
 /**
  * @deprecated
  */
-function option (thisObj: ?Object, name: string): mixed {
+function option(thisObj: ?Object, name: string): mixed {
   return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
-function options (thisObj: ?Object): Object {
+function options(thisObj: ?Object): Object {
   return (thisObj && thisObj.options) || {}
 }
 
