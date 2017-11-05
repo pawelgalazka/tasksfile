@@ -4,7 +4,7 @@ const { execSync } = require('child_process')
 describe('runjs', () => {
   let cwd
 
-  function sh (cmd) {
+  function sh(cmd) {
     return execSync(cmd, { cwd, stdio: 'pipe' }).toString()
   }
 
@@ -14,23 +14,24 @@ describe('runjs', () => {
     })
 
     it('executes simple task', () => {
-      expect(sh('../../../../bin/run.js echo 1 2 3 --foo --bar'))
-        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
+      expect(sh('../../../../bin/run.js echo 1 2 3 --foo --bar')).toContain(
+        "echo [ '1', '2', '3' ] { foo: true, bar: true }"
+      )
     })
 
     it('executes shell commands in a task', () => {
       const output = sh('../../../../bin/run.js commands')
-      expect(output)
-        .toContain('echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe')
-      expect(output)
-        .toContain('\nasync terminal\n')
-      expect(output)
-        .toContain('\noutput async terminal\n')
+      expect(output).toContain(
+        'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe'
+      )
+      expect(output).toContain('\nasync terminal\n')
+      expect(output).toContain('\noutput async terminal\n')
     })
 
     it('executes name spaced tasks', () => {
-      expect(sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar'))
-        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
+      expect(
+        sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
+      ).toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
     it('includes ./node_modules/.bin to PATH when executing commands', () => {
@@ -39,18 +40,21 @@ describe('runjs', () => {
     })
 
     it('executes tasks with async and await', () => {
-      expect(sh('../../../../bin/run.js asyncawait'))
-        .toContain('echo "async and await"\noutput async and await\n\nafter await')
+      expect(sh('../../../../bin/run.js asyncawait')).toContain(
+        'echo "async and await"\noutput async and await\n\nafter await'
+      )
     })
 
     it('displays help for a task', () => {
-      expect(sh('../../../../bin/run.js echo --help'))
-        .toContain('Simple echo task')
+      expect(sh('../../../../bin/run.js echo --help')).toContain(
+        'Simple echo task'
+      )
     })
 
     it('displays error from executed command', () => {
-      expect(() => sh('../../../../bin/run.js error'))
-        .toThrow('Command failed: ../../../../bin/run.js error')
+      expect(() => sh('../../../../bin/run.js error')).toThrow(
+        'Command failed: ../../../../bin/run.js error'
+      )
     })
   })
 
@@ -60,23 +64,24 @@ describe('runjs', () => {
     })
 
     it('executes simple task', () => {
-      expect(sh('../../../../bin/run.js echo 1 2 3 --foo --bar'))
-        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
+      expect(sh('../../../../bin/run.js echo 1 2 3 --foo --bar')).toContain(
+        "echo [ '1', '2', '3' ] { foo: true, bar: true }"
+      )
     })
 
     it('executes shell commands in a task', () => {
       const output = sh('../../../../bin/run.js commands')
-      expect(output)
-        .toContain('echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe')
-      expect(output)
-        .toContain('\nasync terminal\n')
-      expect(output)
-        .toContain('\noutput async terminal\n')
+      expect(output).toContain(
+        'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe'
+      )
+      expect(output).toContain('\nasync terminal\n')
+      expect(output).toContain('\noutput async terminal\n')
     })
 
     it('executes name spaced tasks', () => {
-      expect(sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar'))
-        .toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
+      expect(
+        sh('../../../../bin/run.js nested:echo 1 2 3 --foo --bar')
+      ).toContain("echo [ '1', '2', '3' ] { foo: true, bar: true }")
     })
 
     it('includes ./node_modules/.bin to PATH when executing commands', () => {
@@ -85,13 +90,15 @@ describe('runjs', () => {
     })
 
     it('executes tasks with async and await', () => {
-      expect(sh('../../../../bin/run.js asyncawait'))
-        .toContain('echo "async and await"\noutput async and await\n\nafter await')
+      expect(sh('../../../../bin/run.js asyncawait')).toContain(
+        'echo "async and await"\noutput async and await\n\nafter await'
+      )
     })
 
     it('displays error from executed command', () => {
-      expect(() => sh('../../../../bin/run.js error'))
-        .toThrow('Command failed: ../../../../bin/run.js error')
+      expect(() => sh('../../../../bin/run.js error')).toThrow(
+        'Command failed: ../../../../bin/run.js error'
+      )
     })
   })
 })
