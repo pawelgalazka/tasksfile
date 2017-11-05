@@ -75,8 +75,13 @@ function describe(obj: Object, logger: Logger, namespace: ?string) {
 
     if (typeof value === 'function') {
       // Add task name
-      let funcParams
+      const funcParams = help && help.params
       let logArgs = [chalk.bold(nextNamespace)]
+
+      // Add task params
+      if (Array.isArray(funcParams) && funcParams.length) {
+        logArgs[0] += ` [${funcParams.join(' ')}]`
+      }
 
       // Add description
       if (help && (help.description || typeof help === 'string')) {
