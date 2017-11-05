@@ -13,7 +13,7 @@
     "run": "bin/run.js"
   },
   "scripts": {
-    "lint": "eslint src/ bin/ test/**/*.js",
+    "lint": "eslint src/** bin/run.js test/**",
     "build": "babel src/ --out-dir lib/",
     "test": "yarn run lint && flow check && yarn run build && yarn run sandbox:setup:dev && jest ./test --coverage",
     "test:unit": "jest ./test/unit/",
