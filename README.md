@@ -9,6 +9,7 @@ Minimalistic building tool
     - [Handling arguments](#handling-arguments)
     - [Documenting tasks](#documenting-tasks)
     - [Namespacing](#namespacing)
+    - [Sharing tasks](#sharing-tasks)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
     - [TypeScript](#typescript)
@@ -330,6 +331,49 @@ export { test } // add namespace
 ```bash
 $ run unit
 $ run test:unit
+```
+
+### Sharing tasks
+
+Because `runfile.js` is just a node.js module and `runjs` just calls exported
+functions from that module based on cli arguments, nothing stops you to move 
+some repetitive tasks across your projects to external npm package and 
+just reuse it.
+
+`shared-runfile` module:
+```js
+function shared1 () {
+  console.log('This task is shared!')
+}
+
+function shared2 () {
+  console.log('This task is shared!')
+}
+
+module.exports = {
+  shared1,
+  shared2
+}
+```
+
+Local `runfile.js`
+```js
+const shared = require('shared-runfile')
+
+function local () {
+  console.log('This task is local!')
+}
+
+module.exports = {
+  ...shared,
+  local
+}
+```
+
+```bash
+$ run shared1
+$ run shared2
+$ run local
 ```
 
 ## Transpilers
