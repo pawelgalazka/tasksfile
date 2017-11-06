@@ -54,7 +54,7 @@
   "dependencies": {
     "chalk": "2.3.0",
     "lodash.padend": "4.6.1",
-    "microcli": "1.2.0"
+    "microcli": "1.3.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
