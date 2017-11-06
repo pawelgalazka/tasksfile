@@ -5,6 +5,7 @@ Minimalistic building tool
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
 - [Features](#features)
+    - [Executing shell commands](#executing-shell-commands)
     - [Handling arguments](#handling-arguments)
     - [Documenting tasks](#documenting-tasks)
     - [Namespacing](#namespacing)
@@ -99,6 +100,34 @@ libraries which makes that approach much more flexible.
 
 
 ## Features
+
+### Executing shell commands
+
+RunJS gives an easy way to execute shell commands in your tasks by `run` function
+in synchronous and asynchronous way:
+
+```js
+const { run } = require('runjs')
+
+function commands () {
+  run('jest')
+  run(`webpack-dev-server --config webpack.config.js`, {
+    async: true
+  })
+}
+
+module.exports = {
+  all
+}
+```
+
+```bash
+$ run commands
+```
+
+Because `./node_modules/.bin` is included in `PATH` when calling shell commands
+by `run`, you can call "bins" from your local project in the same way as 
+in npm scripts.
 
 ### Handling arguments
 
