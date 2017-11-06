@@ -29,10 +29,11 @@ Install runjs in your project
 Create `runfile.js` in your root project directory:
 
 ```js
-const { run } = require('runs')
+const { run } = require('runjs')
 
 function hello(name = 'Mysterious') {
   console.log(`Hello ${name}!`)
+  run('echo "I can execute shell commands!"')
 }
 ```
 
@@ -41,6 +42,8 @@ Call in your terminal:
 ```sh
 $ npx run hello Tommy
 Hello Tommy!
+echo "I can execute shell commands"
+I can execute shell commands
 ```
 
 > For node < 8, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
