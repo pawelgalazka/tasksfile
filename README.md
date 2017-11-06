@@ -131,24 +131,34 @@ Provided arguments in the command line are passed to the function:
 
 
 ```javascript
-export function sayHello (who) {
+function sayHello (who) {
   console.log(`Hello ${who}!`)
+}
+
+module.exports = {
+  sayHello
 }
 ```
 
-    $ run sayHello world
-    Hello world!
+```bash
+$ run sayHello world
+Hello world!
+```
     
 You can also provide dash arguments like `-a` or `--test`. Order of them doesn't 
 matter after task name. They will be always available by `options` helper 
 from inside a function.
 
 ```javascript
-import { options } from 'runjs'
+const { options } = require('runjs')
 
-export function sayHello (who) {
+function sayHello (who) {
   console.log(`Hello ${who}!`)
   console.log('Given options:', options(this))
+}
+
+module.exports = {
+  sayHello
 }
 ```
 
@@ -174,13 +184,17 @@ without any arguments:
 Use `help` utility function for your task to get additional description:
 
 ```javascript
-import { run, help } from 'runjs'
+const { run, help } = require('runjs')
 
-export function buildjs () {
+function buildjs () {
   
 }
 
 help(buildjs, 'Compile JS files')
+
+module.exports = {
+  buildjs
+}
 ```
 
     $ run buildjs --help
@@ -193,10 +207,10 @@ help(buildjs, 'Compile JS files')
 You can provide detailed annotation to give even more info about the task:
 
 ```javascript
-import dedent from 'dedent'
-import { run, help } from 'runjs'
+const dedent = require('dedent')
+const { run, help } = require('runjs')
 
-export function test (file) {
+function test (file) {
   
 }
 
@@ -211,6 +225,10 @@ help(test, {
     run test dummyComponent.js --watch
   `
 })
+
+module.exports = {
+  test
+}
 ```
 
     $ run test --help
@@ -439,7 +457,7 @@ $ run lint --fix
 ```
 
 ```js
-export function lint (path = '.') {
+function lint (path = '.') {
   options(this).fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
 ```
