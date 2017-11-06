@@ -188,7 +188,7 @@ You need to also define custom path to your runfile as TypeScript files have
 For inside `runfile.js` usage
 
 ```javascript
-import { run, options } from 'runjs';
+import { run, options, help } from 'runjs';
 ```
 
 #### run(cmd, options)
