@@ -424,13 +424,6 @@ export function lint (path = '.') {
 }
 ```
 
-Implementation of it is really simple:
-
-```js
-function options (thisObj) {
-  return (thisObj && thisObj.options) || {}
-}
-```
 
 #### help(func, annotation)
 
