@@ -96,6 +96,8 @@ but they depend on bash scripting. Within `runfile` you can use
 command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible.
 
+[More](https://hackernoon.com/simple-build-tools-npm-scripts-vs-makefile-vs-runjs-31e578278162)
+
 
 ## Features
 
@@ -318,7 +320,7 @@ $ run unit
 Doing unit testing!
 ```
 
-With ES6 modules import/export syntax it becomes even simpler:
+With ES6 modules import/export syntax this becomes even simpler:
 
 ```js
 // export with no namespace
@@ -380,7 +382,7 @@ $ run local
 ## Transpilers
 
 Transpilers gives you an advantage of using ES6/ES7 features which may not be 
-available for your node version.
+available in your node version.
 
 So for example writing `runfile.js` with es6 imports/exports is possible:
 
@@ -453,7 +455,7 @@ You need to also define custom path to your runfile as TypeScript files have
 
 ## API
 
-For inside `runfile.js` usage
+For inside `runfile.js` usage.
 
 #### run(cmd, options)
 
