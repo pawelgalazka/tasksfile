@@ -67,7 +67,7 @@ from `runfile.js` is called.
 RunJS in a nutshell
 
 ```js
-const runfile = require(path.resolve('runfile'))
+const runfile = require(path.resolve('./runfile'))
 const taskName = process.argv[2]
 const { options, params } = parseArgs(process.argv.slice(2))
 
