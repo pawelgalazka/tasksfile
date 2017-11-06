@@ -22,77 +22,30 @@ Minimalistic building tool
 
 ## Get started
 
-Install globally (for a command line script):
+Install runjs in your project
 
-    npm install -g runjs-cli
-
-Install in your project (to use runjs api inside your `runfile.js`):
-
-    npm install runjs --save-dev
-
-If you want to use Babel transpiler, install it (for TypeScript click [here](#using-typescript)):
-
-    npm install babel-core babel-preset-es2015 babel-register --save-dev
-
-and add config to your `package.json`:
-
-    "babel": {
-      "presets": ["es2015"]
-    },
-    "runjs": {
-      "requires": [
-        "./node_modules/babel-register"
-      ]
-    }
-
-Create `runfile.js`:
-
-```javascript
-
-import { run, options, help } from 'runjs';
-
-export function dev () {
-  run('nodemon --exec node -- core/index.dev.js', {async: true})
-  run('webpack-dev-server --hot --progress --config config/webpack/dev.js', {async: true})
-}
-
-export function build () {
-  run('webpack -p --config config/webpack/prod.js --progress');
-}
-
-export function lint (path = '.') {
-  options(this).fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
-}
-
-export function test (path = '.') {
-  const watchFlag = options(this).w ? '--watch' : ''
-  if (!watchFlag) {
-    lint(path)
-  }
-  run(`jest ${path} ${watchFlag}`)
-}
-
-export const create = {
-  component (name) {
+    npm install runjs --save
     
-  }
-}
+Create `runfile.js` in your root project directory:
 
-help(dev, 'Run development environment')
-help(build, 'Build JavaScript files')
-help(lint, 'Do linting for javascript files')
-help(test, 'Run unit tests')
-help(create.component, 'Create React component file with given name')
+```js
+const { run } = require('runs')
+
+function hello(name = 'Mysterious') {
+  console.log(`Hello ${name}!`)
+}
 ```
-    
-Run:
+
+Call in your terminal:
+
+```sh
+$ npx run hello Tommy
+Hello Tommy!
 ```
-run dev
-run create:component SomeComponent
-run lint --fix components/Button.js
-run lint --help
-run test -w
-```
+
+> For node < 8, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
+is not available, so doing `npm install -g runjs-cli` is neccessary which installs
+global `run` script. After that above task would be called like: `run hello Tommy`
 
 Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
 normal node.js module. Then based on command line arguments proper exported function
