@@ -52,7 +52,7 @@ Call in your terminal:
 ```bash
 $ npx run hello Tommy
 Hello Tommy!
-$ npx makedir
+$ npx run makedir
 mkdir somedir
 ```
 
