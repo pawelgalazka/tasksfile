@@ -4,6 +4,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 const padEnd = require('lodash.padend')
 const microcli = require('microcli')
+const CLIError = microcli.CLIError
 
 const { RunJSError, logger, Logger } = require('./common')
 
@@ -152,7 +153,7 @@ function main() {
       describe(runfile, logger)
     }
   } catch (error) {
-    if (error instanceof RunJSError) {
+    if (error instanceof RunJSError || error instanceof CLIError) {
       logger.error(error.message)
       process.exit(1)
     } else {

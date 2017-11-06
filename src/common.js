@@ -2,12 +2,12 @@
 const chalk = require('chalk')
 
 // Needed to use ES5 inheritance, because of issues with Error subclassing for Babel
-function RunJSError(message: string) {
-  this.name = 'RunJSError'
-  this.message = message && message.split('\n')[0] // assign only first line
+class RunJSError extends Error {
+  constructor(message: string) {
+    message = message && message.split('\n')[0] // assign only first line
+    super(message)
+  }
 }
-RunJSError.prototype = Object.create(Error.prototype)
-RunJSError.prototype.constructor = RunJSError
 
 class Logger {
   title(...args: Array<any>) {
