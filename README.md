@@ -4,9 +4,10 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
-- [Handling arguments](#handling-arguments)
-- [Documenting tasks](#documenting-tasks)
-- [Namespacing](#namespacing)
+- [Features](#features)
+    - [Handling arguments](#handling-arguments)
+    - [Documenting tasks](#documenting-tasks)
+    - [Namespacing](#namespacing)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
     - [TypeScript](#typescript)
@@ -90,7 +91,9 @@ command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible.
 
 
-## Handling arguments
+## Features
+
+### Handling arguments
 
 Provided arguments in the command line are passed to the function:
 
@@ -124,7 +127,7 @@ Given options: { a: true, test: 'something' }
 ```
     
     
-## Documenting tasks
+### Documenting tasks
 
 To display all available tasks for your `runfile.js` type `run` in your command line
 without any arguments:
@@ -195,7 +198,7 @@ help(test, {
     run test dummyComponent.js --watch
 
 
-## Namespacing
+### Namespacing
 
 When `runfile.js` gets large it is a good idea to extract some logic to external modules 
 and import them back to `runfile.js`:
