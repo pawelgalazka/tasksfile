@@ -250,73 +250,71 @@ module.exports = {
 
 ### Namespacing
 
-When `runfile.js` gets large it is a good idea to extract some logic to external modules 
-and import them back to `runfile.js`:
-
-
-`./tasks/css.js`:
-
-```javascript
-export function compile () {
-  ...
-}
-```
-
-`./tasks/lint.js`:
-
-```javascript
-export function fix () {
-  ...
-}
-```
-
-`./tasks/common.js`:
-
-```javascript
-export function serve () {
-  ...
-}
-```
-
-`runfile.js`:
-
-```javascript
-import { run } from 'runjs'
-import * as lint from './tasks/lint'
-import * as css from './tasks/css'
-import * as common from './tasks/common'
-
-export default {
-  css, // equals to css: css
-  lint, // equals to lint: lint
-  ...common,
-  clean: () => {
-    run('rm -rf node_modules') 
-  },
-  deploy: {
-    'production': () => {
-      
-    },
-    'staging': () => {
-      
-    }
+To better organise tasks, it is possible to call them from namespaces:
+```js
+const test = {
+  unit () {
+    console.log('Doing unit testing!')
   }
 }
+
+module.exports = {
+  test
+}
 ```
 
-```
-run css:compile
-run lint:fix
-run serve
-run clean
-run deploy:production
-run deploy:staging
+```bash
+$ run test:unit
+Doing unit testing!
 ```
 
-You can notice a couple of approaches here but in general RunJS will treat object key as
-a namespace. It is also possible to bump tasks directly without the namespace by using ES7 
-object spread operator as with `common` tasks in the example above.
+This is especially useful if `runfile.js` gets too large. We can move some tasks
+to external modules and import them back to a namespace:
 
+`./tasks/test.js`:
+
+```javascript
+function unit () {
+  console.log('Doing unit testing!')
+}
+
+function integration () {
+  console.log('Doing unit testing!')
+}
+
+module.exports = {
+  unit,
+  integration
+}
+```
+
+`runfile.js`
+```js
+import * as test from './tasks/test.js'
+
+module.exports = {
+  test
+}
+```
+
+```bash
+$ run test:unit
+Doing unit testing!
+```
+
+If we don't want to put imported tasks into a namespace, we can always spread
+operator:
+
+```js
+module.exports = {
+  ...test
+}
+```
+
+```bash
+$ run unit
+Doing unit testing!
+```
 
 ## Transpilers
 
