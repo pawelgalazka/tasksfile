@@ -38,8 +38,14 @@ function hello(name = 'Mysterious') {
   console('I made a directory for you!')
 }
 
+function makedir() {
+  run('mkdir somedir')
+  console('I made a directory for you!')
+}
+
 module.exports = {
-  hello
+  hello,
+  makedir
 }
 ```
 
@@ -48,7 +54,8 @@ Call in your terminal:
 ```bash
 $ npx run hello Tommy
 Hello Tommy!
-mkdir tommy
+$ npx makedir
+mkdir somedir
 I made a directory for you!
 ```
 
