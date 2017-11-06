@@ -43,7 +43,7 @@ module.exports = {
 
 Call in your terminal:
 
-```sh
+```bash
 $ npx run hello Tommy
 Hello Tommy!
 echo "I can execute shell commands"
@@ -103,20 +103,24 @@ export function sayHello (who) {
     $ run sayHello world
     Hello world!
     
-You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
-after task name. They will be always passed through `this.options` inside a function 
-in a form of JSON object.
+You can also provide dash arguments like `-a` or `--test`. Order of them doesn't 
+matter after task name. They will be always available by `options` helper 
+from inside a function.
 
 ```javascript
+import { options } from 'runjs'
+
 export function sayHello (who) {
   console.log(`Hello ${who}!`)
-  console.log('Given options:', this.options)
+  console.log('Given options:', options(this))
 }
 ```
 
-    $ run sayHello -a --test=something world
-    Hello world!
-    Given options: { a: true, test: 'something' }
+```bash
+$ run sayHello -a --test=something world
+Hello world!
+Given options: { a: true, test: 'something' }
+```
     
     
 ## Documenting tasks
