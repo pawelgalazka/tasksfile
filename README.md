@@ -10,6 +10,7 @@ Minimalistic building tool
 - [API](#api)
     - [run](#runcmd-options)
     - [options](#optionsthis-name)
+    - [help](#helpfunc-annotation)
 - [Handling arguments](#handling-arguments)
 - [Using Async/Await](#using-asyncawait)
 - [Scaling](#scaling)
@@ -255,6 +256,56 @@ function options (thisObj) {
   return (thisObj && thisObj.options) || {}
 }
 ```
+
+#### help(func, annotation)
+
+Define help annotation for task function, so it will be visible when calling with `--help` options.
+
+
+```javascript
+import dedent from 'dedent'
+import { run, help } from 'runjs'
+
+
+export function build () {
+  
+}
+
+export function test (file) {
+  
+}
+
+help(build, 'Generate JS bundle')
+
+help(test, {
+  description: 'Run unit tests',
+  params: ['file'],
+  options: {
+    watch: 'run tests in a watch mode'
+  },
+  examples: dedent`
+    run test dummyComponent.js
+    run test dummyComponent.js --watch
+  `
+})
+```
+
+    $ run test --help
+    Processing runfile.js...
+    
+    Usage: test [options] [file]
+    
+    Run unit tests
+    
+    Options:
+    
+      --watch       run tests in a watch mode
+      
+    Examples:
+    
+    run test dummyComponent.js
+    run test dummyComponent.js --watch
+
 
 
 ## Handling arguments
