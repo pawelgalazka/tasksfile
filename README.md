@@ -52,7 +52,7 @@ mkdir tommy
 I made a directory for you!
 ```
 
-> For node < 8, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
+> For node < 8.2, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
 is not available, so doing `npm install -g runjs-cli` is neccessary which installs
 global `run` script. After that above task would be called like: `run hello Tommy`
 
