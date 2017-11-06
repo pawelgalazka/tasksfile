@@ -290,7 +290,7 @@ module.exports = {
 
 `runfile.js`
 ```js
-import * as test from './tasks/test'
+const test = require('./tasks/test')
 
 module.exports = {
   test
