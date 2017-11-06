@@ -259,22 +259,11 @@ function options (thisObj) {
 
 #### help(func, annotation)
 
-Define help annotation for task function, so it will be visible when calling with `--help` options.
+Define help annotation for task function, so it will be printed out when calling task with `--help`
+option and when calling `run` without any arguments.
 
 
 ```javascript
-import dedent from 'dedent'
-import { run, help } from 'runjs'
-
-
-export function build () {
-  
-}
-
-export function test (file) {
-  
-}
-
 help(build, 'Generate JS bundle')
 
 help(test, {
@@ -283,29 +272,15 @@ help(test, {
   options: {
     watch: 'run tests in a watch mode'
   },
-  examples: dedent`
+  examples: `
     run test dummyComponent.js
     run test dummyComponent.js --watch
   `
 })
 ```
 
+    $ run build --help
     $ run test --help
-    Processing runfile.js...
-    
-    Usage: test [options] [file]
-    
-    Run unit tests
-    
-    Options:
-    
-      --watch       run tests in a watch mode
-      
-    Examples:
-    
-    run test dummyComponent.js
-    run test dummyComponent.js --watch
-
 
 
 ## Handling arguments
