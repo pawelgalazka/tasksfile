@@ -33,7 +33,8 @@ const { run } = require('runjs')
 
 function hello(name = 'Mysterious') {
   console.log(`Hello ${name}!`)
-  run('echo "I can execute shell commands!"')
+  run(`mkdir ${name.toLowerCase()}`)
+  console('I made a directory for you!')
 }
 
 module.exports = {
@@ -46,8 +47,8 @@ Call in your terminal:
 ```bash
 $ npx run hello Tommy
 Hello Tommy!
-echo "I can execute shell commands"
-I can execute shell commands
+mkdir tommy
+I made a directory for you!
 ```
 
 > For node < 8, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
@@ -269,7 +270,7 @@ object spread operator as with `common` tasks in the example above.
 Transpilers gives you an advantage of using ES6/ES7 features which may not be 
 available for your node version.
 
-So for example writing `runfile.js` with es6 imports is possible:
+So for example writing `runfile.js` with es6 imports/exports is possible:
 
 ```js
 import { run } from 'runjs'
@@ -281,7 +282,7 @@ export function makeThatDir(name) {
 ```
 
 ```bash
-$ npx run makeThatDir somedir
+$ run makeThatDir somedir
 mkdir somedir
 Done!
 ```
