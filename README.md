@@ -24,7 +24,7 @@ Minimalistic building tool
 
 Install runjs in your project
 
-    npm install runjs --save
+    npm install runjs --save-dev
     
 Create `runfile.js` in your root project directory:
 
@@ -34,6 +34,10 @@ const { run } = require('runjs')
 function hello(name = 'Mysterious') {
   console.log(`Hello ${name}!`)
   run('echo "I can execute shell commands!"')
+}
+
+module.exports = {
+  hello
 }
 ```
 
