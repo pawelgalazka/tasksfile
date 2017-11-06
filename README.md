@@ -358,14 +358,14 @@ You need to also define custom path to your runfile as TypeScript files have
 
 For inside `runfile.js` usage
 
-```javascript
-import { run, options, help } from 'runjs';
-```
-
 #### run(cmd, options)
 
 run given command as a child process and log the call in the output. 
 `./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
+
+```js
+const { run } = require('runjs')
+```
 
 *Options:*
 
@@ -408,6 +408,10 @@ For `stdio: 'ignore'` nothing will be returned or printed
 A helper which returns an object with options which were given through dash params of command
 line script.
 
+```js
+const { options } = require('runjs')
+```
+
 Example:
 
 ```bash
@@ -432,6 +436,10 @@ function options (thisObj) {
 
 Define help annotation for task function, so it will be printed out when calling task with `--help`
 option and when calling `run` without any arguments.
+
+```js
+const { help } = require('runjs')
+```
 
 
 ```javascript
