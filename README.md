@@ -266,6 +266,26 @@ object spread operator as with `common` tasks in the example above.
 
 ## Transpilers
 
+Transpilers gives you an advantage of using ES6/ES7 features which may not be 
+available for your node version.
+
+So for example writing `runfile.js` with es6 imports is possible:
+
+```js
+import { run } from 'runjs'
+
+export function makeThatDir(name) {
+  run(`mkdir ${name}`)
+  console.log('Done!')
+}
+```
+
+```bash
+$ npx run makeThatDir somedir
+mkdir somedir
+Done!
+```
+
 #### Babel
 
 If you want to use Babel transpiler for your `runfile.js` install it:
