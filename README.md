@@ -88,7 +88,8 @@ After a while customizing the process even with simple things,
 reconfiguring it becomes time consuming.
 
 Npm scripts are simple but they get out of hand pretty quickly if
-we need more complex process which make them quite hard to read.
+we need more complex process which make them quite hard to read
+and manage.
 
 Makefiles are simple, better for more complex processes
 but they depend on bash scripting. Within `runfile` you can use
