@@ -4,6 +4,9 @@ Minimalistic building tool
 
 - [Get started](#get-started)
 - [Why runjs ?](#why-runjs-)
+- [Handling arguments](#handling-arguments)
+- [Documenting tasks](#documenting-tasks)
+- [Namespacing](#namespacing)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
     - [TypeScript](#typescript)
@@ -11,10 +14,7 @@ Minimalistic building tool
     - [run](#runcmd-options)
     - [options](#optionsthis-name)
     - [help](#helpfunc-annotation)
-- [Handling arguments](#handling-arguments)
 - [Using Async/Await](#using-asyncawait)
-- [Scaling](#scaling)
-- [Documenting tasks](#documenting-tasks)
 
 
 > For 3.x to 4.x migration instructions look [here](https://github.com/pawelgalazka/runjs/releases)
@@ -127,6 +127,177 @@ Makefiles are simple, better for more complex processes
 but they depend on bash scripting. Within `runfile` you can use
 command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible.
+
+
+## Handling arguments
+
+Provided arguments in the command line are passed to the function:
+
+
+```javascript
+export function sayHello (who) {
+  console.log(`Hello ${who}!`)
+}
+```
+
+    $ run sayHello world
+    Hello world!
+    
+You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
+after task name. They will be always passed through `this.options` inside a function 
+in a form of JSON object.
+
+```javascript
+export function sayHello (who) {
+  console.log(`Hello ${who}!`)
+  console.log('Given options:', this.options)
+}
+```
+
+    $ run sayHello -a --test=something world
+    Hello world!
+    Given options: { a: true, test: 'something' }
+    
+    
+## Documenting tasks
+
+To display all available tasks for your `runfile.js` type `run` in your command line
+without any arguments:
+
+    $ run
+    Processing runfile.js...
+    
+    Available tasks:
+    echo                    - echo task description
+    buildjs                 - Compile JS files
+    
+Use `help` utility function for your task to get additional description:
+
+```javascript
+import { run, help } from 'runjs'
+
+export function buildjs () {
+  
+}
+
+help(buildjs, 'Compile JS files')
+```
+
+    $ run buildjs --help
+    Processing runfile.js...
+    
+    Usage: buildjs
+    
+    Compile JS files
+    
+You can provide detailed annotation to give even more info about the task:
+
+```javascript
+import dedent from 'dedent'
+import { run, help } from 'runjs'
+
+export function test (file) {
+  
+}
+
+help(test, {
+  description: 'Run unit tests',
+  params: ['file'],
+  options: {
+    watch: 'run tests in a watch mode'
+  },
+  examples: dedent`
+    run test dummyComponent.js
+    run test dummyComponent.js --watch
+  `
+})
+```
+
+    $ run test --help
+    Processing runfile.js...
+    
+    Usage: test [options] [file]
+    
+    Run unit tests
+    
+    Options:
+    
+      --watch       run tests in a watch mode
+      
+    Examples:
+    
+    run test dummyComponent.js
+    run test dummyComponent.js --watch
+
+
+## Namespacing
+
+When `runfile.js` gets large it is a good idea to extract some logic to external modules 
+and import them back to `runfile.js`:
+
+
+`./tasks/css.js`:
+
+```javascript
+export function compile () {
+  ...
+}
+```
+
+`./tasks/lint.js`:
+
+```javascript
+export function fix () {
+  ...
+}
+```
+
+`./tasks/common.js`:
+
+```javascript
+export function serve () {
+  ...
+}
+```
+
+`runfile.js`:
+
+```javascript
+import { run } from 'runjs'
+import * as lint from './tasks/lint'
+import * as css from './tasks/css'
+import * as common from './tasks/common'
+
+export default {
+  css, // equals to css: css
+  lint, // equals to lint: lint
+  ...common,
+  clean: () => {
+    run('rm -rf node_modules') 
+  },
+  deploy: {
+    'production': () => {
+      
+    },
+    'staging': () => {
+      
+    }
+  }
+}
+```
+
+```
+run css:compile
+run lint:fix
+run serve
+run clean
+run deploy:production
+run deploy:staging
+```
+
+You can notice a couple of approaches here but in general RunJS will treat object key as
+a namespace. It is also possible to bump tasks directly without the namespace by using ES7 
+object spread operator as with `common` tasks in the example above.
 
 
 ## Transpilers
@@ -283,36 +454,6 @@ help(test, {
     $ run test --help
 
 
-## Handling arguments
-
-Provided arguments in the command line are passed to the function:
-
-
-```javascript
-export function sayHello (who) {
-  console.log(`Hello ${who}!`)
-}
-```
-
-    $ run sayHello world
-    Hello world!
-    
-You can also provide dash arguments like `-a` or `--test`. Order of them doesn't matter
-after task name. They will be always passed through `this.options` inside a function 
-in a form of JSON object.
-
-```javascript
-export function sayHello (who) {
-  console.log(`Hello ${who}!`)
-  console.log('Given options:', this.options)
-}
-```
-
-    $ run sayHello -a --test=something world
-    Hello world!
-    Given options: { a: true, test: 'something' }
-    
-    
 ## Using Async/Await
 
 For node >= 7.10 it is possible to use async functions out of the box since node 
@@ -358,141 +499,3 @@ and proper config in your `package.json`:
       ]
     }
 
-## Scaling
-
-When `runfile.js` gets large it is a good idea to extract some logic to external modules 
-and import them back to `runfile.js`:
-
-
-`./tasks/css.js`:
-
-```javascript
-export function compile () {
-  ...
-}
-```
-
-`./tasks/lint.js`:
-
-```javascript
-export function fix () {
-  ...
-}
-```
-
-`./tasks/common.js`:
-
-```javascript
-export function serve () {
-  ...
-}
-```
-
-`runfile.js`:
-
-```javascript
-import { run } from 'runjs'
-import * as lint from './tasks/lint'
-import * as css from './tasks/css'
-import * as common from './tasks/common'
-
-export default {
-  css, // equals to css: css
-  lint, // equals to lint: lint
-  ...common,
-  clean: () => {
-    run('rm -rf node_modules') 
-  },
-  deploy: {
-    'production': () => {
-      
-    },
-    'staging': () => {
-      
-    }
-  }
-}
-```
-
-```
-run css:compile
-run lint:fix
-run serve
-run clean
-run deploy:production
-run deploy:staging
-```
-
-You can notice a couple of approaches here but in general RunJS will treat object key as
-a namespace. It is also possible to bump tasks directly without the namespace by using ES7 
-object spread operator as with `common` tasks in the example above.
-
-## Documenting tasks
-
-To display all available tasks for your `runfile.js` type `run` in your command line
-without any arguments:
-
-    $ run
-    Processing runfile.js...
-    
-    Available tasks:
-    echo                    - echo task description
-    buildjs                 - Compile JS files
-    
-Use `help` utility function for your task to get additional description:
-
-```javascript
-import { run, help } from 'runjs'
-
-export function buildjs () {
-  
-}
-
-help(buildjs, 'Compile JS files')
-```
-
-    $ run buildjs --help
-    Processing runfile.js...
-    
-    Usage: buildjs
-    
-    Compile JS files
-    
-You can provide detailed annotation to give even more info about the task:
-
-```javascript
-import dedent from 'dedent'
-import { run, help } from 'runjs'
-
-export function test (file) {
-  
-}
-
-help(test, {
-  description: 'Run unit tests',
-  params: ['file'],
-  options: {
-    watch: 'run tests in a watch mode'
-  },
-  examples: dedent`
-    run test dummyComponent.js
-    run test dummyComponent.js --watch
-  `
-})
-```
-
-    $ run test --help
-    Processing runfile.js...
-    
-    Usage: test [options] [file]
-    
-    Run unit tests
-    
-    Options:
-    
-      --watch       run tests in a watch mode
-      
-    Examples:
-    
-    run test dummyComponent.js
-    run test dummyComponent.js --watch
