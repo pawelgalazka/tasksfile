@@ -35,13 +35,10 @@ const { run } = require('runjs')
 
 function hello(name = 'Mysterious') {
   console.log(`Hello ${name}!`)
-  run(`mkdir ${name.toLowerCase()}`)
-  console('I made a directory for you!')
 }
 
 function makedir() {
   run('mkdir somedir')
-  console('I made a directory for you!')
 }
 
 module.exports = {
@@ -57,7 +54,6 @@ $ npx run hello Tommy
 Hello Tommy!
 $ npx makedir
 mkdir somedir
-I made a directory for you!
 ```
 
 > For node < 8.2, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
@@ -126,7 +122,7 @@ $ run commands
 ```
 
 Because `./node_modules/.bin` is included in `PATH` when calling shell commands
-by `run`, you can call "bins" from your local project in the same way as 
+by `run` function, you can call "bins" from your local project in the same way as 
 in npm scripts.
 
 ### Handling arguments
