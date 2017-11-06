@@ -290,7 +290,7 @@ module.exports = {
 
 `runfile.js`
 ```js
-import * as test from './tasks/test.js'
+import * as test from './tasks/test'
 
 module.exports = {
   test
@@ -302,7 +302,7 @@ $ run test:unit
 Doing unit testing!
 ```
 
-If we don't want to put imported tasks into a namespace, we can always spread
+If we don't want to put imported tasks into a namespace, we can always use spread
 operator:
 
 ```js
@@ -314,6 +314,22 @@ module.exports = {
 ```bash
 $ run unit
 Doing unit testing!
+```
+
+With ES6 modules import/export syntax it becomes even simpler:
+
+```js
+// export with no namespace
+export * from './tasks/test' // no namespace
+
+// export with namespace
+import * as test from './tasks/test'
+export { test } // add namespace
+```
+
+```bash
+$ run unit
+$ run test:unit
 ```
 
 ## Transpilers
