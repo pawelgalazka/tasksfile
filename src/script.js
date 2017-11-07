@@ -1,12 +1,12 @@
 // @flow
-const path = require('path')
-const fs = require('fs')
-const chalk = require('chalk')
-const padEnd = require('lodash.padend')
-const microcli = require('microcli')
-const CLIError = microcli.CLIError
+import path from 'path'
+import fs from 'fs'
+import chalk from 'chalk'
+import padEnd from 'lodash.padend'
+import microcli, { CLIError } from 'microcli'
+import omelette from 'omelette'
 
-const { RunJSError, logger, Logger } = require('./common')
+import { RunJSError, logger, ILogger, Logger, SilentLogger } from './common'
 
 const DEFAULT_RUNFILE_PATH = './runfile.js'
 
@@ -15,15 +15,15 @@ type Config = {
   requires?: Array<string>
 }
 
-function requirer(filePath: string): Object {
+export function requirer(filePath: string): Object {
   return require(path.resolve(filePath))
 }
 
-function hasAccess(filePath: string): void {
+export function hasAccess(filePath: string): void {
   return fs.accessSync(path.resolve(filePath))
 }
 
-function getConfig(filePath: string): Config {
+export function getConfig(filePath: string): Config {
   let config: Object
   try {
     config = requirer(filePath).runjs || {}
@@ -33,9 +33,9 @@ function getConfig(filePath: string): Config {
   return config
 }
 
-function load(
+export function load(
   config: Config,
-  logger: Logger,
+  logger: ILogger,
   requirer: string => Object,
   access: string => void
 ) {
@@ -64,7 +64,7 @@ function load(
   return runfile
 }
 
-function describe(obj: Object, logger: Logger, namespace: ?string) {
+export function describe(obj: Object, logger: Logger, namespace: ?string) {
   if (!namespace) {
     logger.log(chalk.yellow('Available tasks:'))
   }
@@ -108,10 +108,25 @@ function describe(obj: Object, logger: Logger, namespace: ?string) {
   }
 }
 
-function call(
+function tasks(obj: Object, namespace: ?string) {
+  let list = []
+  Object.keys(obj).forEach(key => {
+    const value = obj[key]
+    const nextNamespace = namespace ? `${namespace}:${key}` : key
+
+    if (typeof value === 'function') {
+      list.push(nextNamespace)
+    } else if (typeof value === 'object') {
+      list = list.concat(tasks(value, nextNamespace))
+    }
+  })
+  return list
+}
+
+export function call(
   obj: Object,
   args: Array<string>,
-  logger: Logger,
+  logger: ILogger,
   subtaskName?: string
 ) {
   const taskName = subtaskName || args[2]
@@ -141,9 +156,20 @@ function call(
   }
 }
 
-function main() {
+function autocomplete(config) {
+  const logger = new SilentLogger()
+  const completion = omelette('run <task>')
+  completion.on('task', ({ reply }) => {
+    const runfile = load(config, logger, requirer, hasAccess)
+    reply(tasks(runfile))
+  })
+  completion.init()
+}
+
+export function main() {
   try {
     const config = getConfig('./package.json')
+    autocomplete(config)
     const runfile = load(config, logger, requirer, hasAccess)
     const ARGV = process.argv.slice()
 
@@ -160,14 +186,4 @@ function main() {
       throw error
     }
   }
-}
-
-module.exports = {
-  requirer,
-  hasAccess,
-  getConfig,
-  load,
-  describe,
-  call,
-  main
 }
