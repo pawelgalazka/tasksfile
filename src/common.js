@@ -9,7 +9,14 @@ class RunJSError extends Error {
   }
 }
 
-class Logger {
+interface ILogger {
+  title(args: Array<any>): void;
+  log(args: Array<any>): void;
+  warning(args: Array<any>): void;
+  error(args: Array<any>): void;
+}
+
+class Logger implements ILogger {
   title(...args: Array<any>) {
     console.log(chalk.bold(...args))
   }
@@ -24,10 +31,18 @@ class Logger {
   }
 }
 
+class SilentLogger implements ILogger {
+  title() {}
+  log() {}
+  warning() {}
+  error() {}
+}
+
 const logger = new Logger()
 
 module.exports = {
   RunJSError,
   logger,
-  Logger
+  Logger,
+  SilentLogger
 }

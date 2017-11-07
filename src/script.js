@@ -4,9 +4,10 @@ const fs = require('fs')
 const chalk = require('chalk')
 const padEnd = require('lodash.padend')
 const microcli = require('microcli')
+const omelette = require('omelette')
 const CLIError = microcli.CLIError
 
-const { RunJSError, logger, Logger } = require('./common')
+const { RunJSError, logger, ILogger, SilentLogger } = require('./common')
 
 const DEFAULT_RUNFILE_PATH = './runfile.js'
 
@@ -35,7 +36,7 @@ function getConfig(filePath: string): Config {
 
 function load(
   config: Config,
-  logger: Logger,
+  logger: ILogger,
   requirer: string => Object,
   access: string => void
 ) {
@@ -108,6 +109,21 @@ function describe(obj: Object, logger: Logger, namespace: ?string) {
   }
 }
 
+function tasks(obj: Object, namespace: ?string) {
+  let list = []
+  Object.keys(obj).forEach(key => {
+    const value = obj[key]
+    const nextNamespace = namespace ? `${namespace}:${key}` : key
+
+    if (typeof value === 'function') {
+      list.push(nextNamespace)
+    } else if (typeof value === 'object') {
+      list = list.concat(tasks(value, nextNamespace))
+    }
+  })
+  return list
+}
+
 function call(
   obj: Object,
   args: Array<string>,
@@ -141,9 +157,20 @@ function call(
   }
 }
 
+function autocomplete(config) {
+  const logger = new SilentLogger()
+  const completion = omelette('run <task>')
+  completion.on('task', ({ reply }) => {
+    const runfile = load(config, logger, requirer, hasAccess)
+    reply(tasks(runfile))
+  })
+  completion.init()
+}
+
 function main() {
   try {
     const config = getConfig('./package.json')
+    autocomplete(config)
     const runfile = load(config, logger, requirer, hasAccess)
     const ARGV = process.argv.slice()
 
