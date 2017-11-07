@@ -10,6 +10,7 @@ Minimalistic building tool
     - [Documenting tasks](#documenting-tasks)
     - [Namespacing](#namespacing)
     - [Sharing tasks](#sharing-tasks)
+    - [Autocompletion](#autocompletion)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
     - [TypeScript](#typescript)
@@ -378,6 +379,31 @@ $ run shared1
 $ run shared2
 $ run local
 ```
+
+### Autocompletion
+
+After setting up autocompletion, suggestions about available
+tasks from your `runfile.js` will be given.
+
+> This is an experimental feature. It will work slowly if you
+use transpiler with you `runfile.js`. It won't work also
+with `npx run <task>` calls, `npm -g install runjs-cli` is necessary,
+so you could do calls like `run <task>`.
+
+Setup process:
+
+1. `run --completion >> ~/runjs.completion.sh`
+2. `echo 'source ~/githubber.completion.sh' >> .bash_profile`
+3. Restart your shell (reopen terminal)
+
+> Depending on your shell, use proper bootstrap files accordingly.
+
+> If you get errors like `_get_comp_words_by_ref command not found`
+you need to install [bash completion](https://github.com/scop/bash-completion)
+package. For MacOS users doing `brew install bash-completion` should
+do the job and then adding `[ -f /usr/local/etc/bash_completion ] && ./usr/local/etc/bash_completion`.
+to your `~/.bash_profile`.
+
 
 ## Transpilers
 
