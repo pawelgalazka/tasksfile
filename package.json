@@ -60,6 +60,7 @@
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-eslint": "8.0.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
     "babel-preset-flow": "6.23.0",
     "eslint": "4.10.0",
     "eslint-config-prettier": "2.7.0",
@@ -72,6 +73,9 @@
     "prettier": "1.7.4"
   },
   "babel": {
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ],
     "presets": [
       "flow"
     ]
@@ -87,7 +91,7 @@
     ],
     "coverageThreshold": {
       "global": {
-        "lines": 65
+        "lines": 55
       }
     }
   }
