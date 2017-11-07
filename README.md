@@ -386,14 +386,14 @@ After setting up autocompletion, suggestions about available
 tasks from your `runfile.js` will be given.
 
 > This is an experimental feature. It will work slowly if you
-use transpiler with you `runfile.js`. It won't work also
+use transpiler with your `runfile.js`. It won't work also
 with `npx run <task>` calls, `npm -g install runjs-cli` is necessary,
 so you could do calls like `run <task>`.
 
 Setup process:
 
 1. `run --completion >> ~/runjs.completion.sh`
-2. `echo 'source ~/githubber.completion.sh' >> .bash_profile`
+2. `echo 'source ~/runjs.completion.sh' >> .bash_profile`
 3. Restart your shell (reopen terminal)
 
 > Depending on your shell, use proper bootstrap files accordingly.
