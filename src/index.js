@@ -1,7 +1,7 @@
 // @flow
-const { execSync, spawn } = require('child_process')
-const path = require('path')
-const { RunJSError, logger, Logger } = require('./common')
+import { execSync, spawn } from 'child_process'
+import path from 'path'
+import { RunJSError, logger, Logger } from './common'
 
 const loggerAlias: Logger = logger
 
@@ -73,7 +73,7 @@ function runAsync(command: string, options: Options): Promise<?string> {
   })
 }
 
-function run(
+export function run(
   command: string,
   options: Options = {},
   logger: Logger = loggerAlias
@@ -110,21 +110,14 @@ function run(
 /**
  * @deprecated
  */
-function option(thisObj: ?Object, name: string): mixed {
+export function option(thisObj: ?Object, name: string): mixed {
   return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
-function options(thisObj: ?Object): Object {
+export function options(thisObj: ?Object): Object {
   return (thisObj && thisObj.options) || {}
 }
 
-function help(func: () => void, annotation?: string | Object) {
+export function help(func: () => void, annotation?: string | Object) {
   func.help = annotation
-}
-
-module.exports = {
-  run,
-  option,
-  options,
-  help
 }
