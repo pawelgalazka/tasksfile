@@ -383,7 +383,7 @@ $ run local
 ### Autocompletion
 
 After setting up autocompletion, suggestions about available
-tasks from your `runfile.js` will be given.
+tasks from your `runfile.js` will be given when calling `run <tab>`.
 
 > This is an experimental feature. It will work slowly if you
 use transpiler with your `runfile.js`. It won't work also
