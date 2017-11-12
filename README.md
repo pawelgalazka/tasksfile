@@ -530,8 +530,8 @@ For `stdio: 'ignore'` nothing will be returned or printed
 
 #### options(this)
 
-A helper which returns an object with options which were given through dash params of command
-line script.
+A helper which returns an object with options which were given through dash 
+params of command line script.
 
 ```js
 const { options } = require('runjs')
@@ -547,6 +547,12 @@ $ run lint --fix
 function lint (path = '.') {
   options(this).fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
 }
+```
+
+To execute a task in JS with options:
+
+```js
+lint.call({ options: { fix: true }}, './component.js')
 ```
 
 
