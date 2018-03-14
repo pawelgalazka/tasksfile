@@ -15,14 +15,14 @@
   "scripts": {
     "lint": "eslint src/** bin/run.js test/**",
     "build": "babel src/ --out-dir lib/",
-    "test": "yarn run lint && flow check && yarn run build && yarn run sandbox:dev && jest ./test --coverage",
+    "test": "yarn lint && flow check && yarn build && yarn sandbox:dev && jest ./test --coverage",
     "test:unit": "jest ./test/unit/",
     "test:e2e": "jest ./test/e2e/",
-    "test:prod": "yarn run sandbox:setup:prod && jest ./test/e2e/",
+    "test:prod": "yarn sandbox:setup:prod && jest ./test/e2e/",
     "sandbox:clean": "rm -rf ./test/e2e/sandbox/node_modules && mkdir -p ./test/e2e/sandbox/node_modules/.bin",
     "sandbox:dev": "yarn sandbox:clean && ln -s ../../../../ ./test/e2e/sandbox/node_modules/runjs",
     "sandbox:prod": "yarn sandbox:clean && (cd ./test/e2e/sandbox && yarn add runjs)",
-    "clean": "rm -rf node_modules && yarn run sandbox:clean",
+    "clean": "rm -rf node_modules && yarn sandbox:clean",
     "precommit": "lint-staged"
   },
   "lint-staged": {
