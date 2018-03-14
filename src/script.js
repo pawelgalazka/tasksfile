@@ -183,7 +183,8 @@ export function main() {
       logger.error(error.message)
       process.exit(1)
     } else {
-      throw error
+      logger.error(error)
+      process.exit(1)
     }
   }
 }
