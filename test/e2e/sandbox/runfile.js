@@ -1,10 +1,10 @@
-import { run, options, help } from '../../../../lib'
+const { run, options, help } = require('../../../lib')
 
-export function echo(...args) {
+function echo(...args) {
   console.log('echo', args, options(this))
 }
 
-export function commands() {
+function commands() {
   run('echo "sync terminal"')
   console.log('output', run('echo "sync pipe"', { stdio: 'pipe' }))
   run('echo "async terminal"', { async: true })
@@ -13,21 +13,21 @@ export function commands() {
   )
 }
 
-export function described(p1, p2) {
+function described(p1, p2) {
   console.log(p1, p2, options(this))
 }
 
-export const nested = {
+const nested = {
   echo(...args) {
     console.log('nested echo', args, options(this))
   }
 }
 
-export function localbin() {
+function localbin() {
   run('hello')
 }
 
-export async function asyncawait() {
+async function asyncawait() {
   const output = await run('echo "async and await"', {
     async: true,
     stdio: 'pipe'
@@ -36,14 +36,14 @@ export async function asyncawait() {
   console.log('after await')
 }
 
-export function error() {
-  run('node ../../scripts/error.js', { async: true })
-  run('node ../../scripts/error.js')
+function error() {
+  run('node ../scripts/error.js', { async: true })
+  run('node ../scripts/error.js')
 }
 
-export function color() {
-  run('node ../../scripts/color.js')
-  run('node ../../scripts/color.js', { async: true })
+function color() {
+  run('node ../scripts/color.js')
+  run('node ../scripts/color.js', { async: true })
 }
 
 help(echo, 'Simple echo task')
@@ -55,3 +55,14 @@ help(described, {
     foo: 'foo option'
   }
 })
+
+module.exports = {
+  echo,
+  commands,
+  described,
+  nested,
+  localbin,
+  asyncawait,
+  error,
+  color
+}
