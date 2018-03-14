@@ -594,13 +594,17 @@ will support them natively.
 Expected usage in your runfile:
 
 ```javascript
-import { run } from 'runjs'
+const { run } = require('runjs')
 
-export async function testasyncawait () {
+async function testasyncawait () {
   await run('ls -al | cat', {async: true}).then((data) => {
     console.log('DATA', data)
   })
   console.log('After AWAIT message')
+}
+
+module.exports = {
+  testasyncawait
 }
 ```
 
