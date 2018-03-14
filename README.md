@@ -21,7 +21,7 @@ Minimalistic building tool
 - [Using Async/Await](#using-asyncawait)
 
 
-> For 3.x to 4.x migration instructions look [here](https://github.com/pawelgalazka/runjs/releases)
+> For 3.x to 4.x migration instructions look [here](https://github.com/pawelgalazka/runjs/releases/tag/v4.0.0)
 
 
 ## Get started
