@@ -183,7 +183,7 @@ export function main() {
       logger.error(error.message)
       process.exit(1)
     } else {
-      logger.error(error)
+      logger.log(error)
       process.exit(1)
     }
   }
