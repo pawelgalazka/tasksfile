@@ -2,7 +2,7 @@
 const path = require('path')
 const fs = require('fs')
 
-const SCRIPT_API_PATH = 'runjs/lib/script.js'
+const SCRIPT_API_PATH = '../lib/script.js'
 
 try {
   fs.accessSync(require.resolve(SCRIPT_API_PATH))
