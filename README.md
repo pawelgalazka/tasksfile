@@ -498,11 +498,26 @@ const { run } = require('runjs')
 {
     cwd: ..., // current working directory (String)
     async: ... // run command asynchronously (true/false), false by default
+    shell: ... // shell to use, 'bash' by default
     stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
-    env: ... // environment key-value pairs (Object)
+    env: ... // environment key-value pairs (Object), defaults to process.env
     timeout: ...
 }
 ```
+
+**Environment Note**
+
+We default to setting the `BASHOPTS` environment variable to `globstar`, which
+supports the `**` globbing pattern, as many Node.js glob libaries do. Here are
+docs for the globstar option:
+
+> If globstar set, the pattern ‘\*\*’ used in a filename expansion context will match all
+> files and zero or more directories and subdirectories. If the pattern is
+> followed by a ‘/’, only directories and subdirectories match.
+
+To provide consistent results in different environments, you must explicitly
+BASHOPTS through the options object if you want to change the default. Setting
+it in the environment will have no effect.
 
 *Examples:*
 

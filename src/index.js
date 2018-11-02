@@ -8,6 +8,7 @@ const loggerAlias: Logger = logger
 type Options = {
   cwd?: string,
   async?: boolean,
+  shell?: string,
   stdio?: string | Array<any>,
   env?: Object,
   timeout?: number
@@ -18,9 +19,11 @@ function runSync(command: string, options: Options): ?string {
     const nextOptions = {
       cwd: options.cwd,
       env: options.env,
+      shell: options.shell,
       stdio: options.stdio,
       timeout: options.timeout
     }
+
     const buffer: string | Buffer = execSync(command, nextOptions)
     if (buffer) {
       return buffer.toString()
@@ -36,8 +39,8 @@ function runAsync(command: string, options: Options): Promise<?string> {
     const nextOptions = {
       cwd: options.cwd,
       env: options.env,
-      stdio: options.stdio,
-      shell: true
+      shell: options.shell,
+      stdio: options.stdio
     }
     const asyncProcess = spawn(command, nextOptions)
     let output: ?string = null
@@ -86,7 +89,8 @@ export function run(
     cwd: options.cwd,
     async: !!options.async,
     stdio: options.stdio || 'inherit',
-    timeout: options.timeout
+    timeout: options.timeout,
+    shell: options.shell || 'bash'
   }
 
   const env = nextOptions.env
@@ -94,6 +98,15 @@ export function run(
   // Include in PATH node_modules bin path
   if (env) {
     env.PATH = [binPath, env.PATH || process.env.PATH].join(path.delimiter)
+
+    // Explicitly don't allow process.env.BASHOPTS to passthrough here, which could
+    // lead to inconsistent results between developers
+    // Other interesting options include "nullglob", like Gulp's allowEmpty,
+    // also "extglob", for extended globbing.
+    // Ex "extglob:globstar:nullglob"
+    // We may want to blacklist other Bash related environment variables from passing through
+    // as well.
+    env.BASHOPTS = options.BASHOPTS || 'globstar'
   }
 
   logger.title(command)

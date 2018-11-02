@@ -76,6 +76,16 @@ describe('api', () => {
           expect(logger.title).toHaveBeenCalledWith('cli-command')
         })
       })
+
+      describe('with shell=bash (default)', () => {
+        it('should execute basic bash commands', () => {
+          // shopt is part of bash, but not 'sh'
+          api.run('shopt -s globstar', { shell: 'bash' }, logger)
+          expect(execSync.mock.calls[0][0]).toEqual('shopt -s globstar')
+          expect(execSync.mock.calls[0][1]).toHaveProperty('shell', 'bash')
+          expect(logger.title).toHaveBeenCalledWith('shopt -s globstar')
+        })
+      })
     })
 
     describe('async version', () => {
