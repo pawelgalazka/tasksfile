@@ -45,6 +45,12 @@ describe('runjs', () => {
     expect(sh('../../../bin/run.js echo --help')).toContain('Simple echo task')
   })
 
+  it('sorts list of tasks', () => {
+    expect(sh('../../../bin/run.js')).toEqual(
+      expect.stringMatching(/asyncawait[^]+color[^]+echo[^]+error[^]+nested/)
+    )
+  })
+
   it('displays error from executed command', () => {
     expect(() => sh('../../../bin/run.js error')).toThrow(
       'Command failed: ../../../bin/run.js error'
