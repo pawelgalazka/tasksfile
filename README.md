@@ -498,6 +498,7 @@ const { run } = require('runjs')
 {
     cwd: ..., // current working directory (String)
     async: ... // run command asynchronously (true/false), false by default
+    input: ... // for sync calls, explicitly pass STDIN.
     stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
     env: ... // environment key-value pairs (Object)
     timeout: ...
@@ -516,6 +517,10 @@ run('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
 }).catch((error) => {
   throw error
 })
+
+// Provide a list of files to rsync via STDIN
+const files = glob('**/*.html').join(' ')
+const output = run('rsync --files-from - ...', {input: files, stdio: 'pipe'})
 ```
 
 For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 

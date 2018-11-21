@@ -8,6 +8,7 @@ const loggerAlias: Logger = logger
 type Options = {
   cwd?: string,
   async?: boolean,
+  input?: string,
   stdio?: string | Array<any>,
   env?: Object,
   timeout?: number
@@ -18,9 +19,11 @@ function runSync(command: string, options: Options): ?string {
     const nextOptions = {
       cwd: options.cwd,
       env: options.env,
+      input: options.input,
       stdio: options.stdio,
       timeout: options.timeout
     }
+
     const buffer: string | Buffer = execSync(command, nextOptions)
     if (buffer) {
       return buffer.toString()
@@ -104,6 +107,9 @@ export function run(
   }
 
   // Handle sync call by default
+  if (typeof options.input !== 'undefined') {
+    nextOptions.input = options.input
+  }
   return runSync(command, nextOptions)
 }
 

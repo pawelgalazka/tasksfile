@@ -34,6 +34,14 @@ describe('api', () => {
     })
 
     describe('sync version', () => {
+      describe('with input=test', () => {
+        it('should pass input to run', () => {
+          const output = api.run('cat', { input: 'test' }, logger)
+          expect(execSync.mock.calls[0][0]).toEqual('cat')
+          expect(execSync.mock.calls[0][1]).toHaveProperty('input', 'test')
+        })
+      })
+
       describe('with stdio=pipe', () => {
         it('should execute basic shell commands', () => {
           const output = api.run('echo "echo test"', { stdio: 'pipe' }, logger)
