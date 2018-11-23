@@ -125,5 +125,11 @@ export function options(thisObj: ?Object): Object {
 }
 
 export function help(func: () => void, annotation?: string | Object) {
-  func.help = annotation
+  // Because the validation above currently gets compiled out,
+  // Explictly  validate the function input
+  if (typeof func === 'function') {
+    func.help = annotation
+  } else {
+    throw new Error('first help() argument must be a function')
+  }
 }

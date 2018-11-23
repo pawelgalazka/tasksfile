@@ -207,4 +207,13 @@ describe('api', () => {
       expect(api.options({})).toEqual({})
     })
   })
+
+  describe('help()', () => {
+    it('help', () => {
+      //api.help(undefined)
+      expect(() => api.help(undefined)).toThrow(
+        'first help() argument must be a function'
+      )
+    })
+  })
 })
