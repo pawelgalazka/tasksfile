@@ -209,8 +209,7 @@ describe('api', () => {
   })
 
   describe('help()', () => {
-    it('help', () => {
-      //api.help(undefined)
+    it('throws an error if first argument is not a function', () => {
       expect(() => api.help(undefined)).toThrow(
         'first help() argument must be a function'
       )

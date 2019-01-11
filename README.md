@@ -16,7 +16,7 @@ Minimalistic building tool
     - [TypeScript](#typescript)
 - [API](#api)
     - [run](#runcmd-options)
-    - [options](#optionsthis-name)
+    - [options](#optionsthis)
     - [help](#helpfunc-annotation)
 - [Using Async/Await](#using-asyncawait)
 
