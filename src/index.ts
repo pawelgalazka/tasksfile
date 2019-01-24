@@ -87,9 +87,21 @@ function runAsync(command: string, options: IOptions): Promise<string | null> {
 
 export function run(
   command: string,
+  options: IOptions & { async: true },
+  logger?: Logger
+): Promise<string | null>
+
+export function run(
+  command: string,
+  options: IOptions & { async?: false | null },
+  logger?: Logger
+): string | null
+
+export function run(
+  command: string,
   options: IOptions = {},
   logger: Logger = loggerAlias
-): Promise<string | null> | string | null {
+) {
   const binPath = path.resolve("./node_modules/.bin")
 
   // Pick relevant option keys and set default values
@@ -122,7 +134,7 @@ export function run(
 /**
  * @deprecated
  */
-export function option(thisObj: ITaskContext | null, name: string): any {
+export function option(thisObj: ITaskContext | null, name: string = ""): any {
   return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
