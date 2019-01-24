@@ -1,41 +1,40 @@
-// @flow
-import chalk from 'chalk'
+import chalk from "chalk"
 
 // Needed to use ES5 inheritance, because of issues with Error subclassing for Babel
 export class RunJSError extends Error {
   constructor(message: string) {
-    message = message && message.split('\n')[0] // assign only first line
+    message = message && message.split("\n")[0] // assign only first line
     super(message)
   }
 }
 
 export interface ILogger {
-  title(args: Array<any>): void;
-  log(args: Array<any>): void;
-  warning(args: Array<any>): void;
-  error(args: Array<any>): void;
+  title(args: any[]): void
+  log(args: any[]): void
+  warning(args: any[]): void
+  error(args: any[]): void
 }
 
 export class Logger implements ILogger {
-  title(...args: Array<any>) {
+  public title(...args: any[]) {
     console.log(chalk.bold(...args))
   }
-  log(...args: Array<any>) {
+  public log(...args: any[]) {
     console.log(...args)
   }
-  warning(...args: Array<any>) {
+  public warning(...args: any[]) {
     console.warn(chalk.yellow(...args))
   }
-  error(...args: Array<any>) {
+  public error(...args: any[]) {
     console.error(chalk.red(...args))
   }
 }
 
 export class SilentLogger implements ILogger {
-  title() {}
-  log() {}
-  warning() {}
-  error() {}
+  public title() {}
+  public log() {}
+  public warning() {}
+  public error() {}
 }
 
 export const logger = new Logger()
