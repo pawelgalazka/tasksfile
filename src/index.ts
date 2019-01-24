@@ -1,19 +1,31 @@
-// @flow
-import { execSync, spawn } from 'child_process'
-import path from 'path'
-import { RunJSError, logger, Logger } from './common'
+import { execSync, spawn, StdioOptions } from "child_process"
+import path from "path"
+import { logger, Logger, RunJSError } from "./common"
 
 const loggerAlias: Logger = logger
 
-type Options = {
-  cwd?: string,
-  async?: boolean,
-  stdio?: string | Array<any>,
-  env?: Object,
+interface IOptions {
+  cwd?: string
+  async?: boolean
+  stdio?: StdioOptions
+  env?: NodeJS.ProcessEnv
   timeout?: number
 }
 
-function runSync(command: string, options: Options): ?string {
+interface ICliOptions {
+  [key: string]: string
+}
+
+interface ITaskContext {
+  options?: ICliOptions
+}
+
+interface ITaskFunction {
+  (...args: any[]): any
+  help?: any
+}
+
+function runSync(command: string, options: IOptions): string | null {
   try {
     const nextOptions = {
       cwd: options.cwd,
@@ -31,24 +43,24 @@ function runSync(command: string, options: Options): ?string {
   }
 }
 
-function runAsync(command: string, options: Options): Promise<?string> {
+function runAsync(command: string, options: IOptions): Promise<string | null> {
   return new Promise((resolve, reject) => {
     const nextOptions = {
       cwd: options.cwd,
       env: options.env,
-      stdio: options.stdio,
-      shell: true
+      shell: true,
+      stdio: options.stdio
     }
     const asyncProcess = spawn(command, nextOptions)
-    let output: ?string = null
+    let output: string | null = null
 
-    asyncProcess.on('error', (error: Error) => {
+    asyncProcess.on("error", (error: Error) => {
       reject(
         new Error(`Failed to start command: ${command}; ${error.toString()}`)
       )
     })
 
-    asyncProcess.on('close', (exitCode: number) => {
+    asyncProcess.on("close", (exitCode: number) => {
       if (exitCode === 0) {
         resolve(output)
       } else {
@@ -58,8 +70,8 @@ function runAsync(command: string, options: Options): Promise<?string> {
       }
     })
 
-    if (options.stdio === 'pipe') {
-      asyncProcess.stdout.on('data', (buffer: Buffer) => {
+    if (options.stdio === "pipe") {
+      asyncProcess.stdout.on("data", (buffer: Buffer) => {
         output = buffer.toString()
       })
     }
@@ -75,17 +87,17 @@ function runAsync(command: string, options: Options): Promise<?string> {
 
 export function run(
   command: string,
-  options: Options = {},
+  options: IOptions = {},
   logger: Logger = loggerAlias
-): Promise<?string> | ?string {
-  const binPath = path.resolve('./node_modules/.bin')
+): Promise<string | null> | string | null {
+  const binPath = path.resolve("./node_modules/.bin")
 
   // Pick relevant option keys and set default values
-  const nextOptions: Options = {
-    env: options.env || process.env,
-    cwd: options.cwd,
+  const nextOptions: IOptions = {
     async: !!options.async,
-    stdio: options.stdio || 'inherit',
+    cwd: options.cwd,
+    env: options.env || process.env,
+    stdio: options.stdio || "inherit",
     timeout: options.timeout
   }
 
@@ -110,20 +122,20 @@ export function run(
 /**
  * @deprecated
  */
-export function option(thisObj: ?Object, name: string): mixed {
+export function option(thisObj: ITaskContext | null, name: string): any {
   return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
-export function options(thisObj: ?Object): Object {
+export function options(thisObj: ITaskContext | null): object {
   return (thisObj && thisObj.options) || {}
 }
 
-export function help(func: () => void, annotation?: string | Object) {
+export function help(func: ITaskFunction, annotation?: string | any) {
   // Because the validation above currently gets compiled out,
   // Explictly  validate the function input
-  if (typeof func === 'function') {
+  if (typeof func === "function") {
     func.help = annotation
   } else {
-    throw new Error('first help() argument must be a function')
+    throw new Error("first help() argument must be a function")
   }
 }
