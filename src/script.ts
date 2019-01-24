@@ -1,21 +1,24 @@
 // @flow
-import path from 'path'
-import fs from 'fs'
-import chalk from 'chalk'
-import padEnd from 'lodash.padend'
-import microcli, { CLIError } from 'microcli'
-import omelette from 'omelette'
+import chalk from "chalk"
+import fs from "fs"
+import padEnd from "lodash.padend"
+import microcli from "microcli"
+// @ts-ignore
+import omelette from "omelette"
+import path from "path"
 
-import { RunJSError, logger, ILogger, Logger, SilentLogger } from './common'
+const CLIError = microcli.CliError
 
-const DEFAULT_RUNFILE_PATH = './runfile.js'
+import { ILogger, logger, Logger, RunJSError, SilentLogger } from "./common"
 
-type Config = {
-  runfile?: string,
-  requires?: Array<string>
+const DEFAULT_RUNFILE_PATH = "./runfile.js"
+
+interface IConfig {
+  runfile?: string
+  requires?: string[]
 }
 
-export function requirer(filePath: string): Object {
+export function requirer(filePath: string): any {
   return require(path.resolve(filePath))
 }
 
@@ -23,8 +26,8 @@ export function hasAccess(filePath: string): void {
   return fs.accessSync(path.resolve(filePath))
 }
 
-export function getConfig(filePath: string): Config {
-  let config: Object
+export function getConfig(filePath: string): IConfig {
+  let config: any
   try {
     config = requirer(filePath).runjs || {}
   } catch (error) {
@@ -34,15 +37,15 @@ export function getConfig(filePath: string): Config {
 }
 
 export function load(
-  config: Config,
+  config: IConfig,
   logger: ILogger,
-  requirer: string => Object,
-  access: string => void
+  requirer: (arg: string) => any,
+  access: (arg: string) => void
 ) {
-  const runfilePath = config['runfile'] || DEFAULT_RUNFILE_PATH
+  const runfilePath = config.runfile || DEFAULT_RUNFILE_PATH
   // Load requires if given in config
-  if (Array.isArray(config['requires'])) {
-    config['requires'].forEach(modulePath => {
+  if (Array.isArray(config.requires)) {
+    config.requires.forEach(modulePath => {
       logger.log(chalk.gray(`Requiring ${modulePath}...`))
       requirer(modulePath)
     })
@@ -64,9 +67,9 @@ export function load(
   return runfile
 }
 
-export function describe(obj: Object, logger: Logger, namespace: ?string) {
+export function describe(obj: any, logger: Logger, namespace?: string) {
   if (!namespace) {
-    logger.log(chalk.yellow('Available tasks:'))
+    logger.log(chalk.yellow("Available tasks:"))
   }
 
   Object.keys(obj).forEach(key => {
@@ -74,33 +77,33 @@ export function describe(obj: Object, logger: Logger, namespace: ?string) {
     const nextNamespace = namespace ? `${namespace}:${key}` : key
     const help = value.help
 
-    if (typeof value === 'function') {
+    if (typeof value === "function") {
       // Add task name
       const funcParams = help && help.params
-      let logArgs = [chalk.bold(nextNamespace)]
+      const logArgs = [chalk.bold(nextNamespace)]
 
       // Add task params
       if (Array.isArray(funcParams) && funcParams.length) {
-        logArgs[0] += ` [${funcParams.join(' ')}]`
+        logArgs[0] += ` [${funcParams.join(" ")}]`
       }
 
       // Add description
-      if (help && (help.description || typeof help === 'string')) {
+      if (help && (help.description || typeof help === "string")) {
         const description = help.description || help
         logArgs[0] = padEnd(logArgs[0], 40) // format
-        logArgs.push('-', description.split('\n')[0])
+        logArgs.push("-", description.split("\n")[0])
       }
 
       // Log
       logger.log(...logArgs)
-    } else if (typeof value === 'object') {
+    } else if (typeof value === "object") {
       describe(value, logger, nextNamespace)
     }
   })
 
   if (!namespace) {
     logger.log(
-      '\n' +
+      "\n" +
         chalk.blue(
           'Type "run [taskname] --help" to get more info if available.'
         )
@@ -108,15 +111,15 @@ export function describe(obj: Object, logger: Logger, namespace: ?string) {
   }
 }
 
-function tasks(obj: Object, namespace: ?string) {
-  let list = []
+function tasks(obj: any, namespace?: string) {
+  let list: string[] = []
   Object.keys(obj).forEach(key => {
     const value = obj[key]
     const nextNamespace = namespace ? `${namespace}:${key}` : key
 
-    if (typeof value === 'function') {
+    if (typeof value === "function") {
       list.push(nextNamespace)
-    } else if (typeof value === 'object') {
+    } else if (typeof value === "object") {
       list = list.concat(tasks(value, nextNamespace))
     }
   })
@@ -124,15 +127,20 @@ function tasks(obj: Object, namespace: ?string) {
 }
 
 export function call(
-  obj: Object,
-  args: Array<string>,
+  obj: any,
+  args: string[],
   logger: ILogger,
   subtaskName?: string
 ) {
   const taskName = subtaskName || args[2]
 
-  if (typeof obj[taskName] === 'function') {
-    const cli = microcli(args.slice(1), obj[taskName].help, null, logger)
+  if (typeof obj[taskName] === "function") {
+    const cli = microcli(
+      args.slice(1),
+      obj[taskName].help,
+      undefined,
+      logger as any
+    )
 
     cli((options, ...params) => {
       obj[taskName].apply({ options }, params)
@@ -140,12 +148,17 @@ export function call(
     return obj[taskName]
   }
 
-  let namespaces = taskName.split(':')
-  const rootNamespace = namespaces.shift()
-  const nextSubtaskName = namespaces.join(':')
+  const namespaces = taskName.split(":")
+  const rootNamespace = namespaces.shift() || ""
+  const nextSubtaskName = namespaces.join(":")
 
   if (obj[rootNamespace]) {
-    const calledTask = call(obj[rootNamespace], args, logger, nextSubtaskName)
+    const calledTask: any = call(
+      obj[rootNamespace],
+      args,
+      logger,
+      nextSubtaskName
+    )
     if (calledTask) {
       return calledTask
     }
@@ -156,10 +169,10 @@ export function call(
   }
 }
 
-function autocomplete(config) {
+function autocomplete(config: IConfig) {
   const logger = new SilentLogger()
-  const completion = omelette('run <task>')
-  completion.on('task', ({ reply }) => {
+  const completion = omelette("run <task>")
+  completion.on("task", ({ reply }: { reply: (arg: any) => any }) => {
     const runfile = load(config, logger, requirer, hasAccess)
     reply(tasks(runfile))
   })
@@ -168,7 +181,7 @@ function autocomplete(config) {
 
 export function main() {
   try {
-    const config = getConfig('./package.json')
+    const config = getConfig("./package.json")
     autocomplete(config)
     const runfile = load(config, logger, requirer, hasAccess)
     const ARGV = process.argv.slice()
