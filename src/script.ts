@@ -129,7 +129,7 @@ function tasks(obj: any, namespace?: string) {
 export function call(
   obj: any,
   args: string[],
-  logger: ILogger,
+  logger?: ILogger,
   subtaskName?: string
 ) {
   const taskName = subtaskName || args[2]
