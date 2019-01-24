@@ -9,10 +9,10 @@ export class RunJSError extends Error {
 }
 
 export interface ILogger {
-  title(args: any[]): void
-  log(args: any[]): void
-  warning(args: any[]): void
-  error(args: any[]): void
+  title(...args: any[]): void
+  log(...args: any[]): void
+  warning(...args: any[]): void
+  error(...args: any[]): void
 }
 
 export class Logger implements ILogger {
