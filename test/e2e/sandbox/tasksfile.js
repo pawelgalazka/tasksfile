@@ -1,4 +1,5 @@
 const { run, options, help } = require('../../../lib')
+const { cli } = require('../../../lib/script')
 
 function echo(...args) {
   console.log('echo', args, options(this))
@@ -56,7 +57,7 @@ help(described, {
   }
 })
 
-module.exports = {
+cli({
   echo,
   commands,
   described,
@@ -65,4 +66,4 @@ module.exports = {
   asyncawait,
   error,
   color
-}
+})

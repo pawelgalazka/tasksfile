@@ -1,69 +1,11 @@
 // @flow
 import chalk from "chalk"
-import fs from "fs"
 import padEnd from "lodash.padend"
 import microcli from "microcli"
-import path from "path"
 
 const CLIError = microcli.CliError
 
 import { ILogger, logger, Logger, TasksfileError } from "./common"
-
-const DEFAULT_RUNFILE_PATH = "./tasksfile.js"
-
-interface IConfig {
-  tasksfile?: string
-  requires?: string[]
-}
-
-export function requirer(filePath: string): any {
-  return require(path.resolve(filePath))
-}
-
-export function hasAccess(filePath: string): void {
-  return fs.accessSync(path.resolve(filePath))
-}
-
-export function getConfig(filePath: string): IConfig {
-  let config: any
-  try {
-    config = requirer(filePath).runjs || {}
-  } catch (error) {
-    config = {}
-  }
-  return config
-}
-
-export function load(
-  config: IConfig,
-  logger: ILogger,
-  requirer: (arg: string) => any,
-  access: (arg: string) => void
-) {
-  const tasksfilePath = config.tasksfile || DEFAULT_RUNFILE_PATH
-  // Load requires if given in config
-  if (Array.isArray(config.requires)) {
-    config.requires.forEach(modulePath => {
-      logger.log(chalk.gray(`Requiring ${modulePath}...`))
-      requirer(modulePath)
-    })
-  }
-
-  // Process tasksfile
-  logger.log(chalk.gray(`Processing ${tasksfilePath}...`))
-
-  try {
-    access(tasksfilePath)
-  } catch (error) {
-    throw new TasksfileError(`No ${tasksfilePath} defined in ${process.cwd()}`)
-  }
-
-  const tasksfile = requirer(tasksfilePath)
-  if (tasksfile.default) {
-    return tasksfile.default
-  }
-  return tasksfile
-}
 
 export function describe(obj: any, logger: Logger, namespace?: string) {
   if (!namespace) {
@@ -152,10 +94,8 @@ export function call(
   }
 }
 
-export function main() {
+export function cli(tasksfile: any) {
   try {
-    const config = getConfig("./package.json")
-    const tasksfile = load(config, logger, requirer, hasAccess)
     const ARGV = process.argv.slice()
 
     if (ARGV.length > 2) {
