@@ -393,6 +393,8 @@ in your project. Just:
 }
 ```
 
+`Tasksfile` already have `TypeScript` declaration files in source files.
+
 ## API
 
 For inside `tasksfile.js` usage.
