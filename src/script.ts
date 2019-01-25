@@ -5,6 +5,7 @@ import microcli from 'microcli'
 const CLIError = microcli.CliError
 
 import { ILogger, logger, Logger, TasksfileError } from './common'
+import { ShellError } from './shell'
 
 export function describe(obj: any, logger: Logger, namespace?: string) {
   if (!namespace) {
@@ -103,7 +104,11 @@ export function cli(tasksfile: any) {
       describe(tasksfile, logger)
     }
   } catch (error) {
-    if (error instanceof TasksfileError || error instanceof CLIError) {
+    if (
+      error instanceof TasksfileError ||
+      error instanceof CLIError ||
+      error instanceof ShellError
+    ) {
       logger.error(error.message)
       process.exit(1)
     } else {
