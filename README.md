@@ -58,10 +58,6 @@ $ npx task makedir
 mkdir somedir
 ```
 
-> For node < 8.2, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-taskner-55f7d4bd282b)
-is not available, so doing `npm install -g tasksfile-cli` is neccessary which installs
-global `task` script. After that above task would be called like: `task hello Tommy`
-
 Mechanism of Tasksfile is very simple. Tasks are run by just importing `tasksfile.js` as a
 normal node.js module. Then based on command line arguments proper exported function
 from `tasksfile.js` is called.
