@@ -1,4 +1,3 @@
-// @flow
 import chalk from 'chalk'
 import padEnd from 'lodash.padend'
 import microcli from 'microcli'
