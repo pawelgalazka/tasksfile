@@ -58,37 +58,20 @@ Create `task` entry in your `scripts` section in `package.json`:
 }
 ```
 
-Create `task` entry in your `scripts` section in `package.json`:
+Call in your terminal through npm scripts:
 
-```json
-{
-  "scripts": {
-    "task": "node ./tasksfile.js"
-  }
-}
+```bash
+$ npm run task -- hello Tommy
+$ npm run task -- makedir
 ```
 
-Call in your terminal:
+or through shorter `npx task` alias:
 
 ```bash
 $ npx task hello Tommy
 Hello Tommy!
 $ npx task makedir
 mkdir somedir
-```
-
-Mechanism of Tasksfile is very simple. Tasks are run by just importing `tasksfile.js` as a
-normal node.js module. Then based on command line arguments proper exported function
-from `tasksfile.js` is called.
-
-Tasksfile in a nutshell
-
-```js
-const tasksfile = require(path.resolve('./tasksfile'))
-const taskName = process.argv[2]
-const { options, params } = parseArgs(process.argv.slice(2))
-
-tasksfile[taskName].apply({ options }, params)
 ```
 
 
