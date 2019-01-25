@@ -1,6 +1,11 @@
-.idea
-.travis.yml
-node_modules
-/test
 /src
+/test
 /bin/package.json
+/.huskyrc.json
+/.travis.yml
+/.prettierrc.json
+/.vscode
+/test
+/jest.config.js
+/tslint.json
+/tsconfig.json
