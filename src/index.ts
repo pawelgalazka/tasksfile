@@ -1,6 +1,7 @@
-import { execSync, spawn, StdioOptions } from 'child_process'
+import { execSync, StdioOptions } from 'child_process'
 import path from 'path'
 import { logger, Logger, TasksfileError } from './common'
+import shell from './shell'
 
 const loggerAlias: Logger = logger
 
@@ -43,48 +44,6 @@ function runSync(command: string, options: IOptions): string | null {
   }
 }
 
-function runAsync(command: string, options: IOptions): Promise<string | null> {
-  return new Promise((resolve, reject) => {
-    const nextOptions = {
-      cwd: options.cwd,
-      env: options.env,
-      shell: true,
-      stdio: options.stdio
-    }
-    const asyncProcess = spawn(command, nextOptions)
-    let output: string | null = null
-
-    asyncProcess.on('error', (error: Error) => {
-      reject(
-        new Error(`Failed to start command: ${command}; ${error.toString()}`)
-      )
-    })
-
-    asyncProcess.on('close', (exitCode: number) => {
-      if (exitCode === 0) {
-        resolve(output)
-      } else {
-        reject(
-          new Error(`Command failed: ${command} with exit code ${exitCode}`)
-        )
-      }
-    })
-
-    if (options.stdio === 'pipe') {
-      asyncProcess.stdout.on('data', (buffer: Buffer) => {
-        output = buffer.toString()
-      })
-    }
-
-    if (options.timeout) {
-      setTimeout(() => {
-        asyncProcess.kill()
-        reject(new Error(`Command timeout: ${command}`))
-      }, options.timeout)
-    }
-  })
-}
-
 export function run(
   command: string,
   options: IOptions & { async: true },
@@ -105,7 +64,7 @@ export function run(
   const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
-  const nextOptions: IOptions = {
+  const nextOptions = {
     async: !!options.async,
     cwd: options.cwd,
     env: options.env || process.env,
@@ -124,7 +83,7 @@ export function run(
 
   // Handle async call
   if (options.async) {
-    return runAsync(command, nextOptions)
+    return shell(command, nextOptions)
   }
 
   // Handle sync call by default
