@@ -62,11 +62,11 @@ mkdir somedir
 is not available, so doing `npm install -g tasksfile-cli` is neccessary which installs
 global `task` script. After that above task would be called like: `task hello Tommy`
 
-Mechanism of RunJS is very simple. Tasks are run by just importing `tasksfile.js` as a
+Mechanism of Tasksfile is very simple. Tasks are run by just importing `tasksfile.js` as a
 normal node.js module. Then based on command line arguments proper exported function
 from `tasksfile.js` is called.
 
-RunJS in a nutshell
+Tasksfile in a nutshell
 
 ```js
 const tasksfile = require(path.resolve('./tasksfile'))
@@ -104,7 +104,7 @@ libraries which makes that approach much more flexible.
 
 ### Executing shell commands
 
-RunJS gives an easy way to execute shell commands in your tasks by `run` function
+Tasksfile gives an easy way to execute shell commands in your tasks by `run` function
 in synchronous and asynchronous way:
 
 ```js
@@ -449,7 +449,7 @@ and in your `package.json` write:
 
 ```
 
-RunJS will require defined transpiler before requiring `tasksfile.js` so you can
+Tasksfile will require defined transpiler before requiring `tasksfile.js` so you can
 use all ES6/ES7 features which are not supported by your node version. 
 
     
@@ -475,7 +475,7 @@ and then in your `package.json` define a path to `ts-node/register` and
 ```
 
 You need to also define custom path to your tasksfile as TypeScript files have
-`*.ts` extension. RunJS will require defined transpiler before requiring 
+`*.ts` extension. Tasksfile will require defined transpiler before requiring 
 `./tasksfile.ts`.
 
 
