@@ -13,6 +13,7 @@ Minimalistic building tool
     - [Documenting tasks](#documenting-tasks)
     - [Namespacing](#namespacing)
     - [Sharing tasks](#sharing-tasks)
+    - [TypeScript support](#typescript-support)
 - [API](#api)
     - [run](#runcmd-options)
     - [options](#optionsthis)
@@ -373,6 +374,23 @@ module.exports = {
 $ task shared1
 $ task shared2
 $ task local
+```
+
+### TypeScript support
+
+It's very easy to run your tasks in `TypeScript` if you have `TypeScript` already
+in your project. Just:
+
+- change your `tasksfile.js` to `tasksfile.ts` and adjust the code
+- install `ts-node`: `npm install --save-dev ts-node`
+- change command in your `package.json`:
+
+```json
+{
+  "scripts": {
+    "task": "ts-node ./tasksfile.ts"
+  }
+}
 ```
 
 ## API
