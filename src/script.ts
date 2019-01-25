@@ -3,13 +3,11 @@ import chalk from "chalk"
 import fs from "fs"
 import padEnd from "lodash.padend"
 import microcli from "microcli"
-// @ts-ignore
-import omelette from "omelette"
 import path from "path"
 
 const CLIError = microcli.CliError
 
-import { ILogger, logger, Logger, SilentLogger, TasksfileError } from "./common"
+import { ILogger, logger, Logger, TasksfileError } from "./common"
 
 const DEFAULT_RUNFILE_PATH = "./tasksfile.js"
 
@@ -111,21 +109,6 @@ export function describe(obj: any, logger: Logger, namespace?: string) {
   }
 }
 
-function tasks(obj: any, namespace?: string) {
-  let list: string[] = []
-  Object.keys(obj).forEach(key => {
-    const value = obj[key]
-    const nextNamespace = namespace ? `${namespace}:${key}` : key
-
-    if (typeof value === "function") {
-      list.push(nextNamespace)
-    } else if (typeof value === "object") {
-      list = list.concat(tasks(value, nextNamespace))
-    }
-  })
-  return list
-}
-
 export function call(
   obj: any,
   args: string[],
@@ -169,20 +152,9 @@ export function call(
   }
 }
 
-function autocomplete(config: IConfig) {
-  const logger = new SilentLogger()
-  const completion = omelette("run <task>")
-  completion.on("task", ({ reply }: { reply: (arg: any) => any }) => {
-    const tasksfile = load(config, logger, requirer, hasAccess)
-    reply(tasks(tasksfile))
-  })
-  completion.init()
-}
-
 export function main() {
   try {
     const config = getConfig("./package.json")
-    autocomplete(config)
     const tasksfile = load(config, logger, requirer, hasAccess)
     const ARGV = process.argv.slice()
 

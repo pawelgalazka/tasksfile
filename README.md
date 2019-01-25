@@ -13,7 +13,6 @@ Minimalistic building tool
     - [Documenting tasks](#documenting-tasks)
     - [Namespacing](#namespacing)
     - [Sharing tasks](#sharing-tasks)
-    - [Autocompletion](#autocompletion)
 - [Transpilers](#transpilers)
     - [Babel](#babel)
     - [TypeScript](#typescript)
@@ -375,31 +374,6 @@ $ task shared1
 $ task shared2
 $ task local
 ```
-
-### Autocompletion
-
-After setting up autocompletion, suggestions about available
-tasks from your `tasksfile.js` will be given when calling `task <tab>`.
-
-> This is an experimental feature. It will work slowly if you
-use transpiler with your `tasksfile.js`. It won't work also
-with `npx task <task>` calls, `npm -g install tasksfile-cli` is necessary,
-so you could do calls like `task <task>`.
-
-Setup process:
-
-1. `task --completion >> ~/tasksfile.completion.sh`
-2. `echo 'source ~/tasksfile.completion.sh' >> .bash_profile`
-3. Restart your shell (reopen terminal)
-
-> Depending on your shell, use proper bootstrap files accordingly.
-
-> If you get errors like `_get_comp_words_by_ref command not found`
-you need to install [bash completion](https://github.com/scop/bash-completion)
-package. For MacOS users doing `brew install bash-completion` should
-do the job and then adding `[ -f /usr/local/etc/bash_completion ] && ./usr/local/etc/bash_completion`.
-to your `~/.bash_profile`.
-
 
 ## Transpilers
 
