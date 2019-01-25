@@ -1,7 +1,7 @@
 import { execSync, spawn } from 'child_process'
 import { EventEmitter } from 'events'
-import { TasksfileError } from '../../src/common'
 import * as api from '../../src/index'
+import { ShellError } from '../../src/shell'
 
 const execSyncMock: any = execSync
 const spawnMock: any = spawn
@@ -52,7 +52,7 @@ describe('api', () => {
           })
           expect(() => {
             api.run('node ./ghost.js', { stdio: 'pipe' }, logger)
-          }).toThrow(TasksfileError)
+          }).toThrow(ShellError)
         })
 
         it('should have access to environment variables by default', () => {

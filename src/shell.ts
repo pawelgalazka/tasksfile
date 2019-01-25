@@ -85,16 +85,6 @@ function shellSync(
   }
 }
 
-function shell(
-  command: string,
-  options: IShellOptions & { async: true }
-): Promise<string | null>
-
-function shell(
-  command: string,
-  options?: IShellOptions & { async?: false }
-): string | null
-
 function shell(command: string, options?: IShellOptions) {
   return options && options.async
     ? shellAsync(command, options)

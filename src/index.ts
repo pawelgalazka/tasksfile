@@ -1,17 +1,8 @@
-import { execSync, StdioOptions } from 'child_process'
 import path from 'path'
-import { logger, Logger, TasksfileError } from './common'
-import shell from './shell'
+import { logger, Logger } from './common'
+import shell, { IShellOptions } from './shell'
 
 const loggerAlias: Logger = logger
-
-interface IOptions {
-  cwd?: string
-  async?: boolean
-  stdio?: StdioOptions
-  env?: NodeJS.ProcessEnv
-  timeout?: number
-}
 
 interface ICliOptions {
   [key: string]: string
@@ -26,39 +17,21 @@ interface ITaskFunction {
   help?: any
 }
 
-function runSync(command: string, options: IOptions): string | null {
-  try {
-    const nextOptions = {
-      cwd: options.cwd,
-      env: options.env,
-      stdio: options.stdio,
-      timeout: options.timeout
-    }
-    const buffer: string | Buffer = execSync(command, nextOptions)
-    if (buffer) {
-      return buffer.toString()
-    }
-    return null
-  } catch (error) {
-    throw new TasksfileError(error.message)
-  }
-}
-
 export function run(
   command: string,
-  options: IOptions & { async: true },
+  options: IShellOptions & { async: true },
   logger?: Logger
 ): Promise<string | null>
 
 export function run(
   command: string,
-  options: IOptions & { async?: false | null },
+  options: IShellOptions & { async?: false | null },
   logger?: Logger
 ): string | null
 
 export function run(
   command: string,
-  options: IOptions = {},
+  options: IShellOptions = {},
   logger: Logger = loggerAlias
 ) {
   const binPath = path.resolve('./node_modules/.bin')
@@ -81,13 +54,7 @@ export function run(
 
   logger.title(command)
 
-  // Handle async call
-  if (options.async) {
-    return shell(command, nextOptions)
-  }
-
-  // Handle sync call by default
-  return runSync(command, nextOptions)
+  return shell(command, nextOptions)
 }
 
 export function options(thisObj: ITaskContext | null): object {
