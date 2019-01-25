@@ -1,8 +1,8 @@
-import chalk from "chalk"
+import chalk from 'chalk'
 
 export class TasksfileError extends Error {
   constructor(message: string) {
-    message = message && message.split("\n")[0] // assign only first line
+    message = message && message.split('\n')[0] // assign only first line
     super(message)
   }
 }

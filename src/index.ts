@@ -1,6 +1,6 @@
-import { execSync, spawn, StdioOptions } from "child_process"
-import path from "path"
-import { logger, Logger, TasksfileError } from "./common"
+import { execSync, spawn, StdioOptions } from 'child_process'
+import path from 'path'
+import { logger, Logger, TasksfileError } from './common'
 
 const loggerAlias: Logger = logger
 
@@ -54,13 +54,13 @@ function runAsync(command: string, options: IOptions): Promise<string | null> {
     const asyncProcess = spawn(command, nextOptions)
     let output: string | null = null
 
-    asyncProcess.on("error", (error: Error) => {
+    asyncProcess.on('error', (error: Error) => {
       reject(
         new Error(`Failed to start command: ${command}; ${error.toString()}`)
       )
     })
 
-    asyncProcess.on("close", (exitCode: number) => {
+    asyncProcess.on('close', (exitCode: number) => {
       if (exitCode === 0) {
         resolve(output)
       } else {
@@ -70,8 +70,8 @@ function runAsync(command: string, options: IOptions): Promise<string | null> {
       }
     })
 
-    if (options.stdio === "pipe") {
-      asyncProcess.stdout.on("data", (buffer: Buffer) => {
+    if (options.stdio === 'pipe') {
+      asyncProcess.stdout.on('data', (buffer: Buffer) => {
         output = buffer.toString()
       })
     }
@@ -102,14 +102,14 @@ export function run(
   options: IOptions = {},
   logger: Logger = loggerAlias
 ) {
-  const binPath = path.resolve("./node_modules/.bin")
+  const binPath = path.resolve('./node_modules/.bin')
 
   // Pick relevant option keys and set default values
   const nextOptions: IOptions = {
     async: !!options.async,
     cwd: options.cwd,
     env: options.env || process.env,
-    stdio: options.stdio || "inherit",
+    stdio: options.stdio || 'inherit',
     timeout: options.timeout
   }
 
@@ -138,9 +138,9 @@ export function options(thisObj: ITaskContext | null): object {
 export function help(func: ITaskFunction, annotation?: string | any) {
   // Because the validation above currently gets compiled out,
   // Explictly  validate the function input
-  if (typeof func === "function") {
+  if (typeof func === 'function') {
     func.help = annotation
   } else {
-    throw new Error("first help() argument must be a function")
+    throw new Error('first help() argument must be a function')
   }
 }
