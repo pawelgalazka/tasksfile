@@ -25,7 +25,7 @@ export function run(
 
 export function run(
   command: string,
-  options: IShellOptions & { async?: false | null },
+  options?: IShellOptions & { async?: false | null },
   logger?: Logger
 ): string | null
 
