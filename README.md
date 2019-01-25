@@ -17,7 +17,7 @@ Minimalistic building tool
     - [Babel](#babel)
     - [TypeScript](#typescript)
 - [API](#api)
-    - [task](#taskcmd-options)
+    - [run](#runcmd-options)
     - [options](#optionsthis)
     - [help](#helpfunc-annotation)
 - [Using Async/Await](#using-asyncawait)
@@ -92,7 +92,7 @@ but they depend on bash scripting. Within `tasksfile` you can use
 command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible.
 
-[More](https://hackernoon.com/simple-build-tools-npm-scripts-vs-makefile-vs-tasksfile-31e578278162)
+[More](https://hackernoon.com/simple-build-tools-npm-scripts-vs-makefile-vs-runjs-31e578278162)
 
 
 ## Features
