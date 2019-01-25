@@ -21,8 +21,8 @@
     "test:e2e": "jest ./test/e2e/",
     "test:prod": "yarn sandbox:prod && jest ./test/e2e/",
     "sandbox:clean": "rm -rf ./test/e2e/sandbox/node_modules && mkdir -p ./test/e2e/sandbox/node_modules/.bin",
-    "sandbox:dev": "yarn sandbox:clean && ln -s ../../../../ ./test/e2e/sandbox/node_modules/runjs",
-    "sandbox:prod": "yarn sandbox:clean && (cd ./test/e2e/sandbox && yarn add runjs)",
+    "sandbox:dev": "yarn sandbox:clean && ln -s ../../../../ ./test/e2e/sandbox/node_modules/tasksfile",
+    "sandbox:prod": "yarn sandbox:clean && (cd ./test/e2e/sandbox && yarn add tasksfile)",
     "clean": "rm -rf node_modules && yarn sandbox:clean"
   },
   "lint-staged": {
