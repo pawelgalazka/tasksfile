@@ -58,6 +58,16 @@ Create `task` entry in your `scripts` section in `package.json`:
 }
 ```
 
+Create `task` entry in your `scripts` section in `package.json`:
+
+```json
+{
+  "scripts": {
+    "task": "node ./tasksfile.js"
+  }
+}
+```
+
 Call in your terminal:
 
 ```bash
