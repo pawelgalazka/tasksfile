@@ -11,7 +11,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
-    "run": "bin/run.js"
+    "task": "bin/task.js"
   },
   "scripts": {
     "lint": "tslint -c tslint.json 'src/*.ts'",
