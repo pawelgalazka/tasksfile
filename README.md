@@ -20,7 +20,6 @@ Minimalistic building tool
     - [run](#runcmd-options)
     - [options](#optionsthis)
     - [help](#helpfunc-annotation)
-- [Using Async/Await](#using-asyncawait)
 
 
 ## Get started
@@ -554,54 +553,4 @@ help(test, {
 
     $ task build --help
     $ task test --help
-
-
-## Using Async/Await
-
-For node >= 7.10 it is possible to use async functions out of the box since node 
-will support them natively.
-
-Expected usage in your tasksfile:
-
-```javascript
-const { run } = require('tasksfile')
-
-async function testasyncawait () {
-  await run('ls -al | cat', {async: true}).then((data) => {
-    console.log('DATA', data)
-  })
-  console.log('After AWAIT message')
-}
-
-module.exports = {
-  testasyncawait
-}
-```
-
-and then just
-
-```
-$ task testasyncawait
-```
-
-If your node version is older you need to depend on transpilers, 
-either `Babel` or `TypeScript`. For `TypeScript` you do no more than transpiler
-setup which was described [above](#typescript) and async/await should just
-work.
-
-For `Babel` you additionally need `babel-preset-es2017` and `babel-polyfill`:
-
-    npm install babel-preset-es2017 babel-polyfill --save-dev
-    
-and proper config in your `package.json`:
-
-    "babel": {
-      "presets": ["es2017"]
-    },
-    "tasksfile": {
-      "requires": [
-        "./node_modules/babel-polyfill",
-        "./node_modules/babel-register"
-      ]
-    }
 
