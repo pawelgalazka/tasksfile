@@ -32,6 +32,7 @@ Create `tasksfile.js` in your root project directory:
 
 ```js
 const { run } = require('tasksfile')
+const { cli } = require('tasksfile/lib/script')
 
 function hello(name = 'Mysterious') {
   console.log(`Hello ${name}!`)
@@ -44,6 +45,16 @@ function makedir() {
 module.exports = {
   hello,
   makedir
+}
+```
+
+Create `task` entry in your `scripts` section in `package.json`:
+
+```json
+{
+  "scripts": {
+    "task": "node ./tasksfile.js"
+  }
 }
 ```
 
