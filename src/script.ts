@@ -9,12 +9,12 @@ import path from "path"
 
 const CLIError = microcli.CliError
 
-import { ILogger, logger, Logger, RunJSError, SilentLogger } from "./common"
+import { ILogger, logger, Logger, SilentLogger, TasksfileError } from "./common"
 
-const DEFAULT_RUNFILE_PATH = "./runfile.js"
+const DEFAULT_RUNFILE_PATH = "./tasksfile.js"
 
 interface IConfig {
-  runfile?: string
+  tasksfile?: string
   requires?: string[]
 }
 
@@ -42,7 +42,7 @@ export function load(
   requirer: (arg: string) => any,
   access: (arg: string) => void
 ) {
-  const runfilePath = config.runfile || DEFAULT_RUNFILE_PATH
+  const tasksfilePath = config.tasksfile || DEFAULT_RUNFILE_PATH
   // Load requires if given in config
   if (Array.isArray(config.requires)) {
     config.requires.forEach(modulePath => {
@@ -51,20 +51,20 @@ export function load(
     })
   }
 
-  // Process runfile
-  logger.log(chalk.gray(`Processing ${runfilePath}...`))
+  // Process tasksfile
+  logger.log(chalk.gray(`Processing ${tasksfilePath}...`))
 
   try {
-    access(runfilePath)
+    access(tasksfilePath)
   } catch (error) {
-    throw new RunJSError(`No ${runfilePath} defined in ${process.cwd()}`)
+    throw new TasksfileError(`No ${tasksfilePath} defined in ${process.cwd()}`)
   }
 
-  const runfile = requirer(runfilePath)
-  if (runfile.default) {
-    return runfile.default
+  const tasksfile = requirer(tasksfilePath)
+  if (tasksfile.default) {
+    return tasksfile.default
   }
-  return runfile
+  return tasksfile
 }
 
 export function describe(obj: any, logger: Logger, namespace?: string) {
@@ -105,7 +105,7 @@ export function describe(obj: any, logger: Logger, namespace?: string) {
     logger.log(
       "\n" +
         chalk.blue(
-          'Type "run [taskname] --help" to get more info if available.'
+          'Type "task [taskname] --help" to get more info if available.'
         )
     )
   }
@@ -165,7 +165,7 @@ export function call(
   }
 
   if (!subtaskName) {
-    throw new RunJSError(`Task ${taskName} not found`)
+    throw new TasksfileError(`Task ${taskName} not found`)
   }
 }
 
@@ -173,8 +173,8 @@ function autocomplete(config: IConfig) {
   const logger = new SilentLogger()
   const completion = omelette("run <task>")
   completion.on("task", ({ reply }: { reply: (arg: any) => any }) => {
-    const runfile = load(config, logger, requirer, hasAccess)
-    reply(tasks(runfile))
+    const tasksfile = load(config, logger, requirer, hasAccess)
+    reply(tasks(tasksfile))
   })
   completion.init()
 }
@@ -183,16 +183,16 @@ export function main() {
   try {
     const config = getConfig("./package.json")
     autocomplete(config)
-    const runfile = load(config, logger, requirer, hasAccess)
+    const tasksfile = load(config, logger, requirer, hasAccess)
     const ARGV = process.argv.slice()
 
     if (ARGV.length > 2) {
-      call(runfile, ARGV, logger)
+      call(tasksfile, ARGV, logger)
     } else {
-      describe(runfile, logger)
+      describe(tasksfile, logger)
     }
   } catch (error) {
-    if (error instanceof RunJSError || error instanceof CLIError) {
+    if (error instanceof TasksfileError || error instanceof CLIError) {
       logger.error(error.message)
       process.exit(1)
     } else {

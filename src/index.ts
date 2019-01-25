@@ -1,6 +1,6 @@
 import { execSync, spawn, StdioOptions } from "child_process"
 import path from "path"
-import { logger, Logger, RunJSError } from "./common"
+import { logger, Logger, TasksfileError } from "./common"
 
 const loggerAlias: Logger = logger
 
@@ -39,7 +39,7 @@ function runSync(command: string, options: IOptions): string | null {
     }
     return null
   } catch (error) {
-    throw new RunJSError(error.message)
+    throw new TasksfileError(error.message)
   }
 }
 
@@ -129,13 +129,6 @@ export function run(
 
   // Handle sync call by default
   return runSync(command, nextOptions)
-}
-
-/**
- * @deprecated
- */
-export function option(thisObj: ITaskContext | null, name: string = ""): any {
-  return (thisObj && thisObj.options && thisObj.options[name]) || null
 }
 
 export function options(thisObj: ITaskContext | null): object {
