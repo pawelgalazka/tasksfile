@@ -2,6 +2,9 @@
 
 Minimalistic building tool
 
+> RunJS was renamed to Tasksfile project which is currently in beta - unstable version.
+> Link to stable RunJS verion: https://github.com/pawelgalazka/runjs/tree/runjs
+
 - [Get started](#get-started)
 - [Why tasksfile ?](#why-tasksfile-)
 - [Features](#features)
