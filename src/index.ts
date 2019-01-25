@@ -93,7 +93,7 @@ export function run(
 
 export function run(
   command: string,
-  options: IOptions & { async?: false | null },
+  options?: IOptions & { async?: false | null },
   logger?: Logger
 ): string | null
 
