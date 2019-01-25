@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import chalk from "chalk"
-import { RunJSError } from "../../src/common"
+import { TasksfileError } from "../../src/common"
 import * as script from "../../src/script"
 
 describe("script", () => {
@@ -36,27 +36,27 @@ describe("script", () => {
       config = {}
     })
 
-    it("should return runfile.js as a module if found", () => {
+    it("should return tasksfile.js as a module if found", () => {
       requirer = jest.fn().mockReturnValue({ test: 1 })
       expect(script.load(config, logger, requirer, access)).toEqual({ test: 1 })
-      expect(requirer).toHaveBeenCalledWith("./runfile.js")
+      expect(requirer).toHaveBeenCalledWith("./tasksfile.js")
       expect(requirer).toHaveBeenCalledTimes(1)
     })
 
-    it("should return runfile.js module default context if found", () => {
+    it("should return tasksfile.js module default context if found", () => {
       requirer = jest.fn().mockReturnValue({ default: { test: 1 } })
       expect(script.load(config, logger, requirer, access)).toEqual({ test: 1 })
-      expect(requirer).toHaveBeenCalledWith("./runfile.js")
+      expect(requirer).toHaveBeenCalledWith("./tasksfile.js")
       expect(requirer).toHaveBeenCalledTimes(1)
     })
 
-    it("should raise an error if runfile.js cannot be found", () => {
+    it("should raise an error if tasksfile.js cannot be found", () => {
       access = jest.fn(() => {
         throw new Error("No access")
       })
       expect(() => {
         script.load(config, logger, requirer, access)
-      }).toThrowError(/^No \.\/runfile\.js defined in/)
+      }).toThrowError(/^No \.\/tasksfile\.js defined in/)
       expect(requirer).not.toHaveBeenCalled()
     })
 
@@ -70,12 +70,12 @@ describe("script", () => {
         }
       })
 
-      it('should require specified "requires" before requiring runfile', () => {
+      it('should require specified "requires" before requiring tasksfile', () => {
         script.load(config, logger, requirer, access)
         expect(requirer.mock.calls).toEqual([
           ["./node_modules/babel-polyfill"],
           ["./node_modules/babel-register"],
-          ["./runfile.js"]
+          ["./tasksfile.js"]
         ])
       })
 
@@ -89,27 +89,27 @@ describe("script", () => {
       })
     })
 
-    describe("when custom runfile path given", () => {
+    describe("when custom tasksfile path given", () => {
       beforeEach(() => {
-        config = { runfile: "./runfile.ts" }
+        config = { tasksfile: "./tasksfile.ts" }
       })
 
-      it("should return custom runfile as a module if found", () => {
+      it("should return custom tasksfile as a module if found", () => {
         requirer = jest.fn().mockReturnValue({ test: 1 })
         expect(script.load(config, logger, requirer, access)).toEqual({
           test: 1
         })
-        expect(requirer).toHaveBeenCalledWith("./runfile.ts")
+        expect(requirer).toHaveBeenCalledWith("./tasksfile.ts")
         expect(requirer).toHaveBeenCalledTimes(1)
       })
 
-      it("should raise an error if custom runfile cannot be found", () => {
+      it("should raise an error if custom tasksfile cannot be found", () => {
         access = jest.fn(() => {
           throw new Error("No access")
         })
         expect(() => {
           script.load(config, logger, requirer, access)
-        }).toThrowError(/^No \.\/runfile\.ts defined in/)
+        }).toThrowError(/^No \.\/tasksfile\.ts defined in/)
         expect(requirer).not.toHaveBeenCalled()
       })
     })
@@ -134,7 +134,7 @@ describe("script", () => {
           "log",
           "\n" +
             chalk.blue(
-              'Type "run [taskname] --help" to get more info if available.'
+              'Type "task [taskname] --help" to get more info if available.'
             )
         ]
       ])
@@ -164,7 +164,7 @@ describe("script", () => {
           "log",
           "\n" +
             chalk.blue(
-              'Type "run [taskname] --help" to get more info if available.'
+              'Type "task [taskname] --help" to get more info if available.'
             )
         ]
       ])
@@ -192,7 +192,7 @@ describe("script", () => {
           "log",
           "\n" +
             chalk.blue(
-              'Type "run [taskname] --help" to get more info if available.'
+              'Type "task [taskname] --help" to get more info if available.'
             )
         ]
       ])
@@ -227,7 +227,7 @@ describe("script", () => {
           "log",
           "\n" +
             chalk.blue(
-              'Type "run [taskname] --help" to get more info if available.'
+              'Type "task [taskname] --help" to get more info if available.'
             )
         ]
       ])
@@ -258,9 +258,9 @@ describe("script", () => {
     })
 
     it("calls the method from a given object by given method name and its arguments", () => {
-      script.call(obj, ["node", "run", "a"])
+      script.call(obj, ["node", "task", "a"])
       expect(a).toHaveBeenLastCalledWith()
-      script.call(obj, ["node", "run", "a", "1", "2"])
+      script.call(obj, ["node", "task", "a", "1", "2"])
       expect(a).toHaveBeenLastCalledWith("1", "2")
     })
 
@@ -274,25 +274,25 @@ describe("script", () => {
 
       obj.a = fn
 
-      script.call(obj, ["node", "run", "a", "-a", "hello"])
+      script.call(obj, ["node", "task", "a", "-a", "hello"])
       expect(calls).toEqual({ args: ["hello"], options: { a: true } })
       calls = {}
-      script.call(obj, ["node", "run", "a", "hello", "-a"])
+      script.call(obj, ["node", "task", "a", "hello", "-a"])
       expect(calls).toEqual({ args: ["hello"], options: { a: true } })
-      script.call(obj, ["node", "run", "a", "--abc", "hello"])
+      script.call(obj, ["node", "task", "a", "--abc", "hello"])
       expect(calls).toEqual({ args: ["hello"], options: { abc: true } })
-      script.call(obj, ["node", "run", "a", "-a=123", "hello"])
+      script.call(obj, ["node", "task", "a", "-a=123", "hello"])
       expect(calls).toEqual({ args: ["hello"], options: { a: 123 } })
-      script.call(obj, ["node", "run", "a", "--abc=test", "hello"])
+      script.call(obj, ["node", "task", "a", "--abc=test", "hello"])
       expect(calls).toEqual({ args: ["hello"], options: { abc: "test" } })
-      script.call(obj, ["node", "run", "a", "-a", "--abc=test", "hello"])
+      script.call(obj, ["node", "task", "a", "-a", "--abc=test", "hello"])
       expect(calls).toEqual({
         args: ["hello"],
         options: { a: true, abc: "test" }
       })
       script.call(obj, [
         "node",
-        "run",
+        "task",
         "a",
         "-a",
         "--abc=test",
@@ -307,7 +307,7 @@ describe("script", () => {
       })
       script.call(obj, [
         "node",
-        "run",
+        "task",
         "a",
         "--ab-cd",
         "--ef-gh=test",
@@ -322,7 +322,7 @@ describe("script", () => {
       })
       script.call(obj, [
         "node",
-        "run",
+        "task",
         "a",
         "--host=http://www.google.com/",
         "hello"
@@ -343,35 +343,35 @@ describe("script", () => {
 
       obj.b.c = fn
 
-      script.call(obj, ["node", "run", "b:c", "-a", "hello"])
+      script.call(obj, ["node", "task", "b:c", "-a", "hello"])
       expect(calls).toEqual({ args: ["hello"], options: { a: true } })
       calls = {}
-      script.call(obj, ["node", "run", "b:c", "hello", "-a"])
+      script.call(obj, ["node", "task", "b:c", "hello", "-a"])
       expect(calls).toEqual({ args: ["hello"], options: { a: true } })
     })
 
     it("should call methods from nested objects by method name name-spacing", () => {
-      script.call(obj, ["node", "run", "a", "1", "2"])
+      script.call(obj, ["node", "task", "a", "1", "2"])
       expect(a).toHaveBeenLastCalledWith("1", "2")
-      script.call(obj, ["node", "run", "b:c", "1", "2"])
+      script.call(obj, ["node", "task", "b:c", "1", "2"])
       expect(c).toHaveBeenLastCalledWith("1", "2")
-      script.call(obj, ["node", "run", "b:d:e", "1", "2"])
+      script.call(obj, ["node", "task", "b:d:e", "1", "2"])
       expect(e).toHaveBeenLastCalledWith("1", "2")
-      script.call(obj, ["node", "run", "f:g:h", "1", "2"])
+      script.call(obj, ["node", "task", "f:g:h", "1", "2"])
       expect(h).toHaveBeenLastCalledWith("1", "2")
     })
 
     it("should raise an error if called method cannot be found", () => {
       expect(() => {
-        script.call(obj, ["node", "run", "abc"])
+        script.call(obj, ["node", "task", "abc"])
       }).toThrowError("Task abc not found")
 
       expect(() => {
-        script.call(obj, ["node", "run", "abc"])
-      }).toThrowError(RunJSError)
+        script.call(obj, ["node", "task", "abc"])
+      }).toThrowError(TasksfileError)
 
       expect(() => {
-        script.call(obj, ["node", "run", "b:d"])
+        script.call(obj, ["node", "task", "b:d"])
       }).toThrowError("Task b:d not found")
     })
   })

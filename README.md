@@ -1,9 +1,12 @@
-# runjs ![node version](https://img.shields.io/node/v/runjs.svg) [![Build Status](https://travis-ci.org/pawelgalazka/runjs.svg?branch=master)](https://travis-ci.org/pawelgalazka/runjs) [![npm version](https://badge.fury.io/js/runjs.svg)](https://badge.fury.io/js/runjs)
+# tasksfile ![node version](https://img.shields.io/node/v/tasksfile.svg) [![Build Status](https://travis-ci.org/pawelgalazka/tasksfile.svg?branch=master)](https://travis-ci.org/pawelgalazka/tasksfile) [![npm version](https://badge.fury.io/js/tasksfile.svg)](https://badge.fury.io/js/tasksfile)
 
 Minimalistic building tool
 
+> From version >= 5 RunJS was renamed to Tasksfile project which is currently in beta - unstable version.
+> Link to stable RunJS version: https://github.com/pawelgalazka/runjs/tree/runjs
+
 - [Get started](#get-started)
-- [Why runjs ?](#why-runjs-)
+- [Why tasksfile ?](#why-tasksfile-)
 - [Features](#features)
     - [Executing shell commands](#executing-shell-commands)
     - [Handling arguments](#handling-arguments)
@@ -15,25 +18,22 @@ Minimalistic building tool
     - [Babel](#babel)
     - [TypeScript](#typescript)
 - [API](#api)
-    - [run](#runcmd-options)
+    - [task](#taskcmd-options)
     - [options](#optionsthis)
     - [help](#helpfunc-annotation)
 - [Using Async/Await](#using-asyncawait)
 
 
-> For 3.x to 4.x migration instructions look [here](https://github.com/pawelgalazka/runjs/releases/tag/v4.0.0)
-
-
 ## Get started
 
-Install runjs in your project
+Install tasksfile in your project
 
-    npm install runjs --save-dev
+    npm install tasksfile --save-dev
     
-Create `runfile.js` in your root project directory:
+Create `tasksfile.js` in your root project directory:
 
 ```js
-const { run } = require('runjs')
+const { run } = require('tasksfile')
 
 function hello(name = 'Mysterious') {
   console.log(`Hello ${name}!`)
@@ -52,32 +52,32 @@ module.exports = {
 Call in your terminal:
 
 ```bash
-$ npx run hello Tommy
+$ npx task hello Tommy
 Hello Tommy!
-$ npx run makedir
+$ npx task makedir
 mkdir somedir
 ```
 
-> For node < 8.2, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b)
-is not available, so doing `npm install -g runjs-cli` is neccessary which installs
-global `run` script. After that above task would be called like: `run hello Tommy`
+> For node < 8.2, [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-taskner-55f7d4bd282b)
+is not available, so doing `npm install -g tasksfile-cli` is neccessary which installs
+global `task` script. After that above task would be called like: `task hello Tommy`
 
-Mechanism of RunJS is very simple. Tasks are run by just importing `runfile.js` as a
+Mechanism of Tasksfile is very simple. Tasks are run by just importing `tasksfile.js` as a
 normal node.js module. Then based on command line arguments proper exported function
-from `runfile.js` is called.
+from `tasksfile.js` is called.
 
-RunJS in a nutshell
+Tasksfile in a nutshell
 
 ```js
-const runfile = require(path.resolve('./runfile'))
+const tasksfile = require(path.resolve('./tasksfile'))
 const taskName = process.argv[2]
 const { options, params } = parseArgs(process.argv.slice(2))
 
-runfile[taskName].apply({ options }, params)
+tasksfile[taskName].apply({ options }, params)
 ```
 
 
-## Why runjs ?
+## Why tasksfile ?
 
 We have Grunt, Gulp, npm scripts, Makefile. Why another building tool ?
 
@@ -93,22 +93,22 @@ we need more complex process which make them quite hard to read
 and manage.
 
 Makefiles are simple, better for more complex processes
-but they depend on bash scripting. Within `runfile` you can use
+but they depend on bash scripting. Within `tasksfile` you can use
 command line calls as well as JavaScript code and npm
 libraries which makes that approach much more flexible.
 
-[More](https://hackernoon.com/simple-build-tools-npm-scripts-vs-makefile-vs-runjs-31e578278162)
+[More](https://hackernoon.com/simple-build-tools-npm-scripts-vs-makefile-vs-tasksfile-31e578278162)
 
 
 ## Features
 
 ### Executing shell commands
 
-RunJS gives an easy way to execute shell commands in your tasks by `run` function
+Tasksfile gives an easy way to execute shell commands in your tasks by `run` function
 in synchronous and asynchronous way:
 
 ```js
-const { run } = require('runjs')
+const { run } = require('tasksfile')
 
 function commands () {
   run('jest')
@@ -146,7 +146,7 @@ module.exports = {
 ```
 
 ```bash
-$ run sayHello world
+$ task sayHello world
 Hello world!
 ```
     
@@ -155,7 +155,7 @@ matter after task name. They will be always available by `options` helper
 from inside a function.
 
 ```javascript
-const { options } = require('runjs')
+const { options } = require('tasksfile')
 
 function sayHello (who) {
   console.log(`Hello ${who}!`)
@@ -168,7 +168,7 @@ module.exports = {
 ```
 
 ```bash
-$ run sayHello -a --test=something world
+$ task sayHello -a --test=something world
 Hello world!
 Given options: { a: true, test: 'something' }
 ```
@@ -176,11 +176,11 @@ Given options: { a: true, test: 'something' }
     
 ### Documenting tasks
 
-To display all available tasks for your `runfile.js` type `run` in your command line
+To display all available tasks for your `tasksfile.js` type `task` in your command line
 without any arguments:
 
-    $ run
-    Processing runfile.js...
+    $ task
+    Processing tasksfile.js...
     
     Available tasks:
     echo                    - echo task description
@@ -189,7 +189,7 @@ without any arguments:
 Use `help` utility function for your task to get additional description:
 
 ```javascript
-const { run, help } = require('runjs')
+const { task, help } = require('tasksfile')
 
 function buildjs () {
   
@@ -202,8 +202,8 @@ module.exports = {
 }
 ```
 
-    $ run buildjs --help
-    Processing runfile.js...
+    $ task buildjs --help
+    Processing tasksfile.js...
     
     Usage: buildjs
     
@@ -213,7 +213,7 @@ You can provide detailed annotation to give even more info about the task:
 
 ```javascript
 const dedent = require('dedent')
-const { run, help } = require('runjs')
+const { run, help } = require('tasksfile')
 
 function test (file) {
   
@@ -226,8 +226,8 @@ help(test, {
     watch: 'run tests in a watch mode'
   },
   examples: dedent`
-    run test dummyComponent.js
-    run test dummyComponent.js --watch
+    task test dummyComponent.js
+    task test dummyComponent.js --watch
   `
 })
 
@@ -236,8 +236,8 @@ module.exports = {
 }
 ```
 
-    $ run test --help
-    Processing runfile.js...
+    $ task test --help
+    Processing tasksfile.js...
     
     Usage: test [options] [file]
     
@@ -249,8 +249,8 @@ module.exports = {
       
     Examples:
     
-    run test dummyComponent.js
-    run test dummyComponent.js --watch
+    task test dummyComponent.js
+    task test dummyComponent.js --watch
 
 
 ### Namespacing
@@ -269,11 +269,11 @@ module.exports = {
 ```
 
 ```bash
-$ run test:unit
+$ task test:unit
 Doing unit testing!
 ```
 
-This is especially useful if `runfile.js` gets too large. We can move some tasks
+This is especially useful if `tasksfile.js` gets too large. We can move some tasks
 to external modules and import them back to a namespace:
 
 `./tasks/test.js`:
@@ -293,7 +293,7 @@ module.exports = {
 }
 ```
 
-`runfile.js`
+`tasksfile.js`
 ```js
 const test = require('./tasks/test')
 
@@ -303,7 +303,7 @@ module.exports = {
 ```
 
 ```bash
-$ run test:unit
+$ task test:unit
 Doing unit testing!
 ```
 
@@ -317,7 +317,7 @@ module.exports = {
 ```
 
 ```bash
-$ run unit
+$ task unit
 Doing unit testing!
 ```
 
@@ -333,18 +333,18 @@ export { test } // add namespace
 ```
 
 ```bash
-$ run unit
-$ run test:unit
+$ task unit
+$ task test:unit
 ```
 
 ### Sharing tasks
 
-Because `runfile.js` is just a node.js module and `runjs` just calls exported
+Because `tasksfile.js` is just a node.js module and `tasksfile` just calls exported
 functions from that module based on cli arguments, nothing stops you to move 
 some repetitive tasks across your projects to external npm package and 
 just reuse it.
 
-`shared-runfile` module:
+`shared-tasksfile` module:
 ```js
 function shared1 () {
   console.log('This task is shared!')
@@ -360,9 +360,9 @@ module.exports = {
 }
 ```
 
-Local `runfile.js`
+Local `tasksfile.js`
 ```js
-const shared = require('shared-runfile')
+const shared = require('shared-tasksfile')
 
 function local () {
   console.log('This task is local!')
@@ -375,25 +375,25 @@ module.exports = {
 ```
 
 ```bash
-$ run shared1
-$ run shared2
-$ run local
+$ task shared1
+$ task shared2
+$ task local
 ```
 
 ### Autocompletion
 
 After setting up autocompletion, suggestions about available
-tasks from your `runfile.js` will be given when calling `run <tab>`.
+tasks from your `tasksfile.js` will be given when calling `task <tab>`.
 
 > This is an experimental feature. It will work slowly if you
-use transpiler with your `runfile.js`. It won't work also
-with `npx run <task>` calls, `npm -g install runjs-cli` is necessary,
-so you could do calls like `run <task>`.
+use transpiler with your `tasksfile.js`. It won't work also
+with `npx task <task>` calls, `npm -g install tasksfile-cli` is necessary,
+so you could do calls like `task <task>`.
 
 Setup process:
 
-1. `run --completion >> ~/runjs.completion.sh`
-2. `echo 'source ~/runjs.completion.sh' >> .bash_profile`
+1. `task --completion >> ~/tasksfile.completion.sh`
+2. `echo 'source ~/tasksfile.completion.sh' >> .bash_profile`
 3. Restart your shell (reopen terminal)
 
 > Depending on your shell, use proper bootstrap files accordingly.
@@ -410,10 +410,10 @@ to your `~/.bash_profile`.
 Transpilers gives you an advantage of using ES6/ES7 features which may not be 
 available in your node version.
 
-So for example writing `runfile.js` with es6 imports/exports is possible:
+So for example writing `tasksfile.js` with es6 imports/exports is possible:
 
 ```js
-import { run } from 'runjs'
+import { run } from 'tasksfile'
 
 export function makeThatDir(name) {
   run(`mkdir ${name}`)
@@ -422,14 +422,14 @@ export function makeThatDir(name) {
 ```
 
 ```bash
-$ run makeThatDir somedir
+$ task makeThatDir somedir
 mkdir somedir
 Done!
 ```
 
 #### Babel
 
-If you want to use Babel transpiler for your `runfile.js` install it:
+If you want to use Babel transpiler for your `tasksfile.js` install it:
 
     npm install babel-core babel-preset-es2015 babel-register --save-dev
 
@@ -440,7 +440,7 @@ and in your `package.json` write:
   "babel": {
     "presets": ["es2015"]
   },
-  "runjs": {
+  "tasksfile": {
     "requires": [
       "./node_modules/babel-register"
     ]
@@ -449,39 +449,39 @@ and in your `package.json` write:
 
 ```
 
-RunJS will require defined transpiler before requiring `runfile.js` so you can
+Tasksfile will require defined transpiler before requiring `tasksfile.js` so you can
 use all ES6/ES7 features which are not supported by your node version. 
 
     
 #### TypeScript
 
-If you want to use TypeScript transpiler for your runfile, install TypeScript 
+If you want to use TypeScript transpiler for your tasksfile, install TypeScript 
 tooling:
 
     npm install typescript ts-node --save-dev
 
 and then in your `package.json` define a path to `ts-node/register` and 
-`runfile.ts`.
+`tasksfile.ts`.
 
 ```json
 {
-  "runjs": {
+  "tasksfile": {
     "requires": [
       "./node_modules/ts-node/register"
     ],
-    "runfile": "./runfile.ts"
+    "tasksfile": "./tasksfile.ts"
   }
 }
 ```
 
-You need to also define custom path to your runfile as TypeScript files have
-`*.ts` extension. RunJS will require defined transpiler before requiring 
-`./runfile.ts`.
+You need to also define custom path to your tasksfile as TypeScript files have
+`*.ts` extension. Tasksfile will require defined transpiler before requiring 
+`./tasksfile.ts`.
 
 
 ## API
 
-For inside `runfile.js` usage.
+For inside `tasksfile.js` usage.
 
 #### run(cmd, options)
 
@@ -489,7 +489,7 @@ run given command as a child process and log the call in the output.
 `./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
 
 ```js
-const { run } = require('runjs')
+const { run } = require('tasksfile')
 ```
 
 *Options:*
@@ -534,13 +534,13 @@ A helper which returns an object with options which were given through dash
 params of command line script.
 
 ```js
-const { options } = require('runjs')
+const { options } = require('tasksfile')
 ```
 
 Example:
 
 ```bash
-$ run lint --fix
+$ task lint --fix
 ```
 
 ```js
@@ -562,7 +562,7 @@ Define help annotation for task function, so it will be printed out when calling
 option and when calling `run` without any arguments.
 
 ```js
-const { help } = require('runjs')
+const { help } = require('tasksfile')
 ```
 
 
@@ -576,14 +576,14 @@ help(test, {
     watch: 'run tests in a watch mode'
   },
   examples: `
-    run test dummyComponent.js
-    run test dummyComponent.js --watch
+    task test dummyComponent.js
+    task test dummyComponent.js --watch
   `
 })
 ```
 
-    $ run build --help
-    $ run test --help
+    $ task build --help
+    $ task test --help
 
 
 ## Using Async/Await
@@ -591,10 +591,10 @@ help(test, {
 For node >= 7.10 it is possible to use async functions out of the box since node 
 will support them natively.
 
-Expected usage in your runfile:
+Expected usage in your tasksfile:
 
 ```javascript
-const { run } = require('runjs')
+const { run } = require('tasksfile')
 
 async function testasyncawait () {
   await run('ls -al | cat', {async: true}).then((data) => {
@@ -611,7 +611,7 @@ module.exports = {
 and then just
 
 ```
-$ run testasyncawait
+$ task testasyncawait
 ```
 
 If your node version is older you need to depend on transpilers, 
@@ -628,7 +628,7 @@ and proper config in your `package.json`:
     "babel": {
       "presets": ["es2017"]
     },
-    "runjs": {
+    "tasksfile": {
       "requires": [
         "./node_modules/babel-polyfill",
         "./node_modules/babel-register"

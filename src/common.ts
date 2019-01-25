@@ -1,7 +1,6 @@
 import chalk from "chalk"
 
-// Needed to use ES5 inheritance, because of issues with Error subclassing for Babel
-export class RunJSError extends Error {
+export class TasksfileError extends Error {
   constructor(message: string) {
     message = message && message.split("\n")[0] // assign only first line
     super(message)

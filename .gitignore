@@ -1,8 +1,6 @@
 .idea
 .vscode
 node_modules
-*.swp
-.DS_Store
 npm-debug.log
 /coverage
 /lib

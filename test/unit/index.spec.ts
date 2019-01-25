@@ -1,6 +1,6 @@
 import { execSync, spawn } from "child_process"
 import { EventEmitter } from "events"
-import { RunJSError } from "../../src/common"
+import { TasksfileError } from "../../src/common"
 import * as api from "../../src/index"
 
 const execSyncMock: any = execSync
@@ -11,7 +11,7 @@ jest.mock("child_process", () => ({
   spawn: jest.fn()
 }))
 
-process.env = { RUNJS_TEST: "runjs test" }
+process.env = { TASKSFILE_TEST: "tasksfile test" }
 
 describe("api", () => {
   let logger: any
@@ -52,14 +52,14 @@ describe("api", () => {
           })
           expect(() => {
             api.run("node ./ghost.js", { stdio: "pipe" }, logger)
-          }).toThrow(RunJSError)
+          }).toThrow(TasksfileError)
         })
 
         it("should have access to environment variables by default", () => {
           api.run("cli-command", { stdio: "pipe" }, logger)
           expect(execSyncMock.mock.calls[0][1].env).toHaveProperty(
-            "RUNJS_TEST",
-            "runjs test"
+            "TASKSFILE_TEST",
+            "tasksfile test"
           )
         })
 
@@ -105,8 +105,8 @@ describe("api", () => {
             .run("cli-cmd", { async: true, stdio: "pipe" }, logger)
             .then(() => {
               expect(spawnMock.mock.calls[0][1].env).toHaveProperty(
-                "RUNJS_TEST",
-                "runjs test"
+                "TASKSFILE_TEST",
+                "tasksfile test"
               )
             })
           spawnProcessMock.stdout.emit("data", "output")
@@ -159,32 +159,6 @@ describe("api", () => {
           return runProcess
         })
       })
-    })
-  })
-
-  describe("option()", () => {
-    let thisStub: any
-
-    beforeEach(() => {
-      thisStub = {
-        options: {
-          test: "abcdef"
-        }
-      }
-    })
-
-    it('should return option value from a given possible "this" object of a task function', () => {
-      expect(api.option(thisStub, "test")).toEqual("abcdef")
-    })
-
-    it("should return null if no option name given", () => {
-      expect(api.option(thisStub)).toBe(null)
-    })
-
-    it("should return null if option not found", () => {
-      expect(api.option(thisStub, "ghost")).toBe(null)
-      expect(api.option(null, "ghost")).toBe(null)
-      expect(api.option({}, "ghost")).toBe(null)
     })
   })
 
