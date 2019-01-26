@@ -16,7 +16,6 @@ Minimalistic building tool
     - [TypeScript support](#typescript-support)
 - [API](#api)
     - [run](#runcmd-options)
-    - [options](#optionsthis)
     - [help](#helpfunc-annotation)
 
 
@@ -32,7 +31,7 @@ Create `tasksfile.js` in your root project directory:
 const { run } = require('tasksfile')
 const { cli } = require('tasksfile/lib/script')
 
-function hello(name = 'Mysterious') {
+function hello(options, name = 'Mysterious') {
   console.log(`Hello ${name}!`)
 }
 
@@ -113,9 +112,9 @@ function commands () {
   })
 }
 
-module.exports = {
+cli({
   all
-}
+})
 ```
 
 ```bash
@@ -132,13 +131,13 @@ Provided arguments in the command line are passed to the function:
 
 
 ```javascript
-function sayHello (who) {
+function sayHello (options, who) {
   console.log(`Hello ${who}!`)
 }
 
-module.exports = {
+cli({
   sayHello
-}
+})
 ```
 
 ```bash
@@ -151,16 +150,14 @@ matter after task name. They will be always available by `options` helper
 from inside a function.
 
 ```javascript
-const { options } = require('tasksfile')
-
-function sayHello (who) {
+function sayHello (options, who) {
   console.log(`Hello ${who}!`)
-  console.log('Given options:', options(this))
+  console.log('Given options:', options)
 }
 
-module.exports = {
+cli({
   sayHello
-}
+})
 ```
 
 ```bash
@@ -191,14 +188,12 @@ function buildjs () {
 
 help(buildjs, 'Compile JS files')
 
-module.exports = {
+cli({
   buildjs
-}
+})
 ```
 
     $ npx task buildjs --help
-    Processing tasksfile.js...
-    
     Usage: buildjs
     
     Compile JS files
@@ -209,7 +204,7 @@ You can provide detailed annotation to give even more info about the task:
 const dedent = require('dedent')
 const { run, help } = require('tasksfile')
 
-function test (file) {
+function test (options, file) {
   
 }
 
@@ -225,14 +220,12 @@ help(test, {
   `
 })
 
-module.exports = {
+cli({
   test
-}
+})
 ```
 
     $ npx task test --help
-    Processing tasksfile.js...
-    
     Usage: test [options] [file]
     
     Run unit tests
@@ -257,9 +250,9 @@ const test = {
   }
 }
 
-module.exports = {
+cli({
   test
-}
+})
 ```
 
 ```bash
@@ -291,9 +284,9 @@ module.exports = {
 ```js
 const test = require('./tasks/test')
 
-module.exports = {
+cli({
   test
-}
+})
 ```
 
 ```bash
@@ -305,9 +298,9 @@ If we don't want to put imported tasks into a namespace, we can always use sprea
 operator:
 
 ```js
-module.exports = {
+cli({
   ...test
-}
+})
 ```
 
 ```bash
@@ -348,10 +341,10 @@ function shared2 () {
   console.log('This task is shared!')
 }
 
-module.exports = {
+cli({
   shared1,
   shared2
-}
+})
 ```
 
 Local `tasksfile.js`
@@ -362,10 +355,10 @@ function local () {
   console.log('This task is local!')
 }
 
-module.exports = {
+cli({
   ...shared,
   local
-}
+})
 ```
 
 ```bash
@@ -440,34 +433,6 @@ to the terminal, but `run` function will resolve (async) / return (sync)
 `null`.
 
 For `stdio: 'ignore'` nothing will be returned or printed
-
-
-#### options(this)
-
-A helper which returns an object with options which were given through dash 
-params of command line script.
-
-```js
-const { options } = require('tasksfile')
-```
-
-Example:
-
-```bash
-$ npx task lint --fix
-```
-
-```js
-function lint (path = '.') {
-  options(this).fix ? run(`eslint ${path} --fix`) : run(`eslint ${path}`) 
-}
-```
-
-To execute a task in JS with options:
-
-```js
-lint.call({ options: { fix: true }}, './component.js')
-```
 
 
 #### help(func, annotation)
