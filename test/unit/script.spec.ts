@@ -169,17 +169,17 @@ describe('script', () => {
 
     it('calls the method from a given object by given method name and its arguments', () => {
       script.call(obj, ['node', 'task', 'a'])
-      expect(a).toHaveBeenLastCalledWith()
+      expect(a).toHaveBeenLastCalledWith({})
       script.call(obj, ['node', 'task', 'a', '1', '2'])
-      expect(a).toHaveBeenLastCalledWith('1', '2')
+      expect(a).toHaveBeenLastCalledWith({}, '1', '2')
     })
 
     it('should handle dash arguments', () => {
       let calls: any = {}
 
-      function fn(this: any, ...args: any[]) {
-        calls.args = args
-        calls.options = this.options
+      function fn(...args: any[]) {
+        calls.args = args.slice(1)
+        calls.options = args[0]
       }
 
       obj.a = fn
@@ -246,9 +246,9 @@ describe('script', () => {
     it('should handle dash arguments in nested tasks', () => {
       let calls: any = {}
 
-      function fn(this: any, ...args: any[]) {
-        calls.args = args
-        calls.options = this.options
+      function fn(...args: any[]) {
+        calls.args = args.slice(1)
+        calls.options = args[0]
       }
 
       obj.b.c = fn
@@ -262,13 +262,13 @@ describe('script', () => {
 
     it('should call methods from nested objects by method name name-spacing', () => {
       script.call(obj, ['node', 'task', 'a', '1', '2'])
-      expect(a).toHaveBeenLastCalledWith('1', '2')
+      expect(a).toHaveBeenLastCalledWith({}, '1', '2')
       script.call(obj, ['node', 'task', 'b:c', '1', '2'])
-      expect(c).toHaveBeenLastCalledWith('1', '2')
+      expect(c).toHaveBeenLastCalledWith({}, '1', '2')
       script.call(obj, ['node', 'task', 'b:d:e', '1', '2'])
-      expect(e).toHaveBeenLastCalledWith('1', '2')
+      expect(e).toHaveBeenLastCalledWith({}, '1', '2')
       script.call(obj, ['node', 'task', 'f:g:h', '1', '2'])
-      expect(h).toHaveBeenLastCalledWith('1', '2')
+      expect(h).toHaveBeenLastCalledWith({}, '1', '2')
     })
 
     it('should raise an error if called method cannot be found', () => {

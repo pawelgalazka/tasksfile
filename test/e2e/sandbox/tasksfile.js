@@ -2,7 +2,7 @@ const { run, options, help } = require('../../../lib')
 const { cli } = require('../../../lib/script')
 
 function echo(...args) {
-  console.log('echo', args, options(this))
+  console.log('echo', args)
 }
 
 function commands() {
@@ -14,13 +14,13 @@ function commands() {
   )
 }
 
-function described(p1, p2) {
-  console.log(p1, p2, options(this))
+function described(options, p1, p2) {
+  console.log(p1, p2, options)
 }
 
 const nested = {
   echo(...args) {
-    console.log('nested echo', args, options(this))
+    console.log('nested echo', args)
   }
 }
 

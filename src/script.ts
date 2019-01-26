@@ -68,7 +68,7 @@ export function call(
     )
 
     cli((options, ...params) => {
-      obj[taskName].apply({ options }, params)
+      obj[taskName](options, ...params)
     })
     return obj[taskName]
   }

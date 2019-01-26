@@ -11,7 +11,7 @@ describe('tasksfile', () => {
 
   it('executes simple task', () => {
     expect(sh('../../../bin/task.js echo 1 2 3 --foo --bar')).toContain(
-      "echo [ '1', '2', '3' ] { foo: true, bar: true }"
+      "echo [ { foo: true, bar: true }, '1', '2', '3' ]\n"
     )
   })
 
@@ -26,7 +26,7 @@ describe('tasksfile', () => {
 
   it('executes name spaced tasks', () => {
     expect(sh('../../../bin/task.js nested:echo 1 2 3 --foo --bar')).toContain(
-      "echo [ '1', '2', '3' ] { foo: true, bar: true }"
+      "echo [ { foo: true, bar: true }, '1', '2', '3' ]\n"
     )
   })
 

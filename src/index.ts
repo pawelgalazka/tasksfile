@@ -4,14 +4,6 @@ import shell, { IShellOptions } from './shell'
 
 const loggerAlias: Logger = logger
 
-interface ICliOptions {
-  [key: string]: string
-}
-
-interface ITaskContext {
-  options?: ICliOptions
-}
-
 interface ITaskFunction {
   (...args: any[]): any
   help?: any
@@ -55,10 +47,6 @@ export function run(
   logger.title(command)
 
   return shell(command, nextOptions)
-}
-
-export function options(thisObj: ITaskContext | null): object {
-  return (thisObj && thisObj.options) || {}
 }
 
 export function help(func: ITaskFunction, annotation?: string | any) {

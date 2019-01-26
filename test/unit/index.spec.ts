@@ -162,27 +162,6 @@ describe('api', () => {
     })
   })
 
-  describe('options()', () => {
-    let thisStub: any
-
-    beforeEach(() => {
-      thisStub = {
-        options: {
-          test: 'abcdef'
-        }
-      }
-    })
-
-    it('returns options object', () => {
-      expect(api.options(thisStub)).toEqual(thisStub.options)
-    })
-
-    it('returns empty object if options not found', () => {
-      expect(api.options(null)).toEqual({})
-      expect(api.options({})).toEqual({})
-    })
-  })
-
   describe('help()', () => {
     it('throws an error if first argument is not a function', () => {
       expect(() => api.help(undefined as any)).toThrow(
