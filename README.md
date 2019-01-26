@@ -119,7 +119,7 @@ module.exports = {
 ```
 
 ```bash
-$ run commands
+$ npx task commands
 ```
 
 Because `./node_modules/.bin` is included in `PATH` when calling shell commands
@@ -142,7 +142,7 @@ module.exports = {
 ```
 
 ```bash
-$ task sayHello world
+$ npx task sayHello world
 Hello world!
 ```
     
@@ -164,7 +164,7 @@ module.exports = {
 ```
 
 ```bash
-$ task sayHello -a --test=something world
+$ npx task sayHello -a --test=something world
 Hello world!
 Given options: { a: true, test: 'something' }
 ```
@@ -175,9 +175,7 @@ Given options: { a: true, test: 'something' }
 To display all available tasks for your `tasksfile.js` type `task` in your command line
 without any arguments:
 
-    $ task
-    Processing tasksfile.js...
-    
+    $ npx task
     Available tasks:
     echo                    - echo task description
     buildjs                 - Compile JS files
@@ -198,7 +196,7 @@ module.exports = {
 }
 ```
 
-    $ task buildjs --help
+    $ npx task buildjs --help
     Processing tasksfile.js...
     
     Usage: buildjs
@@ -232,7 +230,7 @@ module.exports = {
 }
 ```
 
-    $ task test --help
+    $ npx task test --help
     Processing tasksfile.js...
     
     Usage: test [options] [file]
@@ -265,7 +263,7 @@ module.exports = {
 ```
 
 ```bash
-$ task test:unit
+$ npx task test:unit
 Doing unit testing!
 ```
 
@@ -299,7 +297,7 @@ module.exports = {
 ```
 
 ```bash
-$ task test:unit
+$ npx task test:unit
 Doing unit testing!
 ```
 
@@ -313,7 +311,7 @@ module.exports = {
 ```
 
 ```bash
-$ task unit
+$ npx task unit
 Doing unit testing!
 ```
 
@@ -329,8 +327,8 @@ export { test } // add namespace
 ```
 
 ```bash
-$ task unit
-$ task test:unit
+$ npx task unit
+$ npx task test:unit
 ```
 
 ### Sharing tasks
@@ -371,9 +369,9 @@ module.exports = {
 ```
 
 ```bash
-$ task shared1
-$ task shared2
-$ task local
+$ npx task shared1
+$ npx task shared2
+$ npx task local
 ```
 
 ### TypeScript support
@@ -456,7 +454,7 @@ const { options } = require('tasksfile')
 Example:
 
 ```bash
-$ task lint --fix
+$ npx task lint --fix
 ```
 
 ```js
@@ -498,6 +496,6 @@ help(test, {
 })
 ```
 
-    $ task build --help
-    $ task test --help
+    $ npx task build --help
+    $ npx task test --help
 
