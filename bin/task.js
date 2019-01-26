@@ -5,4 +5,9 @@ const packageJson = require(path.resolve('./package.json'))
 
 const taskScript = packageJson.scripts.task
 
-execSync(`${taskScript} ${process.argv.slice(2).join(' ')}`, {shell: true, stdio: 'inherit'})
+try {
+  execSync(`${taskScript} ${process.argv.slice(2).join(' ')}`, {shell: true, stdio: 'inherit'})
+} catch (error) {
+  console.error(error.message)
+  process.exit(1)
+}
