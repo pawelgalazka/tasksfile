@@ -9,19 +9,19 @@ interface ITaskFunction {
   help?: any
 }
 
-export function run(
+export function sh(
   command: string,
   options: IShellOptions & { async: true },
   logger?: Logger
 ): Promise<string | null>
 
-export function run(
+export function sh(
   command: string,
   options?: IShellOptions & { async?: false | null },
   logger?: Logger
 ): string | null
 
-export function run(
+export function sh(
   command: string,
   options: IShellOptions = {},
   logger: Logger = loggerAlias

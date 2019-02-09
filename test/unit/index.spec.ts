@@ -26,7 +26,7 @@ describe('api', () => {
     }
   })
 
-  describe('run()', () => {
+  describe('sh()', () => {
     beforeEach(() => {
       execSyncMock.mockReset()
       spawnMock.mockReset()
@@ -39,7 +39,7 @@ describe('api', () => {
     describe('sync version', () => {
       describe('with stdio=pipe', () => {
         it('should execute basic shell commands', () => {
-          const output = api.run('echo "echo test"', { stdio: 'pipe' }, logger)
+          const output = api.sh('echo "echo test"', { stdio: 'pipe' }, logger)
           expect(execSyncMock.mock.calls[0][0]).toEqual('echo "echo test"')
           expect(execSyncMock.mock.calls[0][1]).toHaveProperty('stdio', 'pipe')
           expect(output).toEqual('output')
@@ -51,12 +51,12 @@ describe('api', () => {
             throw new Error('test')
           })
           expect(() => {
-            api.run('node ./ghost.js', { stdio: 'pipe' }, logger)
+            api.sh('node ./ghost.js', { stdio: 'pipe' }, logger)
           }).toThrow(ShellError)
         })
 
         it('should have access to environment variables by default', () => {
-          api.run('cli-command', { stdio: 'pipe' }, logger)
+          api.sh('cli-command', { stdio: 'pipe' }, logger)
           expect(execSyncMock.mock.calls[0][1].env).toHaveProperty(
             'TASKSFILE_TEST',
             'tasksfile test'
@@ -64,7 +64,7 @@ describe('api', () => {
         })
 
         it('should include in PATH node_modules/.bin', () => {
-          api.run('cli-command', { stdio: 'pipe' }, logger)
+          api.sh('cli-command', { stdio: 'pipe' }, logger)
           expect(execSyncMock.mock.calls[0][1].env.PATH).toContain(
             'node_modules/.bin'
           )
@@ -73,7 +73,7 @@ describe('api', () => {
 
       describe('with stdio=inherit', () => {
         it('should execute basic shell commands', () => {
-          api.run('cli-command', {}, logger)
+          api.sh('cli-command', {}, logger)
           expect(execSyncMock.mock.calls[0][0]).toEqual('cli-command')
           expect(execSyncMock.mock.calls[0][1]).toHaveProperty(
             'stdio',
@@ -88,7 +88,7 @@ describe('api', () => {
       describe('with stdio=pipe', () => {
         it('should execute basic shell commands', () => {
           const runProcess = api
-            .run('cli-cmd', { async: true, stdio: 'pipe' }, logger)
+            .sh('cli-cmd', { async: true, stdio: 'pipe' }, logger)
             .then(output => {
               expect(spawnMock.mock.calls[0][0]).toEqual('cli-cmd')
               expect(spawnMock.mock.calls[0][1]).toHaveProperty('stdio', 'pipe')
@@ -102,7 +102,7 @@ describe('api', () => {
 
         it('should have access to environment variables by default', () => {
           const runProcess = api
-            .run('cli-cmd', { async: true, stdio: 'pipe' }, logger)
+            .sh('cli-cmd', { async: true, stdio: 'pipe' }, logger)
             .then(() => {
               expect(spawnMock.mock.calls[0][1].env).toHaveProperty(
                 'TASKSFILE_TEST',
@@ -115,7 +115,7 @@ describe('api', () => {
         })
 
         it('should reject with an error if command fails', () => {
-          const runProcess = api.run(
+          const runProcess = api.sh(
             'cli-cmd',
             { async: true, stdio: 'pipe' },
             logger
@@ -129,7 +129,7 @@ describe('api', () => {
 
         it('should include in PATH node_modules/.bin', () => {
           const runProcess = api
-            .run('cli-cmd', { async: true, stdio: 'pipe' }, logger)
+            .sh('cli-cmd', { async: true, stdio: 'pipe' }, logger)
             .then(() => {
               expect(spawnMock.mock.calls[0][1].env.PATH).toContain(
                 'node_modules/.bin'
@@ -144,7 +144,7 @@ describe('api', () => {
       describe('with stdio=inherit', () => {
         it('should execute basic shell commands', () => {
           const runProcess = api
-            .run('cli-cmd', { async: true, stdio: 'inherit' }, logger)
+            .sh('cli-cmd', { async: true, stdio: 'inherit' }, logger)
             .then(output => {
               expect(spawnMock.mock.calls[0][0]).toEqual('cli-cmd')
               expect(spawnMock.mock.calls[0][1]).toHaveProperty(

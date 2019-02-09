@@ -1,4 +1,4 @@
-const { run, options, help } = require('../../../lib')
+const { sh, options, help } = require('../../../lib')
 const { cli } = require('../../../lib/script')
 
 function echo(...args) {
@@ -6,10 +6,10 @@ function echo(...args) {
 }
 
 function commands() {
-  run('echo "sync terminal"')
-  console.log('output', run('echo "sync pipe"', { stdio: 'pipe' }))
-  run('echo "async terminal"', { async: true })
-  run('echo "async terminal"', { async: true, stdio: 'pipe' }).then(output =>
+  sh('echo "sync terminal"')
+  console.log('output', sh('echo "sync pipe"', { stdio: 'pipe' }))
+  sh('echo "async terminal"', { async: true })
+  sh('echo "async terminal"', { async: true, stdio: 'pipe' }).then(output =>
     console.log('output', output)
   )
 }
@@ -25,11 +25,11 @@ const nested = {
 }
 
 function localbin() {
-  run('hello')
+  sh('hello')
 }
 
 async function asyncawait() {
-  const output = await run('echo "async and await"', {
+  const output = await sh('echo "async and await"', {
     async: true,
     stdio: 'pipe'
   })
@@ -38,13 +38,13 @@ async function asyncawait() {
 }
 
 function error() {
-  run('node ../scripts/error.js', { async: true })
-  run('node ../scripts/error.js')
+  sh('node ../scripts/error.js', { async: true })
+  sh('node ../scripts/error.js')
 }
 
 function color() {
-  run('node ../scripts/color.js')
-  run('node ../scripts/color.js', { async: true })
+  sh('node ../scripts/color.js')
+  sh('node ../scripts/color.js', { async: true })
 }
 
 help(echo, 'Simple echo task')
