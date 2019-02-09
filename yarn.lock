@@ -32,6 +32,19 @@
     log-update "^2.3.0"
     strip-ansi "^3.0.1"
 
+"@pawelgalazka/cli-args@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@pawelgalazka/cli-args/-/cli-args-1.1.3.tgz#7880b7e4213df516f79b200438290f3966a22428"
+  integrity sha512-snkj9nX11F/2+7t/aQUbGC4iYMMZ2BQMoSsJ0IUUimzkOM9jb12QFAGubsOo9TibmfTN/g0DJ+ciOgXB/YEClQ==
+
+"@pawelgalazka/cli@1.3.5":
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/@pawelgalazka/cli/-/cli-1.3.5.tgz#b5c54607f5cc8b216ec7ad6cd79df031b1dfdbad"
+  integrity sha512-aosoTH1Fa7Ur8EqY7azs7a7mTwPVs/YykAhp1snpxOcdM59t+OE3hUMh/NCFxOWyhdOdz4goZkyYtgcaYs9DzA==
+  dependencies:
+    "@pawelgalazka/cli-args" "1.1.3"
+    lodash "4.17.11"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -2727,19 +2740,6 @@ merge@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.1.tgz#38bebf80c3220a8a487b6fcfb3941bb11720c145"
   integrity sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==
-
-microargs@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/microargs/-/microargs-1.1.2.tgz#725fbedcf120db12317d3eda534d3f19af867733"
-  integrity sha512-fUrX9ozzzUX6JlDoNXmUM5i4B0uBF5xPznZ0Y/izM9wOtAaTf44V2vUCRgGBLUq/SeGIcDgfnEZDVoT92HId0g==
-
-microcli@1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/microcli/-/microcli-1.3.3.tgz#27f1b330b0f935be6314f298972105a325f731e7"
-  integrity sha512-1isRaEBpfRC8vJMJymKknAH8CdPFABuWPVc18rlRWHOCcHLYEkJxcoH7FNkX7AuTGrB4Uf1ve6B0s/FfwzGWKg==
-  dependencies:
-    lodash "4.17.11"
-    microargs "1.1.2"
 
 micromatch@^2.3.11:
   version "2.3.11"
