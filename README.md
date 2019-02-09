@@ -28,7 +28,7 @@ Install tasksfile in your project
 Create `tasksfile.js` in your root project directory:
 
 ```js
-const { run } = require('tasksfile')
+const { sh } = require('tasksfile')
 const { cli } = require('tasksfile/lib/script')
 
 function hello(options, name = 'Mysterious') {
@@ -36,7 +36,7 @@ function hello(options, name = 'Mysterious') {
 }
 
 function makedir() {
-  run('mkdir somedir')
+  sh('mkdir somedir')
 }
 
 cli({
@@ -99,15 +99,15 @@ libraries which makes that approach much more flexible.
 
 ### Executing shell commands
 
-Tasksfile gives an easy way to execute shell commands in your tasks by `run` function
+Tasksfile gives an easy way to execute shell commands in your tasks by `sh` function
 in synchronous and asynchronous way:
 
 ```js
-const { run } = require('tasksfile')
+const { sh } = require('tasksfile')
 
 function commands () {
-  run('jest')
-  run(`webpack-dev-server --config webpack.config.js`, {
+  sh('jest')
+  sh(`webpack-dev-server --config webpack.config.js`, {
     async: true
   })
 }
@@ -122,7 +122,7 @@ $ npx task commands
 ```
 
 Because `./node_modules/.bin` is included in `PATH` when calling shell commands
-by `run` function, you can call "bins" from your local project in the same way as 
+by `sh` function, you can call "bins" from your local project in the same way as 
 in npm scripts.
 
 ### Handling arguments
@@ -202,7 +202,7 @@ You can provide detailed annotation to give even more info about the task:
 
 ```javascript
 const dedent = require('dedent')
-const { run, help } = require('tasksfile')
+const { sh, help } = require('tasksfile')
 
 function test (options, file) {
   
