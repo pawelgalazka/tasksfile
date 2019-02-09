@@ -1,6 +1,5 @@
 /src
 /test
-/bin/package.json
 /.huskyrc.json
 /.travis.yml
 /.prettierrc.json
