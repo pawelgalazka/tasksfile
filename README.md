@@ -28,8 +28,7 @@ Install tasksfile in your project
 Create `tasksfile.js` in your root project directory:
 
 ```js
-const { sh } = require('tasksfile')
-const { cli } = require('tasksfile/lib/script')
+const { sh, cli } = require('tasksfile')
 
 function hello(options, name = 'Mysterious') {
   console.log(`Hello ${name}!`)
