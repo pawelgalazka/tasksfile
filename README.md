@@ -340,10 +340,10 @@ function shared2 () {
   console.log('This task is shared!')
 }
 
-cli({
+module.exports = {
   shared1,
   shared2
-})
+}
 ```
 
 Local `tasksfile.js`
