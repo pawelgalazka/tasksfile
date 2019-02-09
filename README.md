@@ -102,7 +102,7 @@ Tasksfile gives an easy way to execute shell commands in your tasks by `sh` func
 in synchronous and asynchronous way:
 
 ```js
-const { sh } = require('tasksfile')
+const { sh, cli } = require('tasksfile')
 
 function commands () {
   sh('jest')
@@ -179,7 +179,7 @@ without any arguments:
 Use `help` utility function for your task to get additional description:
 
 ```javascript
-const { task, help } = require('tasksfile')
+const { cli, help } = require('tasksfile')
 
 function buildjs () {
   
