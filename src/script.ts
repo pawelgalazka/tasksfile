@@ -1,11 +1,11 @@
 import microcli from '@pawelgalazka/cli'
+import { ShellError } from '@pawelgalazka/shell'
 import chalk from 'chalk'
 import padEnd from 'lodash.padend'
 
 const CLIError = microcli.CliError
 
 import { ILogger, logger, Logger, TasksfileError } from './common'
-import { ShellError } from './shell'
 
 export function describe(obj: any, logger: Logger, namespace?: string) {
   if (!namespace) {

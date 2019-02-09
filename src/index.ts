@@ -1,6 +1,6 @@
+import { IShellOptions, shell } from '@pawelgalazka/shell'
 import path from 'path'
 import { logger, Logger } from './common'
-import shell, { IShellOptions } from './shell'
 export { cli } from './script'
 
 const loggerAlias: Logger = logger
