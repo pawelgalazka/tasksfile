@@ -4,12 +4,32 @@
 
 - renaming project from `runjs` to `tasksfile`
 - `run` api function renamed to `sh`
-- calling tasks occurs through `npx task` not `npx run`, it may happen also through `npm run` (check docs)
+- calling tasks occurs through `npx task` not `npx run` script
+
+*Mechanics:*
+
+- options are passed to task function as first argument, 
+they are not available through `options(this)` anymore
+
+- to be able to run tasks, entry to `npm scripts` must be added.
+`npx task` alias runs `task` entry from there. `tasksfile.js` will
+act now like a script which allows greated flexibility how it is run,
+like: `"task": "node tasksfile.js"` or `"task": "ts-node tasksfile.ts"`.
+That means tasksfile no longer reads `runjs` config from `package.json`
+which allowed to use `babel-register`, `ts-node/register` or change
+name of `runfile.js` as this can be directly adjusted in `npm scripts`
+entry.
+
+- to be able to call a task from `tasksfile.js`, 
+task must be exposed through `cli` api function, not
+exported from module as it was before
 
 
-*4.x to 5.x migration procedure:*
+*Removals*
 
-- 
+- removing `option` and `options` helper
+- removing autocomplete feature
+
 
 ## 4.4.0
 
