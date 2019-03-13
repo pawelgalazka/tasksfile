@@ -1,3 +1,16 @@
+## 5.0.0 beta
+
+*Renames:*
+
+- renaming project from `runjs` to `tasksfile`
+- `run` api function renamed to `sh`
+- calling tasks occurs through `npx task` not `npx run`, it may happen also through `npm run` (check docs)
+
+
+*4.x to 5.x migration procedure:*
+
+- 
+
 ## 4.4.0
 
 - source code migrated from `Flow/Babel` to `TypeScript`
