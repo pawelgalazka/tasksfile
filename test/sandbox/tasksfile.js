@@ -1,4 +1,4 @@
-const { sh, help, cli } = require('../../../lib')
+const { sh, help, cli } = require('../../lib')
 
 function echo(...args) {
   console.log('echo', args)

@@ -1,9 +1,11 @@
+*.spec.ts
 /src
 /test
 /.huskyrc.json
 /.travis.yml
 /.prettierrc.json
 /.vscode
+/.babelrc
 /test
 /jest.config.js
 /tslint.json

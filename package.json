@@ -16,12 +16,12 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'src/*.ts' 'test/**/*.ts'",
     "build": "tsc",
-    "test": "yarn lint && yarn build && yarn clean:sandbox && jest ./test --coverage",
-    "test:unit": "jest ./test/unit/",
-    "test:e2e": "jest ./test/e2e/",
+    "test": "yarn lint && yarn build && yarn clean:sandbox && jest --coverage",
+    "test:unit": "jest ./src/",
+    "test:e2e": "jest ./test/",
     "clean": "rm -rf node_modules && yarn clean:build && yarn clean:sandbox",
     "clean:build": "rm -rf ./lib",
-    "clean:sandbox": "rm -rf ./test/e2e/sandbox/node_modules && mkdir -p ./test/e2e/sandbox/node_modules/.bin"
+    "clean:sandbox": "rm -rf ./test/e2e/sandbox/node_modules && mkdir -p ./test/sandbox/node_modules/.bin"
   },
   "lint-staged": {
     "src/*.{ts,tsx}": [
@@ -48,11 +48,14 @@
     "chalk": "2.3.0"
   },
   "devDependencies": {
-    "@types/jest": "23.3.12",
+    "@babel/core": "7.2.2",
+    "@babel/preset-env": "7.3.1",
+    "@babel/preset-typescript": "7.1.0",
+    "@types/jest": "24.0.0",
     "@types/lodash.padend": "4.6.4",
     "@types/node": "10.12.18",
     "husky": "1.3.1",
-    "jest": "23.6.0",
+    "jest": "24.1.0",
     "lint-staged": "8.1.0",
     "prettier": "1.15.3",
     "ts-jest": "23.10.5",

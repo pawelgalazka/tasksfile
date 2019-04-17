@@ -2,7 +2,7 @@ import { ShellError } from '@pawelgalazka/shell'
 import chalk from 'chalk'
 import { execSync, spawn } from 'child_process'
 import { EventEmitter } from 'events'
-import * as api from '../../src/index'
+import * as api from './index'
 
 const execSyncMock: any = execSync
 const spawnMock: any = spawn
