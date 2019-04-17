@@ -6,6 +6,10 @@ describe('tasksfile', () => {
   function sh(cmd: string) {
     return execSync(cmd, {
       cwd: './test/sandbox',
+      env: {
+        ...process.env,
+        FORCE_COLOR: '0'
+      },
       stdio: 'pipe'
     }).toString()
   }
@@ -16,7 +20,7 @@ describe('tasksfile', () => {
     )
   })
 
-  it.skip('executes shell commands in a task', () => {
+  it('executes shell commands in a task', () => {
     const output = sh(`${scriptPath} commands`)
     expect(output).toContain(
       'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe'
@@ -36,7 +40,7 @@ describe('tasksfile', () => {
     expect(sh(`${scriptPath} localbin`)).toContain('Hello!')
   })
 
-  it.skip('executes tasks with async and await', () => {
+  it('executes tasks with async and await', () => {
     expect(sh(`${scriptPath} asyncawait`)).toContain(
       'echo "async and await"\noutput async and await\n\nafter await\n'
     )
