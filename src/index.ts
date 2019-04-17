@@ -1,9 +1,37 @@
+import {
+  cli as cliEngine,
+  CommandsModule,
+  Middleware,
+  useMiddlewares
+} from '@pawelgalazka/cli'
 import { Logger } from '@pawelgalazka/cli/lib/utils/logger'
-import { IShellOptions, shell } from '@pawelgalazka/shell'
+import { IShellOptions, shell, ShellError } from '@pawelgalazka/shell'
 import chalk from 'chalk'
 import path from 'path'
 
-export { cli, help } from '@pawelgalazka/cli'
+export { help } from '@pawelgalazka/cli'
+
+const shellErrorHandler: (
+  logger: Logger
+) => Middleware = logger => next => args => {
+  const { reject } = args
+  const nextReject = (error: Error) => {
+    if (error instanceof ShellError) {
+      logger.error(error.message)
+      process.exit(1)
+    } else {
+      reject(error)
+    }
+  }
+  try {
+    next({
+      ...args,
+      reject: nextReject
+    })
+  } catch (error) {
+    nextReject(error)
+  }
+}
 
 export function sh(
   command: string,
@@ -43,4 +71,11 @@ export function sh(
   logger.log(chalk.bold(command))
 
   return shell(command, nextOptions)
+}
+
+export function cli(definition: CommandsModule) {
+  return cliEngine(
+    definition,
+    useMiddlewares([shellErrorHandler(new Logger())])
+  )
 }
