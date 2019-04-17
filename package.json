@@ -16,6 +16,7 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'src/*.ts' 'test/**/*.ts'",
     "build": "tsc",
+    "build:clean": "rm -rf ./lib",
     "test": "yarn lint && yarn build && yarn sandbox:dev && jest ./test --coverage",
     "test:unit": "jest ./test/unit/",
     "test:e2e": "jest ./test/e2e/",
