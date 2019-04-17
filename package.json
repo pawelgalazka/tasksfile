@@ -34,14 +34,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pawelgalazka/runjs.git"
+    "url": "git+https://github.com/pawelgalazka/tasksfile.git"
   },
   "author": "Pawel Galazka",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pawelgalazka/runjs/issues"
+    "url": "https://github.com/pawelgalazka/tasksfile/issues"
   },
-  "homepage": "https://github.com/pawelgalazka/runjs#readme",
+  "homepage": "https://github.com/pawelgalazka/tasksfile#readme",
   "dependencies": {
     "@pawelgalazka/cli": "2.0.0",
     "@pawelgalazka/shell": "1.0.0",
@@ -58,7 +58,6 @@
     "jest": "24.1.0",
     "lint-staged": "8.1.0",
     "prettier": "1.15.3",
-    "ts-jest": "23.10.5",
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.17.0",
     "tslint-plugin-prettier": "2.0.1",
