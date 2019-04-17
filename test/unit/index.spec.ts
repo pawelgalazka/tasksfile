@@ -1,4 +1,5 @@
 import { ShellError } from '@pawelgalazka/shell'
+import chalk from 'chalk'
 import { execSync, spawn } from 'child_process'
 import { EventEmitter } from 'events'
 import * as api from '../../src/index'
@@ -43,7 +44,9 @@ describe('api', () => {
           expect(execSyncMock.mock.calls[0][0]).toEqual('echo "echo test"')
           expect(execSyncMock.mock.calls[0][1]).toHaveProperty('stdio', 'pipe')
           expect(output).toEqual('output')
-          expect(logger.title).toHaveBeenCalledWith('echo "echo test"')
+          expect(logger.log).toHaveBeenCalledWith(
+            chalk.bold('echo "echo test"')
+          )
         })
 
         it('should throw an error if command fails', () => {
@@ -79,7 +82,7 @@ describe('api', () => {
             'stdio',
             'inherit'
           )
-          expect(logger.title).toHaveBeenCalledWith('cli-command')
+          expect(logger.log).toHaveBeenCalledWith(chalk.bold('cli-command'))
         })
       })
     })
@@ -93,7 +96,7 @@ describe('api', () => {
               expect(spawnMock.mock.calls[0][0]).toEqual('cli-cmd')
               expect(spawnMock.mock.calls[0][1]).toHaveProperty('stdio', 'pipe')
               expect(output).toEqual('output')
-              expect(logger.title).toHaveBeenCalledWith('cli-cmd')
+              expect(logger.log).toHaveBeenCalledWith(chalk.bold('cli-cmd'))
             })
           spawnProcessMock.stdout.emit('data', 'output')
           spawnProcessMock.emit('close', 0)
@@ -152,21 +155,13 @@ describe('api', () => {
                 'inherit'
               )
               expect(output).toEqual(null)
-              expect(logger.title).toHaveBeenCalledWith('cli-cmd')
+              expect(logger.log).toHaveBeenCalledWith(chalk.bold('cli-cmd'))
             })
           spawnProcessMock.stdout.emit('data', 'output')
           spawnProcessMock.emit('close', 0)
           return runProcess
         })
       })
-    })
-  })
-
-  describe('help()', () => {
-    it('throws an error if first argument is not a function', () => {
-      expect(() => api.help(undefined as any)).toThrow(
-        'first help() argument must be a function'
-      )
     })
   })
 })

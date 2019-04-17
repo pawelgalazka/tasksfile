@@ -1,14 +1,9 @@
+import { Logger } from '@pawelgalazka/cli/lib/utils/logger'
 import { IShellOptions, shell } from '@pawelgalazka/shell'
+import chalk from 'chalk'
 import path from 'path'
-import { logger, Logger } from './common'
-export { cli } from './script'
 
-const loggerAlias: Logger = logger
-
-interface ITaskFunction {
-  (...args: any[]): any
-  help?: any
-}
+export { cli, help } from '@pawelgalazka/cli'
 
 export function sh(
   command: string,
@@ -25,7 +20,7 @@ export function sh(
 export function sh(
   command: string,
   options: IShellOptions = {},
-  logger: Logger = loggerAlias
+  logger: Logger = new Logger()
 ) {
   const binPath = path.resolve('./node_modules/.bin')
 
@@ -45,17 +40,7 @@ export function sh(
     env.PATH = [binPath, env.PATH || process.env.PATH].join(path.delimiter)
   }
 
-  logger.title(command)
+  logger.log(chalk.bold(command))
 
   return shell(command, nextOptions)
-}
-
-export function help(func: ITaskFunction, annotation?: string | any) {
-  // Because the validation above currently gets compiled out,
-  // Explictly  validate the function input
-  if (typeof func === 'function') {
-    func.help = annotation
-  } else {
-    throw new Error('first help() argument must be a function')
-  }
 }

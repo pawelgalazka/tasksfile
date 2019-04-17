@@ -1,4 +1,4 @@
-const { sh, options, help, cli } = require('../../../lib')
+const { sh, help, cli } = require('../../../lib')
 
 function echo(...args) {
   console.log('echo', args)
@@ -48,8 +48,7 @@ function color() {
 
 help(echo, 'Simple echo task')
 help(nested.echo, 'Description of nested task')
-help(described, {
-  description: 'Task description',
+help(described, 'Task description', {
   params: ['p1', 'p2'],
   options: {
     foo: 'foo option'
