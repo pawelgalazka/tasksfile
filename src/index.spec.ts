@@ -7,7 +7,7 @@ const shellMock = shell as jest.Mock
 
 jest.mock('@pawelgalazka/shell')
 
-process.env = { TASKSFILE_TEST: 'tasksfile test' }
+process.env = { DEFAULT_ENV: 'default env' }
 
 describe('sh()', () => {
   let logger: any
@@ -41,8 +41,8 @@ describe('sh()', () => {
       async: false,
       cwd: undefined,
       env: {
-        PATH: expect.anything(),
-        TASKSFILE_TEST: 'tasksfile test'
+        DEFAULT_ENV: 'default env',
+        PATH: expect.anything()
       },
       stdio: 'inherit',
       timeout: undefined
@@ -52,7 +52,13 @@ describe('sh()', () => {
   it('calls original @pawelgalazka/shell with given options values', () => {
     sh(
       'test command',
-      { async: true, cwd: 'cwd-dir', stdio: 'pipe', timeout: 1000 },
+      {
+        async: true,
+        cwd: 'cwd-dir',
+        env: { CUSTOM_ENV: 'custom env' },
+        stdio: 'pipe',
+        timeout: 1000
+      },
       logger
     )
     expect(shellMock).toHaveBeenCalledTimes(1)
@@ -60,11 +66,23 @@ describe('sh()', () => {
       async: true,
       cwd: 'cwd-dir',
       env: {
-        PATH: expect.anything(),
-        TASKSFILE_TEST: 'tasksfile test'
+        CUSTOM_ENV: 'custom env',
+        PATH: expect.anything()
       },
       stdio: 'pipe',
       timeout: 1000
     })
+  })
+
+  it('adds ./node_modules/.bin to $PATH', () => {
+    sh('test command', undefined, logger)
+    expect(shellMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        env: expect.objectContaining({
+          PATH: expect.stringContaining('node_modules/.bin:')
+        })
+      })
+    )
   })
 })
