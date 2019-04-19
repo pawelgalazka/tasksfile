@@ -27,6 +27,8 @@ exported from module as it was before
 - `help` function as second argument accepts only `string`, for third argument
 accepts detailed help information about `options` and `params`
 
+- handling default namespace task
+
 
 *Removals*
 
