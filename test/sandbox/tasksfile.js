@@ -16,7 +16,13 @@ const nested = {
   }
 }
 
-help(nested.echo, 'Description of nested task')
+help(nested.echo, 'Description of nested task', {
+  options: {
+    foo: 'foo option description',
+    bar: 'bar option description'
+  },
+  params: ['p1', 'p2']
+})
 
 function shell() {
   sh('echo "sync terminal"')

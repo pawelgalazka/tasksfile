@@ -57,6 +57,14 @@ describe('tasksfile', () => {
     )
   })
 
+  it('displays detailed help', () => {
+    expect(execSync(`${scriptPath} nested:echo --help`)).toEqual(
+      'Usage: nested:echo [options] [p1 p2]\n\nDescription of nested task\n\n' +
+        'Options:\n\n  --foo       foo option description\n' +
+        '  --bar       bar option description\n'
+    )
+  })
+
   it('displays error from executed command', () => {
     expect(() => execSync(`${scriptPath} error`)).toThrow(
       `Command failed: ${scriptPath} error`
