@@ -107,7 +107,7 @@ in synchronous and asynchronous way:
 ```js
 const { sh, cli } = require('tasksfile')
 
-function commands () {
+function command () {
   sh('jest')
   sh(`webpack-dev-server --config webpack.config.js`, {
     async: true
@@ -115,12 +115,12 @@ function commands () {
 }
 
 cli({
-  all
+  command
 })
 ```
 
 ```bash
-$ npx task commands
+$ npx task command
 ```
 
 Because `./node_modules/.bin` is included in `PATH` when calling shell commands
