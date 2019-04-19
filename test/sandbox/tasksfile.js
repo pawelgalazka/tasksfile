@@ -37,13 +37,13 @@ async function asyncawait() {
 }
 
 function error() {
-  sh('node ../scripts/error.js', { async: true })
-  sh('node ../scripts/error.js')
+  sh('node ./scripts/error.js', { async: true })
+  sh('node ./scripts/error.js')
 }
 
 function color() {
-  sh('node ../scripts/color.js')
-  sh('node ../scripts/color.js', { async: true })
+  sh('node ./scripts/color.js')
+  sh('node ./scripts/color.js', { async: true })
 }
 
 help(echo, 'Simple echo task')
