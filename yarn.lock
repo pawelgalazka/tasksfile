@@ -806,10 +806,10 @@
   resolved "https://registry.yarnpkg.com/@pawelgalazka/cli-args/-/cli-args-1.1.3.tgz#7880b7e4213df516f79b200438290f3966a22428"
   integrity sha512-snkj9nX11F/2+7t/aQUbGC4iYMMZ2BQMoSsJ0IUUimzkOM9jb12QFAGubsOo9TibmfTN/g0DJ+ciOgXB/YEClQ==
 
-"@pawelgalazka/cli@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@pawelgalazka/cli/-/cli-2.0.0.tgz#f2c90e029277e0d53a29ae23d1ce503861146021"
-  integrity sha512-/PtLD3kM2kEIoBDnC6jZQYf5IE8NsI6P3RPNNQ4QOsH0T7QO/rwasReTtgfRCjjtEx2zPht5nU7pUocZuAofyQ==
+"@pawelgalazka/cli@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@pawelgalazka/cli/-/cli-2.0.1.tgz#cf4f511514247f7413455ffaae115d6b951cbd1c"
+  integrity sha512-Xa3aerdlr30yIucd7EoCQgEEFI5k3BXDcsk0aDTMr/pMGd9dACzOhH7DH7PgOQMft93CbAWTqMCJctSgjaqfDg==
   dependencies:
     "@pawelgalazka/cli-args" "1.1.3"
     "@pawelgalazka/middleware" "1.0.0"
