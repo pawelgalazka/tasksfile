@@ -210,8 +210,7 @@ function test (options, file) {
   
 }
 
-help(test, {
-  description: 'Run unit tests',
+help(test, 'Run unit tests', {
   params: ['file'],
   options: {
     watch: 'run tests in a watch mode'
