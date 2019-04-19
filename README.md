@@ -60,6 +60,8 @@ Call in your terminal through npm scripts:
 ```bash
 $ npm run task -- hello Tommy
 $ npm run task -- makedir
+$ yarn task hello Tommy
+$ yarn task makedir
 ```
 
 or through shorter `npx task` alias:
