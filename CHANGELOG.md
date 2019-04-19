@@ -1,10 +1,15 @@
 ## 5.0.0 beta
 
-*Renames:*
+*API*
 
-- renaming project from `runjs` to `tasksfile`
-- `run` api function renamed to `sh`
-- calling tasks occurs through `npx task` not `npx run` script
+- `help` function as second argument now accepts only `string`, for third argument
+accepts detailed help information about `options` and `params`
+- removing `option` and `options` helper, now `options` will be passed always as a first
+argument to the task
+- introducing `rawArgs` function, which returns raw, unparsed args which were provided
+to the task
+- renaming `run` function to `sh`
+
 
 *Mechanics:*
 
@@ -24,21 +29,16 @@ entry.
 task must be exposed through `cli` api function, not
 exported from module as it was before
 
-- `help` function as second argument accepts only `string`, for third argument
-accepts detailed help information about `options` and `params`
+- namespaces now can have `default` task
 
-- handling default namespace task
+- removing autocomplete, as it required to much configuration and it
+seems not used by the users
 
+- calling tasks occurs through `npx task` not `npx run` script
 
-*Removals*
+*Other:*
 
-- removing `option` and `options` helper
-- removing autocomplete feature
-
-*Api*
-
-- `rawArgs()` function available which returns raw, unparsed args which were provided
-to the task
+- renaming project from `runjs` to `tasksfile`
 
 
 ## 4.4.0
