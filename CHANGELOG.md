@@ -1,6 +1,6 @@
 ## 5.0.0 beta
 
-*API*
+*API:*
 
 - `help` function as second argument now accepts only `string`, for third argument
 accepts detailed help information about `options` and `params`
