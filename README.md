@@ -17,6 +17,7 @@ Minimalistic building tool
 - [API](#api)
     - [sh](#shcmd-options)
     - [help](#helpfunc-description-annotation)
+    - [rawArgs](#rawArgs)
 
 
 ## Get started
@@ -462,3 +463,24 @@ help(test, 'Run unit tests', {
     $ npx task build --help
     $ npx task test --help
 
+
+#### rawArgs()
+
+Returns arguments / options passed to task in a raw, unparsed format.
+
+```javascript
+const { cli, rawArgs } = require('tasksfile')
+
+function hello(options) {
+  console.log('RAW ARGS', rawArgs())
+}
+
+cli({
+  hello
+})
+```
+
+```sh
+$ npx task hello 1 2 3 --test
+RAW ARGS ['1', '2', '3', '--test']
+```

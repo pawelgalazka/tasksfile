@@ -33,6 +33,11 @@ accepts detailed help information about `options` and `params`
 - removing `option` and `options` helper
 - removing autocomplete feature
 
+*Api*
+
+- `rawArgs()` function available which returns raw, unparsed args which were provided
+to the task
+
 
 ## 4.4.0
 

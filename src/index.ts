@@ -9,7 +9,7 @@ import { IShellOptions, shell, ShellError } from '@pawelgalazka/shell'
 import chalk from 'chalk'
 import path from 'path'
 
-export { help } from '@pawelgalazka/cli'
+export { help, rawArgs } from '@pawelgalazka/cli'
 
 const shellErrorHandler: (
   logger: Logger
