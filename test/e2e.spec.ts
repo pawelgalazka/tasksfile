@@ -77,4 +77,8 @@ describe('tasksfile', () => {
       `Command failed: ${scriptPath} errorAsyncAwait`
     )
   })
+
+  it('displays commands list if only --help option provided and no task name', () => {
+    expect(execSync(`${scriptPath} --help`)).toMatchSnapshot()
+  })
 })

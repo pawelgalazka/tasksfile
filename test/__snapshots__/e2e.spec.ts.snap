@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tasksfile displays commands list if only --help option provided and no task name 1`] = `
+"
+Commands:
+
+asyncAwait
+color
+echo                                     - Simple echo task
+error
+errorAsyncAwait
+nested
+nested:echo [p1 p2]                      - Description of nested task
+npmBin
+shell
+"
+`;
