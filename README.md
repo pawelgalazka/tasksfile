@@ -16,7 +16,7 @@ Minimalistic building tool
     - [TypeScript support](#typescript-support)
 - [API](#api)
     - [sh](#shcmd-options)
-    - [help](#helpfunc-annotation)
+    - [help](#helpfunc-description-annotation)
 
 
 ## Get started
@@ -434,7 +434,7 @@ to the terminal, but `sh` function will resolve (async) / return (sync)
 For `stdio: 'ignore'` nothing will be returned or printed
 
 
-#### help(func, annotation)
+#### help(func, description, annotation)
 
 Define help annotation for task function, so it will be printed out when calling task with `--help`
 option and when calling `run` without any arguments.
@@ -447,8 +447,7 @@ const { help } = require('tasksfile')
 ```javascript
 help(build, 'Generate JS bundle')
 
-help(test, {
-  description: 'Run unit tests',
+help(test, 'Run unit tests', {
   params: ['file'],
   options: {
     watch: 'run tests in a watch mode'
