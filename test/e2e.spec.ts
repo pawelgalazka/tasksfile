@@ -9,7 +9,8 @@ describe('tasksfile', () => {
       env: {
         ...process.env,
         FORCE_COLOR: '0'
-      }
+      },
+      stdio: 'pipe'
     }).toString()
   }
 
@@ -65,9 +66,15 @@ describe('tasksfile', () => {
     )
   })
 
-  it('displays error from executed command', () => {
+  it('displays error from executed task', () => {
     expect(() => execSync(`${scriptPath} error`)).toThrow(
       `Command failed: ${scriptPath} error`
+    )
+  })
+
+  it('displays error from executed async task', () => {
+    expect(() => execSync(`${scriptPath} errorAsyncAwait`)).toThrow(
+      `Command failed: ${scriptPath} errorAsyncAwait`
     )
   })
 })

@@ -46,13 +46,13 @@ async function asyncAwait() {
   console.log('after await')
 }
 
-async function errorAsyncAwait() {
-  await Promise.reject(new Error('async await error'))
-}
-
 function error() {
   sh('node ./scripts/error.js', { async: true })
   sh('node ./scripts/error.js')
+}
+
+async function errorAsyncAwait() {
+  await Promise.reject(new Error('async await error'))
 }
 
 function color() {
