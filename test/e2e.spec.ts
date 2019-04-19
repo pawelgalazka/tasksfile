@@ -20,7 +20,7 @@ describe('tasksfile', () => {
   })
 
   it('executes shell commands in a task', () => {
-    const output = execSync(`${scriptPath} commands`)
+    const output = execSync(`${scriptPath} shell`)
     expect(output).toContain(
       'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe'
     )
@@ -36,11 +36,11 @@ describe('tasksfile', () => {
 
   it('includes ./node_modules/.bin to PATH when executing commands', () => {
     execSync('cp -p ./scripts/hello.js ./node_modules/.bin/hello')
-    expect(execSync(`${scriptPath} localbin`)).toContain('Hello!')
+    expect(execSync(`${scriptPath} npmBin`)).toContain('Hello!')
   })
 
   it('executes tasks with async and await', () => {
-    expect(execSync(`${scriptPath} asyncawait`)).toContain(
+    expect(execSync(`${scriptPath} asyncAwait`)).toContain(
       'echo "async and await"\noutput async and await\n\nafter await\n'
     )
   })

@@ -18,7 +18,7 @@ const nested = {
 
 help(nested.echo, 'Description of nested task')
 
-function commands() {
+function shell() {
   sh('echo "sync terminal"')
   console.log('output', sh('echo "sync pipe"', { stdio: 'pipe' }))
   sh('echo "async terminal"', { async: true })
@@ -27,17 +27,21 @@ function commands() {
   )
 }
 
-function localbin() {
+function npmBin() {
   sh('hello')
 }
 
-async function asyncawait() {
+async function asyncAwait() {
   const output = await sh('echo "async and await"', {
     async: true,
     stdio: 'pipe'
   })
   console.log('output', output)
   console.log('after await')
+}
+
+async function errorAsyncAwait() {
+  await Promise.reject(new Error('async await error'))
 }
 
 function error() {
@@ -53,10 +57,11 @@ function color() {
 
 cli({
   echo,
-  commands,
+  shell,
   nested,
-  localbin,
-  asyncawait,
+  npmBin,
+  asyncAwait,
+  errorAsyncAwait,
   error,
   color
 })
