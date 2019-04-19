@@ -21,7 +21,8 @@
     "test:e2e": "jest ./test/",
     "clean": "rm -rf node_modules && yarn clean:build && yarn clean:sandbox",
     "clean:build": "rm -rf ./lib",
-    "clean:sandbox": "rm -rf ./test/e2e/sandbox/node_modules && mkdir -p ./test/sandbox/node_modules/.bin"
+    "clean:sandbox": "rm -rf ./test/e2e/sandbox/node_modules && mkdir -p ./test/sandbox/node_modules/.bin",
+    "sandbox:task": "cd ./test/sandbox && ../../bin/task.js"
   },
   "lint-staged": {
     "src/*.{ts,tsx}": [
