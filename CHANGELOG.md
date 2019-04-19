@@ -27,7 +27,7 @@ it's just an alias.
 - removing autocomplete feature, as it required too much configuration and it
 seems not used by the users
 - full support for `TypeScript`. Types files are included within the project. Using
-`TypeScript` for `tasksfile` is possible. It's just require different entry in `npm scripts`:
+`TypeScript` for `tasksfile` is possible. It just require different entry in `npm scripts`:
 `"task": "ts-node ./tasksfile.ts"`
 
 
