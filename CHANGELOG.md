@@ -15,23 +15,17 @@ to the task
 *Mechanics:*
 
 - `options` are always passed as a first argument to the task function
-
 - calling tasks occurs through `npx task` not `npx run` script or by calling
 `tasksfile.js` directly (`node tasksfile.js`). Tasks file now behaves like a
 CLI script
-
 - to be able to call tasks from `tasksfile.js` they must be exposed by `cli`
 function. Exporting tasks functions won't do the job anymore.
-
 - to be able to call a task through `npx task`, entry to `npm scripts` must be added:
 `"task": "node ./tasksfile.js"`. `npx task` always try to execute `task` npm script,
 it's just an alias.
-
 - namespaces now can have `default` task
-
 - removing autocomplete feature, as it required too much configuration and it
 seems not used by the users
-
 - full support for `TypeScript`. Types files are included within the project. Using
 `TypeScript` for `tasksfile` is possible. It's just require different entry in `npm scripts`:
 `"task": "ts-node ./tasksfile.ts"`
