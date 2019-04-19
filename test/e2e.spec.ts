@@ -14,7 +14,7 @@ describe('tasksfile', () => {
   }
 
   it('executes simple task', () => {
-    expect(execSync(`${scriptPath} echo 1 2 3 --foo --bar`)).toContain(
+    expect(execSync(`${scriptPath} echo 1 2 3 --foo --bar`)).toEqual(
       "echo [ { foo: true, bar: true }, '1', '2', '3' ]\n"
     )
   })
@@ -28,25 +28,33 @@ describe('tasksfile', () => {
     expect(output).toContain('\noutput async terminal\n')
   })
 
-  it('executes name spaced tasks', () => {
-    expect(execSync(`${scriptPath} nested:echo 1 2 3 --foo --bar`)).toContain(
-      "echo [ { foo: true, bar: true }, '1', '2', '3' ]\n"
+  it('executes task from a namespace', () => {
+    expect(execSync(`${scriptPath} nested:echo 1 2 3 --foo --bar`)).toEqual(
+      "nested echo [ { foo: true, bar: true }, '1', '2', '3' ]\n"
     )
   })
 
-  it('includes ./node_modules/.bin to PATH when executing commands', () => {
-    execSync('cp -p ./scripts/hello.js ./node_modules/.bin/hello')
-    expect(execSync(`${scriptPath} npmBin`)).toContain('Hello!')
+  it('executes default task from a namespace', () => {
+    expect(execSync(`${scriptPath} nested 1 2 3 --foo --bar`)).toEqual(
+      "nested default [ { foo: true, bar: true }, '1', '2', '3' ]\n"
+    )
   })
 
-  it('executes tasks with async and await', () => {
+  it('includes ./node_modules/.bin to PATH when executing bin scripts', () => {
+    execSync('cp -p ./scripts/hello.js ./node_modules/.bin/hello')
+    expect(execSync(`${scriptPath} npmBin`)).toEqual('hello\nHello!\n')
+  })
+
+  it('executes async/await task', () => {
     expect(execSync(`${scriptPath} asyncAwait`)).toContain(
       'echo "async and await"\noutput async and await\n\nafter await\n'
     )
   })
 
   it('displays help for a task', () => {
-    expect(execSync(`${scriptPath} echo --help`)).toContain('Simple echo task')
+    expect(execSync(`${scriptPath} echo --help`)).toEqual(
+      'Usage: echo  \n\nSimple echo task\n\n'
+    )
   })
 
   it('displays error from executed command', () => {
