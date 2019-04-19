@@ -174,8 +174,9 @@ Given options: { a: true, test: 'something' }
 To display all available tasks for your `tasksfile.js` type `task` in your command line
 without any arguments:
 
-    $ npx task
-    Available tasks:
+    $ npx task --help
+
+    Commands:
     echo                    - echo task description
     buildjs                 - Compile JS files
     
@@ -275,9 +276,15 @@ function integration () {
   console.log('Doing unit testing!')
 }
 
+function default() {
+  unit()
+  integration()
+}
+
 module.exports = {
   unit,
-  integration
+  integration,
+  default
 }
 ```
 
@@ -293,6 +300,10 @@ cli({
 ```bash
 $ npx task test:unit
 Doing unit testing!
+
+$ npx task test
+Doing unit testing!
+Doing integration testing!
 ```
 
 If we don't want to put imported tasks into a namespace, we can always use spread
