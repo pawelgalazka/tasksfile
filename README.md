@@ -384,7 +384,7 @@ in your project. Just:
 }
 ```
 
-`Tasksfile` already have `TypeScript` declaration files in source files.
+`Tasksfile` project already has `TypeScript` declaration files in source files.
 
 ## API
 
