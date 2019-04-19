@@ -9,32 +9,33 @@ argument to the task
 - introducing `rawArgs` function, which returns raw, unparsed args which were provided
 to the task
 - renaming `run` function to `sh`
+- introducing `cli` function which exposes tasks functions to the cli
 
 
 *Mechanics:*
 
-- options are passed to task function as first argument, 
-they are not available through `options(this)` anymore
+- `options` are always passed as a first argument to the task function
 
-- to be able to run tasks, entry to `npm scripts` must be added.
-`npx task` alias runs `task` entry from there. `tasksfile.js` will
-act now like a script which allows greated flexibility how it is run,
-like: `"task": "node tasksfile.js"` or `"task": "ts-node tasksfile.ts"`.
-That means tasksfile no longer reads `runjs` config from `package.json`
-which allowed to use `babel-register`, `ts-node/register` or change
-name of `runfile.js` as this can be directly adjusted in `npm scripts`
-entry.
+- calling tasks occurs through `npx task` not `npx run` script or by calling
+`tasksfile.js` directly (`node tasksfile.js`). Tasks file now behaves like a
+CLI script
 
-- to be able to call a task from `tasksfile.js`, 
-task must be exposed through `cli` api function, not
-exported from module as it was before
+- to be able to call tasks from `tasksfile.js` they must be exposed by `cli`
+function. Exporting tasks functions won't do the job anymore.
+
+- to be able to call a task through `npx task`, entry to `npm scripts` must be added:
+`"task": "node ./tasksfile.js"`. `npx task` always try to execute `task` npm script,
+it's just an alias.
 
 - namespaces now can have `default` task
 
-- removing autocomplete, as it required to much configuration and it
+- removing autocomplete feature, as it required too much configuration and it
 seems not used by the users
 
-- calling tasks occurs through `npx task` not `npx run` script
+- full support for `TypeScript`. Types files are included within the project. Using
+`TypeScript` for `tasksfile` is possible. It's just require different entry in `npm scripts`:
+`"task": "ts-node ./tasksfile.ts"`
+
 
 *Other:*
 
