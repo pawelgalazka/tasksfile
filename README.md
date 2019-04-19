@@ -177,6 +177,7 @@ without any arguments:
     $ npx task --help
 
     Commands:
+    
     echo                    - echo task description
     buildjs                 - Compile JS files
     
