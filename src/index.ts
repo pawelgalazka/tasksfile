@@ -1,5 +1,6 @@
 import {
   cli as cliEngine,
+  CLIError,
   CommandsModule,
   Middleware,
   useMiddlewares
@@ -11,6 +12,17 @@ import path from 'path'
 
 export { help, rawArgs } from '@pawelgalazka/cli'
 
+const commandNotFoundHandler: Middleware = next => args => {
+  const { command } = args
+
+  if (!command) {
+    throw new CLIError(
+      'Command not found. Type "npx task --help" for more information.'
+    )
+  }
+
+  next(args)
+}
 const shellErrorHandler: (
   logger: Logger
 ) => Middleware = logger => next => args => {
@@ -76,6 +88,6 @@ export function sh(
 export function cli(definition: CommandsModule) {
   return cliEngine(
     definition,
-    useMiddlewares([shellErrorHandler(new Logger())])
+    useMiddlewares([commandNotFoundHandler, shellErrorHandler(new Logger())])
   )
 }
