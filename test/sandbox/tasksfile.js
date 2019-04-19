@@ -1,8 +1,22 @@
 const { sh, help, cli } = require('../../lib')
 
+help(echo, 'Simple echo task')
+
 function echo(...args) {
   console.log('echo', args)
 }
+
+const nested = {
+  echo(...args) {
+    console.log('nested echo', args)
+  },
+
+  default (...args) {
+    console.log('nested default', args)
+  }
+}
+
+help(nested.echo, 'Description of nested task')
 
 function commands() {
   sh('echo "sync terminal"')
@@ -11,16 +25,6 @@ function commands() {
   sh('echo "async terminal"', { async: true, stdio: 'pipe' }).then(output =>
     console.log('output', output)
   )
-}
-
-function described(options, p1, p2) {
-  console.log(p1, p2, options)
-}
-
-const nested = {
-  echo(...args) {
-    console.log('nested echo', args)
-  }
 }
 
 function localbin() {
@@ -46,19 +50,10 @@ function color() {
   sh('node ./scripts/color.js', { async: true })
 }
 
-help(echo, 'Simple echo task')
-help(nested.echo, 'Description of nested task')
-help(described, 'Task description', {
-  params: ['p1', 'p2'],
-  options: {
-    foo: 'foo option'
-  }
-})
 
 cli({
   echo,
   commands,
-  described,
   nested,
   localbin,
   asyncawait,
