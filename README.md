@@ -3,7 +3,7 @@
 Minimalistic building tool
 
 > From version >= 5 RunJS was renamed to Tasksfile.
-> Link RunJS version: https://github.com/pawelgalazka/runjs/tree/runjs
+> Link to RunJS version: https://github.com/pawelgalazka/runjs/tree/runjs
 
 - [Get started](#get-started)
 - [Why tasksfile ?](#why-tasksfile-)
