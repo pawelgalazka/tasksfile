@@ -1,7 +1,7 @@
 {
   "name": "tasksfile",
   "version": "5.1.0",
-  "description": "Minimalistic building tool",
+  "description": "Minimalistic task runner for node.js",
   "keywords": [
     "build",
     "system",
