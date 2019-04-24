@@ -45,7 +45,7 @@
   "homepage": "https://github.com/pawelgalazka/tasksfile#readme",
   "dependencies": {
     "@pawelgalazka/cli": "2.0.2",
-    "@pawelgalazka/shell": "1.0.0",
+    "@pawelgalazka/shell": "2.0.0",
     "chalk": "2.3.0"
   },
   "devDependencies": {

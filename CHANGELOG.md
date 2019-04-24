@@ -1,3 +1,17 @@
+## 5.1.0
+
+*API:*
+- `sh` function now accepts different set of options. Most importantly it does not accept
+`stdio` option anymore. By default it will be always in `stdio=pipe` mode for `stdout`
+and `stderr` process streams. It will also print out results to the terminal unless `silent=true`
+option given.
+
+- `sh` function accepts also `transform` option which allows to transform output of
+shell process. Usefull if we want to add prefixes to the output.
+
+- introducing `prefixTransform` function. It is dedicated for usage along with `sh`
+function as value for `transform` option.
+
 ## 5.0.0
 
 *API:*

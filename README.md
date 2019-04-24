@@ -16,6 +16,7 @@ Minimalistic building tool
     - [TypeScript support](#typescript-support)
 - [API](#api)
     - [sh](#shcmd-options)
+    - [prefixTransform](#prefixTransformprefix)
     - [help](#helpfunc-description-annotation)
     - [rawArgs](#rawArgs)
 
@@ -405,8 +406,10 @@ For inside `tasksfile.js` usage.
 
 #### sh(cmd, options)
 
-run given command as a child process and log the call in the output. 
-`./node_modules/.bin/` is included into PATH so you can call installed scripts directly.
+Run given command as a child process and log the call in the output. 
+`./node_modules/.bin/` is included into `PATH` so you can call installed scripts directly.
+
+Function will return output of executed command.
 
 ```js
 const { sh } = require('tasksfile')
@@ -414,38 +417,60 @@ const { sh } = require('tasksfile')
 
 *Options:*
 
-```javascript
-{
-    cwd: ..., // current working directory (String)
-    async: ... // run command asynchronously (true/false), false by default
-    stdio: ... // 'inherit' (default), 'pipe' or 'ignore'
-    env: ... // environment key-value pairs (Object)
-    timeout: ...
+```ts
+interface IShellOptions {
+  // current working directory
+  cwd?: string
+
+  // environment key-value pairs
+  env?: NodeJS.ProcessEnv
+
+  // timeout after which execution will be cancelled
+  timeout?: number
+
+  // default: false, if true it runs command asynchronously and returns a Promise
+  async?: boolean
+
+  // if true, it will send output directly to parent process (stdio="inherit"), it won't return the output though
+  // usefull if default piping strips too much colours when printing to the terminal
+  // if enabled, transform option won't work
+  nopipe?: boolean
+
+  // if true, it won't print anything to the terminal but it will still return the output as a string
+  silent?: boolean
+
+  // function which allows to transform the output, line by line
+  // usefull for adding prefixes to async commands output
+  transform?: (output: string) => string
 }
 ```
 
-*Examples:*
+#### prefixTransform(prefix)
 
-To get an output from `sh` function we need to set `stdio` option to `pipe` otherwise
-`output` will be `null`:
+Transform function which can be used as `transform` option of `sh` function.
+It allows to add prefixes to shell output.
 
-```javascript
-const output = sh('ls -la', {stdio: 'pipe'})
-sh('http-server .', {async: true, stdio: 'pipe'}).then((output) => {
-  log(output) 
-}).catch((error) => {
-  throw error
+*Example:*
+
+```js
+const { cli, sh, prefixTransform } = require('tasksfile')
+
+function test() {
+  sh('echo "test"', { 
+    transform: prefixTransform('[prefix]')
+  })
+}
+
+cli({
+  test
 })
 ```
 
-For `stdio: 'pipe'` outputs are returned but not forwarded to the parent process thus 
-not printed out to the terminal. 
-
-For `stdio: 'inherit'` (default) outputs are passed 
-to the terminal, but `sh` function will resolve (async) / return (sync)
-`null`.
-
-For `stdio: 'ignore'` nothing will be returned or printed
+```sh
+$ npx task test
+echo "test"
+[prefix] test
+```
 
 
 #### help(func, description, annotation)

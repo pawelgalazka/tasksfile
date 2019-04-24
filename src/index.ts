@@ -6,11 +6,18 @@ import {
   useMiddlewares
 } from '@pawelgalazka/cli'
 import { Logger } from '@pawelgalazka/cli/lib/utils/logger'
-import { IShellOptions, shell, ShellError } from '@pawelgalazka/shell'
+import {
+  IAsyncShellOptions,
+  IShellOptions,
+  ISyncShellOptions,
+  shell,
+  ShellError
+} from '@pawelgalazka/shell'
 import chalk from 'chalk'
 import path from 'path'
 
 export { help, rawArgs } from '@pawelgalazka/cli'
+export { prefixTransform } from '@pawelgalazka/shell'
 
 const commandNotFoundHandler: Middleware = next => args => {
   const { command } = args
@@ -47,13 +54,13 @@ const shellErrorHandler: (
 
 export function sh(
   command: string,
-  options: IShellOptions & { async: true },
+  options: IAsyncShellOptions,
   logger?: Logger
 ): Promise<string | null>
 
 export function sh(
   command: string,
-  options?: IShellOptions & { async?: false | null },
+  options?: ISyncShellOptions,
   logger?: Logger
 ): string | null
 
@@ -63,21 +70,18 @@ export function sh(
   logger: Logger = new Logger()
 ) {
   const binPath = path.resolve('./node_modules/.bin')
-
-  // Pick relevant option keys and set default values
-  const nextOptions = {
-    async: !!options.async,
-    cwd: options.cwd,
-    env: options.env || process.env,
-    stdio: options.stdio || 'inherit',
-    timeout: options.timeout
-  }
-
-  const env = nextOptions.env
-
   // Include in PATH node_modules bin path
-  if (env) {
-    env.PATH = [binPath, env.PATH || process.env.PATH].join(path.delimiter)
+  const nextPath = [
+    binPath,
+    (options.env && options.env.PATH) || process.env.PATH
+  ].join(path.delimiter)
+
+  const nextOptions = {
+    ...options,
+    env: {
+      ...(options.env || process.env),
+      PATH: nextPath
+    }
   }
 
   logger.log(chalk.bold(command))

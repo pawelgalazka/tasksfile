@@ -26,9 +26,9 @@ help(nested.echo, 'Description of nested task', {
 
 function shell() {
   sh('echo "sync terminal"')
-  console.log('output', sh('echo "sync pipe"', { stdio: 'pipe' }))
+  console.log('output', sh('echo "sync silent"', {silent: true}))
   sh('echo "async terminal"', { async: true })
-  sh('echo "async terminal"', { async: true, stdio: 'pipe' }).then(output =>
+  sh('echo "async silent"', { async: true, silent: true}).then(output =>
     console.log('output', output)
   )
 }
@@ -40,7 +40,7 @@ function npmBin() {
 async function asyncAwait() {
   const output = await sh('echo "async and await"', {
     async: true,
-    stdio: 'pipe'
+    silent: true
   })
   console.log('output', output)
   console.log('after await')
