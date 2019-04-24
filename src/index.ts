@@ -17,6 +17,7 @@ import chalk from 'chalk'
 import path from 'path'
 
 export { help, rawArgs } from '@pawelgalazka/cli'
+export { prefixTransform } from '@pawelgalazka/shell'
 
 const commandNotFoundHandler: Middleware = next => args => {
   const { command } = args
