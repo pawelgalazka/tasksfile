@@ -821,10 +821,10 @@
   resolved "https://registry.yarnpkg.com/@pawelgalazka/middleware/-/middleware-1.0.0.tgz#b772fecd221903fb41a7be799ab092c72ad24b68"
   integrity sha512-BHE0ZFTDhfrAWzeoeUkhKXCjh0NFcd7dYJJiekW6sp3xbhaWTVBoaJbyZthWJEeow4FHJInjeEIBwbkGKqZzRg==
 
-"@pawelgalazka/shell@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@pawelgalazka/shell/-/shell-1.0.0.tgz#955aeb50e10d9e6f23f260edecb7a7e6d53df9f6"
-  integrity sha512-FScYzYmvvk/o167hbc/MYxs8/5YaWylNCYKDB9TUx/muvWogzM0INYXgaIOSym81tbY8icNKQ7oVi8bhPSl5ng==
+"@pawelgalazka/shell@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@pawelgalazka/shell/-/shell-2.0.0.tgz#7174a2d904375e435f6a012322713234c00e75cd"
+  integrity sha512-MsNuS9M2vVbJNW3+YSiz9eF0/U2ZPlEEVC4ky8QJnxFlU4H7DZOH5A1hDQUfF5DV/pYwBD76dkF3+mrzZTJ3Tw==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
