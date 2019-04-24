@@ -23,10 +23,10 @@ describe('tasksfile', () => {
   it('executes shell commands in a task', () => {
     const output = execSync(`${scriptPath} shell`)
     expect(output).toContain(
-      'echo "sync terminal"\nsync terminal\necho "sync pipe"\noutput sync pipe'
+      'echo "sync terminal"\nsync terminal\necho "sync silent"\noutput sync silent'
     )
     expect(output).toContain('\nasync terminal\n')
-    expect(output).toContain('\noutput async terminal\n')
+    expect(output).toContain('\noutput async silent\n')
   })
 
   it('executes task from a namespace', () => {

@@ -38,14 +38,10 @@ describe('sh()', () => {
     sh('test command', undefined, logger)
     expect(shellMock).toHaveBeenCalledTimes(1)
     expect(shellMock).toHaveBeenCalledWith(expect.anything(), {
-      async: false,
-      cwd: undefined,
       env: {
         DEFAULT_ENV: 'default env',
         PATH: expect.anything()
-      },
-      stdio: 'inherit',
-      timeout: undefined
+      }
     })
   })
 
