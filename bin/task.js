@@ -7,7 +7,10 @@ const taskScript = packageJson.scripts.task
 
 if (taskScript === undefined) {
   // prettier-ignore
-  console.error('Mising \'task\' script in package.json')
+  console.error('Mising \'task\' script in package.json.')
+  console.error('Example (package.json, in `script`):\n')
+  console.error('"task": "node ./tasksfile.js",')
+  console.error('...')
   process.exit(1)
 }
 
